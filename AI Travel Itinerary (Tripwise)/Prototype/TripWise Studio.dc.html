@@ -1,0 +1,954 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+body{margin:0;font-family:'Instrument Sans',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#B35400;text-decoration:none}a:hover{color:#FF7A00}
+button,input,textarea,select{font-family:inherit}
+@keyframes stIn{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:none}}
+@keyframes stDrawer{0%{transform:translateX(24px);opacity:0}100%{transform:none;opacity:1}}
+@keyframes stShimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+</style>
+</helmet>
+
+<div ref="{{ rootRef }}" style="--page:#E9E7E1;--bg:#F4F3EF;--surface:#FFFFFF;--surface2:#F7F6F2;--border:rgba(30,26,18,.09);--border2:rgba(30,26,18,.15);--text:#1E1A12;--muted:rgba(30,26,18,.62);--faint:rgba(30,26,18,.42);--hover:rgba(30,26,18,.045);--chrome:#ECEAE4;--pos:#2E7D4F;--posBg:rgba(46,125,79,.11);--neg:#C2410C;--negBg:rgba(194,65,12,.1);--warnBg:rgba(248,231,28,.42);--grid:rgba(30,26,18,.07);--acText:#B35400;min-height:100vh;background:var(--page);color:var(--text);font-family:'Instrument Sans',system-ui,sans-serif;transition:background .3s">
+
+  <!-- portfolio strip -->
+  <div style="display:flex;align-items:center;gap:14px;padding:14px 24px;flex-wrap:wrap">
+    <a href="{{ backHref }}" style="display:inline-flex;align-items:center;gap:8px;padding:8px 14px 8px 10px;border-radius:999px;background:var(--surface);border:1px solid var(--border);color:var(--text);font-size:13px;font-weight:600">
+      <svg width="9" height="14" viewBox="0 0 12 20" fill="none"><path d="M10 2L2 10l8 8" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg>Back to app
+    </a>
+    <div style="display:flex;align-items:center;gap:10px">
+      <svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 2l7 7-7 13-7-13z" fill="#FF7A00"></path><circle cx="12" cy="9" r="2.2" fill="#141210"></circle></svg>
+      <span style="font:700 16px 'Bricolage Grotesque',sans-serif">TripWise Studio</span>
+      <span style="font-size:12px;color:var(--muted)">Admin panel · Desktop 1440 · Part 2 of 2</span>
+    </div>
+    <div style="flex:1"></div>
+    <sc-for list="{{ stripToggles }}" as="t" hint-placeholder-count="3">
+      <button onClick="{{ t.toggle }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:10px;padding:8px 10px 8px 14px;border-radius:999px;background:var(--surface);border:1px solid {{ t.border }};font-size:12.5px;font-weight:600">
+        {{ t.label }}
+        <span style="width:32px;height:18px;border-radius:999px;background:{{ t.track }};position:relative;transition:background .2s;flex:none"><span style="position:absolute;top:2px;left:{{ t.knob }};width:14px;height:14px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:left .2s"></span></span>
+      </button>
+    </sc-for>
+  </div>
+
+  <!-- desktop frame -->
+  <div ref="{{ outerRef }}" style="padding:0 24px 18px;overflow:hidden">
+    <div ref="{{ frameRef }}" style="width:1440px;height:900px;transform-origin:top left;border-radius:14px;overflow:hidden;border:1px solid var(--border2);box-shadow:0 30px 70px rgba(30,26,18,.14);background:var(--bg);display:flex;flex-direction:column;position:relative">
+
+      <!-- browser chrome -->
+      <div style="height:40px;flex:none;display:flex;align-items:center;gap:8px;padding:0 14px;background:var(--chrome);border-bottom:1px solid var(--border)">
+        <span style="width:12px;height:12px;border-radius:50%;background:#FF5F57"></span><span style="width:12px;height:12px;border-radius:50%;background:#FEBC2E"></span><span style="width:12px;height:12px;border-radius:50%;background:#28C840"></span>
+        <div style="flex:1;display:flex;justify-content:center">
+          <div style="display:flex;align-items:center;gap:7px;width:460px;padding:6px 12px;border-radius:8px;background:var(--surface);font-size:12px;color:var(--muted)">
+            <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>studio.tripwise.app/{{ urlPath }}
+          </div>
+        </div>
+        <span style="width:52px"></span>
+      </div>
+
+      <div style="flex:1;min-height:0;display:grid;grid-template-columns:248px minmax(0,1fr)">
+
+        <!-- sidebar -->
+        <aside style="display:flex;flex-direction:column;gap:18px;padding:18px 14px;background:var(--surface);border-right:1px solid var(--border);min-height:0">
+          <div style="display:flex;align-items:center;gap:9px;padding:0 6px">
+            <svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 2l7 7-7 13-7-13z" fill="#FF7A00"></path><circle cx="12" cy="9" r="2.2" fill="#141210"></circle></svg>
+            <span style="font:700 16px 'Bricolage Grotesque',sans-serif">TripWise</span>
+            <span style="font-size:10px;letter-spacing:.08em;text-transform:uppercase;font-weight:700;padding:3px 7px;border-radius:6px;background:var(--hover);color:var(--muted)">Studio</span>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;border:1px solid var(--border)">
+            <span style="width:34px;height:34px;border-radius:{{ accRadius }};background:{{ accBg }};color:{{ accColor }};font:700 12px 'Bricolage Grotesque',sans-serif;display:flex;align-items:center;justify-content:center;flex:none">{{ accInit }}</span>
+            <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ accName }}</div><div style="font-size:11.5px;color:var(--muted);margin-top:1px">{{ accSub }}</div></div>
+            <span style="font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;padding:3px 6px;border-radius:5px;background:{{ accBg }};color:{{ accColor }}">{{ roleLabel }}</span>
+          </div>
+
+          <nav style="display:flex;flex-direction:column;gap:2px;flex:1;min-height:0;overflow:auto">
+            <div style="font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);padding:0 10px 6px">Workspace</div>
+            <sc-for list="{{ nav }}" as="n" hint-placeholder-count="7">
+              <button onClick="{{ n.go }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:9px;font-size:13.5px;font-weight:{{ n.fw }};color:{{ n.color }};background:{{ n.bg }};opacity:{{ n.op }};transition:background .15s" style-hover="background:var(--hover)">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="{{ n.iconColor }}" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.d }}"></path></svg>
+                <span style="flex:1">{{ n.label }}</span>
+                <sc-if value="{{ n.hasBadge }}" hint-placeholder-val="{{ false }}"><span style="min-width:18px;text-align:center;font-size:11px;font-weight:700;padding:1px 6px;border-radius:999px;background:#F8E71C;color:#141210">{{ n.badge }}</span></sc-if>
+                <sc-if value="{{ n.later }}" hint-placeholder-val="{{ false }}"><span style="font-size:9px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;padding:2px 5px;border-radius:4px;border:1px solid var(--border2);color:var(--muted)">Later</span></sc-if>
+                <sc-if value="{{ n.mvp }}" hint-placeholder-val="{{ false }}"><span style="font-size:9px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;padding:2px 5px;border-radius:4px;background:#F8E71C;color:#141210">MVP</span></sc-if>
+              </button>
+            </sc-for>
+          </nav>
+
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="display:flex;padding:3px;border-radius:10px;background:var(--surface2);border:1px solid var(--border)">
+              <sc-for list="{{ themeTabs }}" as="t" hint-placeholder-count="2">
+                <button onClick="{{ t.set }}" style="all:unset;cursor:pointer;flex:1;display:flex;align-items:center;justify-content:center;gap:6px;padding:7px 0;border-radius:8px;font-size:12.5px;font-weight:600;background:{{ t.bg }};color:{{ t.color }};box-shadow:{{ t.shadow }}">
+                  <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="{{ t.d }}"></path></svg>{{ t.label }}
+                </button>
+              </sc-for>
+            </div>
+            <div style="font-size:10.5px;color:var(--faint);padding:0 6px">Portfolio reconstruction · Synthetic data</div>
+          </div>
+        </aside>
+
+        <!-- main -->
+        <main style="display:flex;flex-direction:column;min-width:0;min-height:0">
+          <header style="height:66px;flex:none;display:flex;align-items:center;gap:14px;padding:0 28px;border-bottom:1px solid var(--border);background:var(--surface)">
+            <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+              <div style="font-size:11.5px;color:var(--faint)">{{ crumb }}</div>
+              <div style="display:flex;align-items:center;gap:10px"><h1 style="margin:0;font:700 21px/1.1 'Bricolage Grotesque',sans-serif;letter-spacing:-.01em">{{ pageTitle }}</h1>
+                <sc-if value="{{ pageLater }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px;letter-spacing:.06em;text-transform:uppercase;font-weight:700;padding:3px 7px;border-radius:5px;background:var(--text);color:var(--surface)">Later phase</span></sc-if>
+              </div>
+            </div>
+            <div style="flex:1"></div>
+            <label style="display:flex;align-items:center;gap:8px;width:260px;padding:8px 12px;border-radius:9px;background:var(--surface2);border:1px solid var(--border)">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--faint)" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
+              <input value="{{ q }}" onChange="{{ onQ }}" placeholder="{{ searchPh }}" style="all:unset;flex:1;font-size:13px;color:var(--text)">
+            </label>
+            <div style="display:flex;padding:3px;border-radius:9px;background:var(--surface2);border:1px solid var(--border)">
+              <sc-for list="{{ ranges }}" as="r" hint-placeholder-count="3">
+                <button onClick="{{ r.set }}" style="all:unset;cursor:pointer;padding:6px 11px;border-radius:7px;font-size:12.5px;font-weight:600;background:{{ r.bg }};color:{{ r.color }};box-shadow:{{ r.shadow }}">{{ r.label }}</button>
+              </sc-for>
+            </div>
+            <button onClick="{{ bell }}" style="all:unset;cursor:pointer;position:relative;width:36px;height:36px;border-radius:9px;border:1px solid {{ bellBorder }};background:{{ bellBg }};display:flex;align-items:center;justify-content:center">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--text)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9M10 20a2 2 0 0 0 4 0"></path></svg>
+              <sc-if value="{{ hasUnread }}" hint-placeholder-val="{{ true }}"><span style="position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 5px;box-sizing:border-box;border-radius:999px;background:#FF7A00;color:#141210;font-size:10.5px;font-weight:800;display:flex;align-items:center;justify-content:center;border:2px solid var(--surface)">{{ unreadCount }}</span></sc-if>
+            </button>
+            <button onClick="{{ primary }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:7px;padding:10px 15px;border-radius:9px;background:#F8E71C;color:#141210;font-size:13px;font-weight:700">
+              <svg width="12" height="12" viewBox="0 0 12 12" stroke="#141210" stroke-width="2" stroke-linecap="round"><path d="M6 1v10M1 6h10"></path></svg>{{ primaryLabel }}
+            </button>
+          </header>
+
+          <div style="flex:1;min-height:0;overflow:auto;padding:24px 28px 40px;opacity:{{ contentOp }};filter:{{ contentFilter }};transition:opacity .3s,filter .3s">
+
+            <!-- KPIs -->
+            <sc-if value="{{ hasKpis }}" hint-placeholder-val="{{ true }}">
+              <div style="display:grid;grid-template-columns:repeat({{ kpiCols }},minmax(0,1fr));gap:14px;margin-bottom:16px">
+                <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+                  <div style="padding:16px 18px;border-radius:14px;background:var(--surface);border:1px solid var(--border);animation:stIn .35s ease-out">
+                    <div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:12.5px;color:var(--muted)">{{ k.label }}</span><span style="font-size:11.5px;font-weight:700;padding:2px 7px;border-radius:999px;color:{{ k.dColor }};background:{{ k.dBg }}">{{ k.delta }}</span></div>
+                    <sc-if value="{{ loading }}" hint-placeholder-val="{{ false }}"><div style="height:30px;margin-top:10px;border-radius:7px;background:linear-gradient(90deg,var(--hover) 25%,var(--border2) 50%,var(--hover) 75%);background-size:200% 100%;animation:stShimmer 1.2s linear infinite"></div></sc-if>
+                    <sc-if value="{{ notLoading }}" hint-placeholder-val="{{ true }}"><div style="font:700 28px/1 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;margin-top:10px;font-variant-numeric:tabular-nums">{{ k.value }}</div></sc-if>
+                    <svg width="100%" height="30" viewBox="0 0 120 30" preserveAspectRatio="none" style="display:block;margin-top:10px"><path d="{{ k.spark }}" fill="none" stroke="{{ k.sparkColor }}" stroke-width="1.8" vector-effect="non-scaling-stroke"></path></svg>
+                    <div style="font-size:11.5px;color:var(--faint);margin-top:4px">{{ k.foot }}</div>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+
+            <!-- generic sections -->
+            <div style="display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px">
+              <sc-for list="{{ sections }}" as="s" hint-placeholder-count="3">
+                <section style="grid-column:{{ s.col }};position:relative;display:flex;flex-direction:column;border-radius:14px;background:var(--surface);border:1px solid var(--border);min-width:0;animation:stIn .35s ease-out">
+                  <sc-if value="{{ s.hasPin }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:absolute;top:-11px;right:16px;z-index:5;display:flex;align-items:center;gap:6px"><span style="width:22px;height:22px;border-radius:50%;background:#F8E71C;color:#141210;font:700 11px 'Bricolage Grotesque',sans-serif;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px rgba(248,231,28,.35)">{{ s.pinN }}</span><span style="font-size:11px;font-weight:600;background:#1E1A12;color:#F8E71C;padding:4px 9px;border-radius:999px;white-space:nowrap">{{ s.pinLabel }}</span></div>
+                  </sc-if>
+                  <sc-if value="{{ s.hasHead }}" hint-placeholder-val="{{ true }}">
+                    <div style="display:flex;align-items:center;gap:12px;padding:14px 18px;border-bottom:1px solid {{ s.headBorder }}">
+                      <div style="flex:1;min-width:0"><div style="font-size:14.5px;font-weight:700">{{ s.title }}</div><sc-if value="{{ s.hasSub }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px;color:var(--muted);margin-top:2px">{{ s.sub }}</div></sc-if></div>
+                      <sc-if value="{{ s.hasTabs }}" hint-placeholder-val="{{ false }}">
+                        <div style="display:flex;gap:4px">
+                          <sc-for list="{{ s.tabs }}" as="t" hint-placeholder-count="3">
+                            <button onClick="{{ t.set }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:6px;padding:6px 10px;border-radius:7px;font-size:12.5px;font-weight:600;background:{{ t.bg }};color:{{ t.color }}">{{ t.label }}<span style="font-size:11px;opacity:.6">{{ t.count }}</span></button>
+                          </sc-for>
+                        </div>
+                      </sc-if>
+                      <sc-if value="{{ s.hasLegend }}" hint-placeholder-val="{{ false }}">
+                        <div style="display:flex;gap:14px">
+                          <sc-for list="{{ s.legend }}" as="l" hint-placeholder-count="2"><span style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)"><span style="width:10px;height:3px;border-radius:2px;background:{{ l.c }}"></span>{{ l.t }}</span></sc-for>
+                        </div>
+                      </sc-if>
+                      <sc-if value="{{ s.hasAction }}" hint-placeholder-val="{{ false }}">
+                        <button onClick="{{ s.onAction }}" style="all:unset;cursor:pointer;font-size:12.5px;font-weight:600;padding:7px 11px;border-radius:8px;border:1px solid var(--border2)">{{ s.action }}</button>
+                      </sc-if>
+                    </div>
+                  </sc-if>
+
+                  <!-- empty -->
+                  <sc-if value="{{ s.isEmpty }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;padding:44px 20px;text-align:center">
+                      <div style="width:46px;height:46px;border-radius:12px;background:var(--hover);display:flex;align-items:center;justify-content:center"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M12 2l7 7-7 13-7-13z" fill="#FF7A00"></path></svg></div>
+                      <div style="font-size:13.5px;color:var(--muted)">{{ s.empty }}</div>
+                      <sc-if value="{{ s.hasEmptyCta }}" hint-placeholder-val="{{ false }}"><button onClick="{{ s.onEmptyCta }}" style="all:unset;cursor:pointer;padding:8px 14px;border-radius:8px;background:#F8E71C;color:#141210;font-size:12.5px;font-weight:700">{{ s.emptyCta }}</button></sc-if>
+                    </div>
+                  </sc-if>
+
+                  <!-- chart -->
+                  <sc-if value="{{ s.isChart }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;gap:10px;padding:16px 18px 14px">
+                      <div style="display:flex;flex-direction:column;justify-content:space-between;height:210px;font-size:11px;color:var(--faint);text-align:right;width:44px;font-variant-numeric:tabular-nums">
+                        <sc-for list="{{ s.yLabels }}" as="y" hint-placeholder-count="4"><span>{{ y }}</span></sc-for>
+                      </div>
+                      <div style="flex:1;min-width:0">
+                        <div style="position:relative;height:210px">
+                          <div style="position:absolute;inset:0;display:flex;flex-direction:column;justify-content:space-between"><sc-for list="{{ s.yLabels }}" as="y" hint-placeholder-count="4"><div style="height:1px;background:var(--grid)"></div></sc-for></div>
+                          <svg width="100%" height="210" viewBox="0 0 600 210" preserveAspectRatio="none" style="position:absolute;inset:0">
+                            <sc-for list="{{ s.series }}" as="l" hint-placeholder-count="2">
+                              <path d="{{ l.area }}" fill="{{ l.fill }}"></path>
+                              <path d="{{ l.d }}" fill="none" stroke="{{ l.c }}" stroke-width="2.2" stroke-dasharray="{{ l.dash }}" vector-effect="non-scaling-stroke" stroke-linejoin="round"></path>
+                            </sc-for>
+                          </svg>
+                        </div>
+                        <div style="display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--faint)"><sc-for list="{{ s.xLabels }}" as="x" hint-placeholder-count="6"><span>{{ x }}</span></sc-for></div>
+                      </div>
+                    </div>
+                  </sc-if>
+
+                  <!-- bars -->
+                  <sc-if value="{{ s.isBars }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;align-items:flex-end;gap:10px;height:200px;padding:18px 18px 8px">
+                      <sc-for list="{{ s.bars }}" as="b" hint-placeholder-count="7">
+                        <div style="flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;height:100%;justify-content:flex-end">
+                          <span style="font-size:11px;font-weight:600;font-variant-numeric:tabular-nums">{{ b.v }}</span>
+                          <div style="width:100%;max-width:38px;height:{{ b.h }};border-radius:6px 6px 2px 2px;background:{{ b.c }};transition:height .4s"></div>
+                        </div>
+                      </sc-for>
+                    </div>
+                    <div style="display:flex;gap:10px;padding:0 18px 14px"><sc-for list="{{ s.bars }}" as="b" hint-placeholder-count="7"><span style="flex:1;text-align:center;font-size:11px;color:var(--faint)">{{ b.l }}</span></sc-for></div>
+                  </sc-if>
+
+                  <!-- table -->
+                  <sc-if value="{{ s.isTable }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:grid;grid-template-columns:{{ s.cols }};gap:12px;padding:10px 18px;border-bottom:1px solid var(--border);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:600">
+                      <sc-for list="{{ s.heads }}" as="h" hint-placeholder-count="5"><span style="text-align:{{ h.align }}">{{ h.t }}</span></sc-for>
+                    </div>
+                    <sc-for list="{{ s.rows }}" as="r" hint-placeholder-count="5">
+                      <button onClick="{{ r.open }}" style="all:unset;cursor:{{ r.cursor }};display:grid;grid-template-columns:{{ r.cols }};gap:12px;align-items:center;padding:11px 18px;border-bottom:1px solid var(--border);background:{{ r.bg }};font-size:13px;transition:background .15s" style-hover="background:var(--hover)">
+                        <sc-for list="{{ r.cells }}" as="c" hint-placeholder-count="5">
+                          <span style="min-width:0;text-align:{{ c.align }};display:flex;align-items:center;gap:10px;justify-content:{{ c.justify }}">
+                            <sc-if value="{{ c.isAv }}" hint-placeholder-val="{{ false }}"><span style="width:30px;height:30px;border-radius:{{ c.avR }};background:{{ c.avBg }};background-size:cover;background-position:center;color:#141210;font:700 10.5px 'Bricolage Grotesque',sans-serif;display:flex;align-items:center;justify-content:center;flex:none">{{ c.init }}</span></sc-if>
+                            <sc-if value="{{ c.isPill }}" hint-placeholder-val="{{ false }}"><span style="font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:{{ c.pBg }};color:{{ c.pColor }};white-space:nowrap">{{ c.t }}</span></sc-if>
+                            <sc-if value="{{ c.isText }}" hint-placeholder-val="{{ true }}"><span style="min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-weight:{{ c.fw }};color:{{ c.color }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-variant-numeric:tabular-nums">{{ c.t }}</span><sc-if value="{{ c.hasSub }}" hint-placeholder-val="{{ false }}"><span style="font-size:11.5px;color:var(--faint);white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ c.sub }}</span></sc-if></span></sc-if>
+                            <sc-if value="{{ c.isBar }}" hint-placeholder-val="{{ false }}"><span style="flex:1;height:6px;border-radius:3px;background:var(--hover);overflow:hidden"><span style="display:block;width:{{ c.w }};height:100%;border-radius:3px;background:{{ c.barC }}"></span></span><span style="font-size:12px;font-variant-numeric:tabular-nums;width:38px;text-align:right">{{ c.t }}</span></sc-if>
+                            <sc-if value="{{ c.isBtn }}" hint-placeholder-val="{{ false }}"><span onClick="{{ c.act }}" style="cursor:pointer;font-size:12px;font-weight:600;padding:5px 10px;border-radius:7px;border:1px solid var(--border2)">{{ c.t }}</span></sc-if>
+                          </span>
+                        </sc-for>
+                      </button>
+                    </sc-for>
+                    <sc-if value="{{ s.hasFoot }}" hint-placeholder-val="{{ false }}"><div style="padding:11px 18px;font-size:12px;color:var(--faint)">{{ s.foot }}</div></sc-if>
+                  </sc-if>
+
+                  <!-- list -->
+                  <sc-if value="{{ s.isList }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;flex-direction:column;padding:6px 18px 10px">
+                      <sc-for list="{{ s.items }}" as="i" hint-placeholder-count="4">
+                        <div style="display:flex;align-items:center;gap:12px;padding:10px 0;border-top:{{ i.sep }}">
+                          <span style="width:38px;height:38px;border-radius:{{ i.r }};background:{{ i.bg }};background-size:cover;background-position:center;color:#141210;font:700 12px 'Bricolage Grotesque',sans-serif;display:flex;align-items:center;justify-content:center;flex:none">{{ i.init }}</span>
+                          <div style="flex:1;min-width:0">
+                            <div style="font-size:13.5px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ i.title }}</div>
+                            <div style="font-size:12px;color:var(--muted);margin-top:2px">{{ i.meta }}</div>
+                            <sc-if value="{{ i.hasBar }}" hint-placeholder-val="{{ false }}"><div style="height:5px;border-radius:3px;background:var(--hover);margin-top:7px;overflow:hidden"><div style="width:{{ i.w }};height:100%;border-radius:3px;background:{{ i.barC }}"></div></div></sc-if>
+                          </div>
+                          <div style="text-align:right"><div style="font-size:13.5px;font-weight:700;font-variant-numeric:tabular-nums">{{ i.value }}</div><div style="font-size:11.5px;color:{{ i.subColor }};margin-top:2px">{{ i.vsub }}</div></div>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+
+                  <!-- funnel -->
+                  <sc-if value="{{ s.isFunnel }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;flex-direction:column;gap:12px;padding:16px 18px 18px">
+                      <sc-for list="{{ s.steps }}" as="f" hint-placeholder-count="4">
+                        <div>
+                          <div style="display:flex;justify-content:space-between;font-size:12.5px;margin-bottom:6px"><span style="color:var(--muted)">{{ f.label }}</span><span style="font-weight:700;font-variant-numeric:tabular-nums">{{ f.value }} <span style="font-weight:500;color:var(--faint)">{{ f.pct }}</span></span></div>
+                          <div style="height:26px;border-radius:7px;background:var(--hover);overflow:hidden"><div style="width:{{ f.w }};height:100%;border-radius:7px;background:{{ f.c }};transition:width .5s"></div></div>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+
+                  <!-- split -->
+                  <sc-if value="{{ s.isSplit }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:18px">
+                      <div style="display:flex;height:14px;border-radius:7px;overflow:hidden;gap:2px;margin-bottom:16px"><sc-for list="{{ s.parts }}" as="p" hint-placeholder-count="4"><div style="width:{{ p.w }};background:{{ p.c }}"></div></sc-for></div>
+                      <div style="display:flex;flex-direction:column;gap:10px">
+                        <sc-for list="{{ s.parts }}" as="p" hint-placeholder-count="4">
+                          <div style="display:flex;align-items:center;gap:10px;font-size:13px"><span style="width:10px;height:10px;border-radius:3px;background:{{ p.c }};flex:none"></span><span style="flex:1;color:var(--muted)">{{ p.label }}</span><span style="font-weight:700;font-variant-numeric:tabular-nums">{{ p.value }}</span><span style="width:40px;text-align:right;color:var(--faint);font-variant-numeric:tabular-nums">{{ p.pct }}</span></div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-if>
+
+                  <!-- payout -->
+                  <sc-if value="{{ s.isPayout }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:18px;display:flex;flex-direction:column;gap:14px">
+                      <div><div style="font:800 34px/1 'Bricolage Grotesque',sans-serif;letter-spacing:-.02em;font-variant-numeric:tabular-nums">{{ s.amount }}</div><div style="font-size:12.5px;color:var(--muted);margin-top:6px">{{ s.when }}</div></div>
+                      <div style="display:flex;flex-direction:column;gap:8px">
+                        <sc-for list="{{ s.lines }}" as="l" hint-placeholder-count="3"><div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:var(--muted)">{{ l.k }}</span><span style="font-weight:600;font-variant-numeric:tabular-nums;color:{{ l.c }}">{{ l.v }}</span></div></sc-for>
+                      </div>
+                      <div style="display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:9px;background:var(--surface2);font-size:12.5px;color:var(--muted)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="6" width="18" height="13" rx="2"></rect><path d="M3 10h18"></path></svg>{{ s.bank }}</div>
+                    </div>
+                  </sc-if>
+
+                  <!-- week (availability) -->
+                  <sc-if value="{{ s.isWeek }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:14px 18px 18px">
+                      <div style="display:grid;grid-template-columns:70px repeat(7,minmax(0,1fr));gap:6px;margin-bottom:6px">
+                        <span></span>
+                        <sc-for list="{{ s.days }}" as="d" hint-placeholder-count="7"><span style="text-align:center;font-size:12px;font-weight:600;color:{{ d.color }}">{{ d.t }}</span></sc-for>
+                      </div>
+                      <sc-for list="{{ s.slots }}" as="sl" hint-placeholder-count="5">
+                        <div style="display:grid;grid-template-columns:70px repeat(7,minmax(0,1fr));gap:6px;margin-bottom:6px">
+                          <span style="font-size:12px;color:var(--muted);display:flex;align-items:center">{{ sl.t }}</span>
+                          <sc-for list="{{ sl.cells }}" as="c" hint-placeholder-count="7">
+                            <button onClick="{{ c.toggle }}" style="all:unset;cursor:pointer;height:52px;border-radius:9px;background:{{ c.bg }};border:1px solid {{ c.border }};display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;transition:all .2s">
+                              <span style="font-size:13px;font-weight:700;color:{{ c.color }};font-variant-numeric:tabular-nums">{{ c.t }}</span>
+                              <span style="width:60%;height:4px;border-radius:2px;background:{{ c.trackBg }};overflow:hidden"><span style="display:block;width:{{ c.w }};height:100%;background:{{ c.fill }}"></span></span>
+                            </button>
+                          </sc-for>
+                        </div>
+                      </sc-for>
+                      <div style="display:flex;gap:16px;margin-top:10px;font-size:12px;color:var(--muted)">
+                        <span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:var(--surface2);border:1px solid var(--border2)"></span>Open</span>
+                        <span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:rgba(248,231,28,.55)"></span>Filling</span>
+                        <span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:#FF7A00"></span>Full</span>
+                        <span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:3px;background:repeating-linear-gradient(45deg,var(--border2) 0 2px,transparent 2px 5px)"></span>Closed</span>
+                        <span style="flex:1"></span><span>Click a slot to open or close it</span>
+                      </div>
+                    </div>
+                  </sc-if>
+
+                  <!-- month (schedule) -->
+                  <sc-if value="{{ s.isMonth }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:12px 18px 18px">
+                      <div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px;margin-bottom:6px"><sc-for list="{{ s.wd }}" as="w" hint-placeholder-count="7"><span style="font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--faint);font-weight:600;padding-left:4px">{{ w }}</span></sc-for></div>
+                      <div style="display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:6px">
+                        <sc-for list="{{ s.cells }}" as="c" hint-placeholder-count="35">
+                          <button onClick="{{ c.open }}" style="all:unset;cursor:pointer;box-sizing:border-box;height:96px;padding:6px;border-radius:9px;background:{{ c.bg }};border:1px solid {{ c.border }};display:flex;flex-direction:column;gap:4px;opacity:{{ c.op }};overflow:hidden" style-hover="border-color:var(--border2)">
+                            <span style="font-size:12px;font-weight:{{ c.fw }};color:{{ c.dColor }}">{{ c.d }}</span>
+                            <sc-for list="{{ c.posts }}" as="p" hint-placeholder-count="1">
+                              <span style="display:flex;align-items:center;gap:5px;padding:3px 6px;border-radius:5px;background:{{ p.bg }};font-size:11px;font-weight:600;color:#141210;white-space:nowrap;overflow:hidden"><span style="flex:none">{{ p.time }}</span><span style="overflow:hidden;text-overflow:ellipsis">{{ p.plat }}</span></span>
+                            </sc-for>
+                          </button>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-if>
+
+                  <!-- where you appear -->
+                  <sc-if value="{{ s.isAppear }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:grid;grid-template-columns:300px minmax(0,1fr);gap:28px;padding:22px">
+                      <div style="width:300px;border-radius:34px;padding:12px;background:#1E1A12">
+                        <div style="border-radius:24px;background:#F7F6F2;padding:16px 14px;color:#1E1A12;display:flex;flex-direction:column;gap:10px">
+                          <div style="font-size:11px;color:rgba(30,26,18,.55)">Day 1 · Alfama</div>
+                          <div style="padding:12px;border-radius:16px;background:#FFFFFF;border:1px solid rgba(30,26,18,.08);opacity:.5"><div style="font:600 14px 'Bricolage Grotesque',sans-serif">Alfama walk</div><div style="font-size:11px;color:rgba(30,26,18,.55)">11:00 · step-free</div></div>
+                          <div style="position:relative;padding:12px 82px 12px 12px;border-radius:16px;background:#FFFFFF;border:1.5px solid #FF7A00">
+                            <div style="position:absolute;right:10px;top:10px;bottom:10px;width:62px;border-radius:10px;background:url(https://images.unsplash.com/photo-1536663815808-535e2280d2c2?w=200&amp;q=70&amp;auto=format&amp;fit=crop) center/cover"></div>
+                            <span style="display:inline-block;font-size:9.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#D44A00;border:1px solid rgba(255,122,0,.6);padding:2px 6px;border-radius:999px;margin-bottom:5px">Partner</span>
+                            <div style="font:600 14px 'Bricolage Grotesque',sans-serif">{{ s.offerTitle }}</div>
+                            <div style="font-size:11px;color:rgba(30,26,18,.55);margin-top:2px">{{ s.offerSub }}</div>
+                          </div>
+                          <div style="padding:12px;border-radius:16px;background:#FFFFFF;border:1px solid rgba(30,26,18,.08);opacity:.5"><div style="font:600 14px 'Bricolage Grotesque',sans-serif">Museu do Azulejo</div><div style="font-size:11px;color:rgba(30,26,18,.55)">15:00 · Booked</div></div>
+                        </div>
+                      </div>
+                      <div style="display:flex;flex-direction:column;gap:18px">
+                        <div style="display:flex;gap:12px">
+                          <sc-for list="{{ s.reach }}" as="x" hint-placeholder-count="3"><div style="flex:1;padding:14px;border-radius:12px;background:var(--surface2)"><div style="font:700 24px 'Bricolage Grotesque',sans-serif;font-variant-numeric:tabular-nums">{{ x.v }}</div><div style="font-size:12px;color:var(--muted);margin-top:3px">{{ x.l }}</div></div></sc-for>
+                        </div>
+                        <div>
+                          <div style="font-size:12px;color:var(--muted);margin-bottom:10px">Show to travelers who match</div>
+                          <div style="display:flex;flex-wrap:wrap;gap:8px">
+                            <sc-for list="{{ s.rules }}" as="r" hint-placeholder-count="6"><button onClick="{{ r.toggle }}" style="all:unset;cursor:pointer;padding:8px 13px;border-radius:999px;font-size:13px;font-weight:500;background:{{ r.bg }};color:{{ r.color }};border:1px solid {{ r.border }}">{{ r.t }}</button></sc-for>
+                          </div>
+                        </div>
+                        <div style="display:flex;flex-direction:column;gap:10px">
+                          <sc-for list="{{ s.guarantees }}" as="g" hint-placeholder-count="3"><div style="display:flex;align-items:center;gap:10px;font-size:13px"><span style="width:22px;height:22px;border-radius:50%;background:var(--posBg);display:flex;align-items:center;justify-content:center;flex:none"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="var(--pos)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"></path></svg></span>{{ g }}</div></sc-for>
+                        </div>
+                      </div>
+                    </div>
+                  </sc-if>
+
+                  <!-- form (editors) -->
+                  <sc-if value="{{ s.isForm }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;flex-direction:column;gap:16px;padding:18px">
+                      <sc-for list="{{ s.fields }}" as="f" hint-placeholder-count="4">
+                        <div style="display:flex;flex-direction:column;gap:7px">
+                          <span style="font-size:12px;font-weight:600;color:var(--muted)">{{ f.label }}</span>
+                          <sc-if value="{{ f.isInput }}" hint-placeholder-val="{{ true }}"><input value="{{ f.v }}" onChange="{{ f.on }}" style="all:unset;padding:10px 12px;border-radius:9px;border:1px solid var(--border2);background:var(--surface);font-size:14px;color:var(--text)"></sc-if>
+                          <sc-if value="{{ f.isArea }}" hint-placeholder-val="{{ false }}"><textarea value="{{ f.v }}" onChange="{{ f.on }}" rows="3" style="all:unset;padding:10px 12px;border-radius:9px;border:1px solid var(--border2);background:var(--surface);font-size:14px;line-height:1.45;color:var(--text);white-space:pre-wrap"></textarea></sc-if>
+                          <sc-if value="{{ f.isChips }}" hint-placeholder-val="{{ false }}">
+                            <div style="display:flex;flex-wrap:wrap;gap:6px">
+                              <sc-for list="{{ f.opts }}" as="o" hint-placeholder-count="4"><button onClick="{{ o.toggle }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;font-size:12.5px;font-weight:500;background:{{ o.bg }};color:{{ o.color }};border:1px solid {{ o.border }}">{{ o.t }}</button></sc-for>
+                            </div>
+                          </sc-if>
+                          <sc-if value="{{ f.isMedia }}" hint-placeholder-val="{{ false }}">
+                            <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px">
+                              <sc-for list="{{ f.media }}" as="m" hint-placeholder-count="4"><div style="aspect-ratio:4/3;border-radius:9px;background:{{ m }};background-size:cover;background-position:center"></div></sc-for>
+                              <button onClick="{{ f.on }}" style="all:unset;cursor:pointer;aspect-ratio:4/3;border-radius:9px;border:1.5px dashed var(--border2);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted)">+ Add</button>
+                            </div>
+                          </sc-if>
+                          <sc-if value="{{ f.isStops }}" hint-placeholder-val="{{ false }}">
+                            <div style="display:flex;flex-direction:column;gap:6px">
+                              <sc-for list="{{ f.stops }}" as="st" hint-placeholder-count="4">
+                                <div style="display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:10px;border:1px solid var(--border)">
+                                  <span style="width:22px;height:22px;border-radius:50%;background:var(--hover);font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none">{{ st.n }}</span>
+                                  <span style="width:36px;height:36px;border-radius:7px;background:{{ st.img }};background-size:cover;background-position:center;flex:none"></span>
+                                  <div style="flex:1;min-width:0"><div style="font-size:13.5px;font-weight:600">{{ st.t }}</div><div style="font-size:12px;color:var(--muted)">Tip · {{ st.tip }}</div></div>
+                                  <span style="display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;color:{{ st.vColor }}"><span style="width:7px;height:7px;border-radius:50%;background:{{ st.vColor }}"></span>{{ st.check }}</span>
+                                  <span onClick="{{ st.up }}" style="cursor:pointer;width:26px;height:26px;border-radius:6px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center"><svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 6.5L5 3.5L8 6.5"></path></svg></span>
+                                  <span onClick="{{ st.remove }}" style="cursor:pointer;width:26px;height:26px;border-radius:6px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center"><svg width="9" height="9" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 2l6 6M8 2l-6 6"></path></svg></span>
+                                </div>
+                              </sc-for>
+                              <button onClick="{{ f.on }}" style="all:unset;cursor:pointer;padding:10px;border-radius:10px;border:1.5px dashed var(--border2);text-align:center;font-size:12.5px;color:var(--muted)">+ Add stop</button>
+                            </div>
+                          </sc-if>
+                          <sc-if value="{{ f.isRules }}" hint-placeholder-val="{{ false }}">
+                            <div style="display:flex;flex-direction:column;border-radius:10px;border:1px solid var(--border)">
+                              <sc-for list="{{ f.rules }}" as="r" hint-placeholder-count="3"><div style="display:flex;justify-content:space-between;padding:10px 12px;border-top:{{ r.sep }};font-size:13px"><span style="color:var(--muted)">{{ r.k }}</span><span style="font-weight:600">{{ r.v }}</span></div></sc-for>
+                            </div>
+                          </sc-if>
+                        </div>
+                      </sc-for>
+                      <sc-if value="{{ s.hasSave }}" hint-placeholder-val="{{ false }}">
+                        <div style="display:flex;gap:8px;padding-top:4px">
+                          <button onClick="{{ s.onSave }}" style="all:unset;cursor:pointer;padding:10px 18px;border-radius:9px;background:#F8E71C;color:#141210;font-size:13px;font-weight:700">{{ s.saveLabel }}</button>
+                          <button onClick="{{ s.onCancel }}" style="all:unset;cursor:pointer;padding:10px 16px;border-radius:9px;border:1px solid var(--border2);font-size:13px;font-weight:600">Cancel</button>
+                        </div>
+                      </sc-if>
+                    </div>
+                  </sc-if>
+
+                  <!-- steps / how it works -->
+                  <sc-if value="{{ s.isHow }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;padding:16px 18px 14px">
+                      <sc-for list="{{ s.how }}" as="p" hint-placeholder-count="4">
+                        <div style="display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:12px;background:var(--surface2)">
+                          <div style="display:flex;align-items:center;justify-content:space-between"><span style="width:24px;height:24px;border-radius:50%;background:#F8E71C;color:#141210;font:700 12px 'Bricolage Grotesque',sans-serif;display:flex;align-items:center;justify-content:center">{{ p.n }}</span><span style="font:700 18px 'Bricolage Grotesque',sans-serif;color:var(--acText);font-variant-numeric:tabular-nums">{{ p.v }}</span></div>
+                          <div style="font-size:14px;font-weight:700">{{ p.t }}</div>
+                          <div style="font-size:12.5px;line-height:1.45;color:var(--muted)">{{ p.d }}</div>
+                        </div>
+                      </sc-for>
+                    </div>
+                    <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 24px;padding:0 18px 18px">
+                      <sc-for list="{{ s.policy }}" as="x" hint-placeholder-count="4"><div style="display:flex;align-items:center;gap:9px;font-size:12.5px"><span style="width:18px;height:18px;border-radius:50%;background:var(--posBg);display:flex;align-items:center;justify-content:center;flex:none"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="var(--pos)" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"></path></svg></span>{{ x }}</div></sc-for>
+                    </div>
+                  </sc-if>
+
+                  <!-- calculator -->
+                  <sc-if value="{{ s.isCalc }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;flex-direction:column;gap:14px;padding:16px 18px 18px">
+                      <div style="display:flex;flex-direction:column;gap:7px"><span style="font-size:12px;font-weight:600;color:var(--muted)">Offering</span><div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ s.cOffers }}" as="o" hint-placeholder-count="4"><button onClick="{{ o.toggle }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;font-size:12.5px;font-weight:500;background:{{ o.bg }};color:{{ o.color }};border:1px solid {{ o.border }};opacity:{{ o.op }}">{{ o.t }}</button></sc-for></div></div>
+                      <div style="display:flex;flex-direction:column;gap:7px"><span style="font-size:12px;font-weight:600;color:var(--muted)">Booked via</span><div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ s.cChannels }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.toggle }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;font-size:12.5px;font-weight:500;background:{{ o.bg }};color:{{ o.color }};border:1px solid {{ o.border }};opacity:{{ o.op }}">{{ o.t }}</button></sc-for></div></div>
+                      <div style="display:flex;align-items:center;gap:10px"><span style="font-size:12px;font-weight:600;color:var(--muted);flex:1">{{ s.qtyLabel }}</span>
+                        <button onClick="{{ s.dec }}" style="all:unset;cursor:pointer;width:30px;height:30px;border-radius:8px;border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:16px">−</button>
+                        <span style="width:30px;text-align:center;font:700 17px 'Bricolage Grotesque',sans-serif">{{ s.qty }}</span>
+                        <button onClick="{{ s.inc }}" style="all:unset;cursor:pointer;width:30px;height:30px;border-radius:8px;background:#F8E71C;color:#141210;display:flex;align-items:center;justify-content:center;font-size:16px">+</button>
+                      </div>
+                      <div style="display:flex;height:16px;border-radius:8px;overflow:hidden;gap:2px"><sc-for list="{{ s.cParts }}" as="p" hint-placeholder-count="3"><div style="width:{{ p.w }};background:{{ p.c }};transition:width .35s"></div></sc-for></div>
+                      <div style="display:flex;flex-direction:column;border-radius:10px;border:1px solid var(--border)">
+                        <sc-for list="{{ s.cRows }}" as="r" hint-placeholder-count="5">
+                          <div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-top:{{ r.sep }};background:{{ r.bg }}">
+                            <span style="width:10px;height:10px;border-radius:3px;background:{{ r.dot }};flex:none"></span>
+                            <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:1px"><span style="font-size:13px;font-weight:{{ r.fw }}">{{ r.k }}</span><span style="font-size:11.5px;color:var(--faint)">{{ r.sub }}</span></span>
+                            <span style="font-size:14px;font-weight:{{ r.fw }};color:{{ r.c }};font-variant-numeric:tabular-nums">{{ r.v }}</span>
+                          </div>
+                        </sc-for>
+                      </div>
+                    </div>
+                  </sc-if>
+
+                  <!-- connections grid -->
+                  <sc-if value="{{ s.isConnect }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding:16px 18px 18px">
+                      <sc-for list="{{ s.apps }}" as="a" hint-placeholder-count="6">
+                        <div style="display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:12px;border:1px solid {{ a.border }};background:{{ a.bg }}">
+                          <div style="display:flex;align-items:center;gap:10px">
+                            <span style="width:40px;height:40px;border-radius:10px;background:{{ a.tile }};color:#141210;font:800 13px 'Bricolage Grotesque',sans-serif;display:flex;align-items:center;justify-content:center;flex:none">{{ a.init }}</span>
+                            <div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:700">{{ a.name }}</div><div style="font-size:12px;color:var(--muted);margin-top:1px">{{ a.cat }}</div></div>
+                            <sc-if value="{{ a.on }}" hint-placeholder-val="{{ false }}"><span style="display:flex;align-items:center;gap:5px;font-size:11.5px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--posBg);color:var(--pos)"><span style="width:6px;height:6px;border-radius:50%;background:var(--pos)"></span>Connected</span></sc-if>
+                          </div>
+                          <div style="font-size:12.5px;line-height:1.45;color:var(--muted);min-height:36px">{{ a.desc }}</div>
+                          <sc-if value="{{ a.on }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:12px;font-size:11.5px;color:var(--faint)"><span>{{ a.stat1 }}</span><span>·</span><span>{{ a.stat2 }}</span></div></sc-if>
+                          <div style="display:flex;gap:8px">
+                            <button onClick="{{ a.act }}" style="all:unset;cursor:pointer;flex:1;text-align:center;padding:8px 0;border-radius:8px;font-size:12.5px;font-weight:700;background:{{ a.btnBg }};color:{{ a.btnColor }};border:1px solid {{ a.btnBorder }}">{{ a.btn }}</button>
+                          </div>
+                        </div>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+
+                  <!-- toggles -->
+                  <sc-if value="{{ s.isToggles }}" hint-placeholder-val="{{ false }}">
+                    <div style="display:flex;flex-direction:column;padding:2px 18px 8px">
+                      <sc-for list="{{ s.toggles }}" as="t" hint-placeholder-count="4">
+                        <button onClick="{{ t.toggle }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:12px;padding:12px 0;border-top:{{ t.sep }}">
+                          <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:13.5px;font-weight:600">{{ t.label }}</span><span style="font-size:12px;color:var(--muted)">{{ t.sub }}</span></span>
+                          <span style="width:36px;height:20px;border-radius:999px;background:{{ t.track }};position:relative;flex:none;transition:background .2s"><span style="position:absolute;top:2px;left:{{ t.knob }};width:16px;height:16px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:left .2s"></span></span>
+                        </button>
+                      </sc-for>
+                    </div>
+                  </sc-if>
+
+                  <!-- preview card -->
+                  <sc-if value="{{ s.isPreview }}" hint-placeholder-val="{{ false }}">
+                    <div style="padding:16px 18px 18px;display:flex;flex-direction:column;gap:12px">
+                      <div style="position:relative;height:170px;border-radius:12px;background:{{ s.img }};background-size:cover;background-position:center;overflow:hidden">
+                        <div style="position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,.55))"></div>
+                        <span style="position:absolute;left:10px;top:10px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;padding:3px 7px;border-radius:999px;background:#FFFFFF;color:{{ s.tagColor }}">{{ s.tag }}</span>
+                        <div style="position:absolute;left:12px;right:12px;bottom:10px;color:#FFFFFF"><div style="font:700 17px 'Bricolage Grotesque',sans-serif">{{ s.pTitle }}</div><div style="font-size:12px;opacity:.85;margin-top:2px">{{ s.pSub }}</div></div>
+                      </div>
+                      <sc-for list="{{ s.checks }}" as="c" hint-placeholder-count="3"><div style="display:flex;align-items:center;gap:9px;font-size:12.5px"><span style="width:18px;height:18px;border-radius:50%;background:{{ c.bg }};display:flex;align-items:center;justify-content:center;flex:none"><svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="{{ c.c }}" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round"><path d="{{ c.d }}"></path></svg></span><span style="flex:1;color:var(--muted)">{{ c.t }}</span></div></sc-for>
+                    </div>
+                  </sc-if>
+                </section>
+              </sc-for>
+            </div>
+          </div>
+        </main>
+      </div>
+
+      <!-- drawer -->
+      <sc-if value="{{ hasDrawer }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ closeDrawer }}" style="position:absolute;inset:40px 0 0 0;background:rgba(20,18,16,.28);z-index:40"></div>
+        <div style="position:absolute;top:40px;right:0;bottom:0;width:420px;z-index:41;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;animation:stDrawer .3s ease-out">
+          <div style="display:flex;align-items:center;gap:10px;padding:18px 20px;border-bottom:1px solid var(--border)">
+            <div style="flex:1;min-width:0"><div style="font-size:11.5px;color:var(--faint)">{{ dKicker }}</div><div style="font:700 19px 'Bricolage Grotesque',sans-serif;margin-top:2px">{{ dTitle }}</div></div>
+            <sc-if value="{{ dHasPill }}" hint-placeholder-val="{{ false }}"><span style="font-size:11.5px;font-weight:700;padding:3px 9px;border-radius:999px;background:{{ dPillBg }};color:{{ dPillColor }}">{{ dPill }}</span></sc-if>
+            <button onClick="{{ closeDrawer }}" style="all:unset;cursor:pointer;width:32px;height:32px;border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center"><svg width="10" height="10" viewBox="0 0 10 10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 2l6 6M8 2l-6 6"></path></svg></button>
+          </div>
+          <div style="flex:1;overflow:auto;padding:18px 20px;display:flex;flex-direction:column;gap:16px">
+            <sc-if value="{{ dHasPin }}" hint-placeholder-val="{{ false }}"><div style="display:flex;align-items:center;gap:8px"><span style="width:22px;height:22px;border-radius:50%;background:#F8E71C;color:#141210;font:700 11px 'Bricolage Grotesque',sans-serif;display:flex;align-items:center;justify-content:center">{{ dPinN }}</span><span style="font-size:11px;font-weight:600;background:#1E1A12;color:#F8E71C;padding:4px 9px;border-radius:999px">{{ dPinLabel }}</span></div></sc-if>
+            <sc-if value="{{ dHasRows }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column;border-radius:12px;border:1px solid var(--border)">
+              <sc-for list="{{ dRows }}" as="r" hint-placeholder-count="6"><div style="display:flex;justify-content:space-between;gap:12px;padding:11px 14px;border-top:{{ r.sep }};font-size:13px"><span style="color:var(--muted)">{{ r.k }}</span><span style="font-weight:600;text-align:right;font-variant-numeric:tabular-nums">{{ r.v }}</span></div></sc-for>
+            </div></sc-if>
+            <sc-if value="{{ dHasForm }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <sc-for list="{{ dForm }}" as="f" hint-placeholder-count="3">
+                  <div style="display:flex;flex-direction:column;gap:7px">
+                    <span style="font-size:12px;font-weight:600;color:var(--muted)">{{ f.label }}</span>
+                    <sc-if value="{{ f.isInput }}" hint-placeholder-val="{{ true }}"><input value="{{ f.v }}" onChange="{{ f.on }}" style="all:unset;padding:10px 12px;border-radius:9px;border:1px solid var(--border2);font-size:14px;color:var(--text)"></sc-if>
+                    <sc-if value="{{ f.isChips }}" hint-placeholder-val="{{ false }}"><div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ f.opts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.toggle }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;font-size:12.5px;font-weight:500;background:{{ o.bg }};color:{{ o.color }};border:1px solid {{ o.border }};opacity:{{ o.op }}">{{ o.t }}</button></sc-for></div></sc-if>
+                    <sc-if value="{{ f.isArea }}" hint-placeholder-val="{{ false }}"><textarea value="{{ f.v }}" onChange="{{ f.on }}" rows="4" placeholder="{{ f.ph }}" style="all:unset;box-sizing:border-box;padding:10px 12px;border-radius:9px;border:1px solid var(--border2);background:var(--surface);font-size:14px;color:var(--text);line-height:1.45;white-space:pre-wrap;resize:none"></textarea></sc-if>
+                    <sc-if value="{{ f.isSelect }}" hint-placeholder-val="{{ false }}">
+                      <div style="position:relative">
+                        <select value="{{ f.v }}" onChange="{{ f.on }}" style="all:unset;box-sizing:border-box;padding:10px 12px;border-radius:9px;border:1px solid var(--border2);background:var(--surface);font-size:14px;color:var(--text);width:100%;appearance:none;-webkit-appearance:none;padding-right:34px;cursor:pointer">
+                          <sc-for list="{{ f.options }}" as="o" hint-placeholder-count="0"><option value="{{ o.v }}">{{ o.t }}</option></sc-for>
+                        </select>
+                        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="var(--muted)" stroke-width="1.8" stroke-linecap="round" style="position:absolute;right:12px;top:50%;margin-top:-6px;pointer-events:none"><path d="M3 4.5L6 7.5L9 4.5"></path></svg>
+                      </div>
+                      <sc-if value="{{ f.hasHint }}" hint-placeholder-val="{{ false }}"><span style="font-size:11.5px;color:var(--faint)">{{ f.hint }}</span></sc-if>
+                    </sc-if>
+                    <sc-if value="{{ f.isDateTime }}" hint-placeholder-val="{{ false }}">
+                      <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:8px">
+                        <input type="date" value="{{ f.date }}" onChange="{{ f.onDate }}" style="all:unset;box-sizing:border-box;padding:10px 12px;border-radius:9px;border:1px solid var(--border2);background:var(--surface);font-size:14px;color:var(--text);color-scheme:{{ f.scheme }}">
+                        <input type="time" step="300" value="{{ f.time }}" onChange="{{ f.onTime }}" style="all:unset;box-sizing:border-box;padding:10px 12px;border-radius:9px;border:1px solid var(--border2);background:var(--surface);font-size:14px;color:var(--text);color-scheme:{{ f.scheme }}">
+                      </div>
+                      <div style="display:flex;flex-wrap:wrap;gap:6px;align-items:center">
+                        <span style="font-size:11.5px;color:var(--faint)">Suggested</span>
+                        <sc-for list="{{ f.quick }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.toggle }}" style="all:unset;cursor:pointer;display:flex;align-items:center;gap:6px;padding:7px 12px;border-radius:999px;font-size:12.5px;font-weight:500;background:{{ o.bg }};color:{{ o.color }};border:1px solid {{ o.border }};opacity:{{ o.op }}">{{ o.t }}</button></sc-for>
+                      </div>
+                      <span style="font-size:11.5px;color:var(--faint)">{{ f.tz }}</span>
+                    </sc-if>
+                    <sc-if value="{{ f.isUpload }}" hint-placeholder-val="{{ false }}">
+                      <label style="display:flex;flex-direction:column;align-items:center;gap:6px;padding:18px 12px;border-radius:10px;border:1.5px dashed var(--border2);background:var(--surface2);cursor:pointer;text-align:center">
+                        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="var(--acText)" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M12 16V4M7 9l5-5 5 5M4 16v3a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-3"></path></svg>
+                        <span style="font-size:13px;font-weight:700">Upload photos or video</span>
+                        <span style="font-size:11.5px;color:var(--faint)">JPG, PNG, MP4 · up to 10 · first is the cover</span>
+                        <input type="file" accept="image/*,video/*" multiple="{{ true }}" onChange="{{ f.onFiles }}" style="display:none">
+                      </label>
+                      <sc-if value="{{ f.hasMedia }}" hint-placeholder-val="{{ false }}">
+                        <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px">
+                          <sc-for list="{{ f.media }}" as="m" hint-placeholder-count="2">
+                            <div style="position:relative;aspect-ratio:1;border-radius:8px;background:{{ m.bg }};background-size:cover;background-position:center;outline:{{ m.outline }};outline-offset:1px;overflow:hidden">
+                              <sc-if value="{{ m.isVideo }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M7 4l13 8-13 8z"></path></svg></span></sc-if>
+                              <sc-if value="{{ m.isCover }}" hint-placeholder-val="{{ false }}"><span style="position:absolute;left:4px;bottom:4px;font-size:9px;font-weight:800;letter-spacing:.05em;text-transform:uppercase;padding:2px 5px;border-radius:4px;background:#F8E71C;color:#141210">Cover</span></sc-if>
+                              <span onClick="{{ m.remove }}" style="position:absolute;top:4px;right:4px;width:18px;height:18px;border-radius:50%;background:rgba(20,18,16,.7);display:flex;align-items:center;justify-content:center;cursor:pointer"><svg width="7" height="7" viewBox="0 0 10 10" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round"><path d="M2 2l6 6M8 2l-6 6"></path></svg></span>
+                            </div>
+                          </sc-for>
+                        </div>
+                      </sc-if>
+                      <div style="display:flex;align-items:center;gap:6px">
+                        <span style="font-size:11.5px;color:var(--faint);margin-right:2px">From your guides</span>
+                        <sc-for list="{{ f.quickMedia }}" as="q" hint-placeholder-count="5"><span onClick="{{ q.add }}" style="cursor:pointer;width:34px;height:34px;border-radius:7px;background:{{ q.bg }};background-size:cover;background-position:center;border:1px solid var(--border)"></span></sc-for>
+                      </div>
+                    </sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-if>
+            <sc-if value="{{ dHasNote }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:9px;padding:12px 14px;border-radius:10px;background:var(--warnBg);font-size:12.5px;line-height:1.45"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" style="flex:none;margin-top:1px"><rect x="5" y="11" width="14" height="10" rx="2"></rect><path d="M8 11V7a4 4 0 0 1 8 0v4"></path></svg>{{ dNote }}</div></sc-if>
+          </div>
+          <div style="display:flex;gap:8px;padding:14px 20px;border-top:1px solid var(--border)">
+            <sc-for list="{{ dActions }}" as="a" hint-placeholder-count="2"><button onClick="{{ a.act }}" style="all:unset;cursor:pointer;flex:1;text-align:center;padding:11px 0;border-radius:9px;font-size:13px;font-weight:700;background:{{ a.bg }};color:{{ a.color }};border:1px solid {{ a.border }}">{{ a.t }}</button></sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- notifications -->
+      <sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+        <div onClick="{{ closeNotif }}" style="position:absolute;inset:40px 0 0 0;z-index:45"></div>
+        <div style="position:absolute;top:100px;right:{{ notifRight }};width:400px;z-index:46;display:flex;flex-direction:column;max-height:620px;background:var(--surface);border:1px solid var(--border2);border-radius:14px;box-shadow:0 24px 60px rgba(0,0,0,.2);overflow:hidden;animation:stIn .2s ease-out">
+          <div style="display:flex;align-items:center;gap:10px;padding:14px 16px 10px">
+            <span style="font:700 16px 'Bricolage Grotesque',sans-serif">Notifications</span>
+            <sc-if value="{{ hasUnread }}" hint-placeholder-val="{{ true }}"><span style="font-size:11px;font-weight:800;padding:2px 7px;border-radius:999px;background:#FF7A00;color:#141210">{{ unreadCount }} new</span></sc-if>
+            <span style="flex:1"></span>
+            <button onClick="{{ markAll }}" style="all:unset;cursor:pointer;font-size:12.5px;font-weight:600;color:var(--acText)">Mark all read</button>
+          </div>
+          <div style="display:flex;gap:4px;padding:0 12px 10px;border-bottom:1px solid var(--border)">
+            <sc-for list="{{ nTabs }}" as="t" hint-placeholder-count="3"><button onClick="{{ t.set }}" style="all:unset;cursor:pointer;padding:6px 10px;border-radius:7px;font-size:12.5px;font-weight:600;background:{{ t.bg }};color:{{ t.color }}">{{ t.label }}</button></sc-for>
+          </div>
+          <div style="flex:1;overflow:auto">
+            <sc-for list="{{ notifs }}" as="n" hint-placeholder-count="5">
+              <button onClick="{{ n.go }}" style="all:unset;cursor:pointer;box-sizing:border-box;width:100%;display:flex;align-items:flex-start;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);background:{{ n.bg }}" style-hover="background:var(--hover)">
+                <span style="width:34px;height:34px;border-radius:9px;background:{{ n.tile }};display:flex;align-items:center;justify-content:center;flex:none"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#141210" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="{{ n.d }}"></path></svg></span>
+                <span style="flex:1;min-width:0;display:flex;flex-direction:column;gap:3px">
+                  <span style="font-size:13px;font-weight:{{ n.fw }};line-height:1.35">{{ n.title }}</span>
+                  <span style="font-size:12px;color:var(--muted);line-height:1.35">{{ n.meta }}</span>
+                  <span style="font-size:11px;color:var(--faint)">{{ n.time }} · {{ n.cta }}</span>
+                </span>
+                <sc-if value="{{ n.unread }}" hint-placeholder-val="{{ false }}"><span style="width:8px;height:8px;border-radius:50%;background:#FF7A00;margin-top:6px;flex:none"></span></sc-if>
+              </button>
+            </sc-for>
+            <sc-if value="{{ noNotifs }}" hint-placeholder-val="{{ false }}"><div style="padding:36px 16px;text-align:center;font-size:13px;color:var(--muted)">You’re all caught up</div></sc-if>
+          </div>
+          <button onClick="{{ notifSettings }}" style="all:unset;cursor:pointer;padding:12px 16px;border-top:1px solid var(--border);font-size:12.5px;font-weight:600;color:var(--muted);text-align:center">Notification settings</button>
+        </div>
+      </sc-if>
+
+      <!-- toast -->
+      <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+        <div style="position:absolute;left:50%;bottom:26px;transform:translateX(-50%);z-index:60;display:flex;align-items:center;gap:8px;padding:11px 16px;border-radius:10px;background:#1E1A12;color:#FFFFFF;font-size:13px;font-weight:600;box-shadow:0 10px 30px rgba(0,0,0,.2);animation:stIn .25s ease-out">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#F8E71C" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7"></path></svg>{{ toast }}
+        </div>
+      </sc-if>
+    </div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const Y='#F8E71C',O='#FF7A00',INK='#141210';
+const U=id=>'https://images.unsplash.com/photo-'+id+'?w=300&q=70&auto=format&fit=crop';
+const BG=id=>'url('+U(id)+')';
+const LIGHT={'--page':'#E9E7E1','--bg':'#F4F3EF','--surface':'#FFFFFF','--surface2':'#F7F6F2','--border':'rgba(30,26,18,.09)','--border2':'rgba(30,26,18,.15)','--text':'#1E1A12','--muted':'rgba(30,26,18,.62)','--faint':'rgba(30,26,18,.42)','--hover':'rgba(30,26,18,.045)','--chrome':'#ECEAE4','--pos':'#2E7D4F','--posBg':'rgba(46,125,79,.11)','--neg':'#C2410C','--negBg':'rgba(194,65,12,.1)','--warnBg':'rgba(248,231,28,.42)','--grid':'rgba(30,26,18,.07)','--acText':'#B35400'};
+const DARK={'--page':'#0C0B0A','--bg':'#121110','--surface':'#1A1917','--surface2':'#22201D','--border':'rgba(255,255,255,.08)','--border2':'rgba(255,255,255,.14)','--text':'#F2EFE8','--muted':'rgba(242,239,232,.64)','--faint':'rgba(242,239,232,.42)','--hover':'rgba(255,255,255,.05)','--chrome':'#1F1D1A','--pos':'#5BC48A','--posBg':'rgba(91,196,138,.15)','--neg':'#FF8A4C','--negBg':'rgba(255,138,76,.15)','--warnBg':'rgba(248,231,28,.18)','--grid':'rgba(255,255,255,.07)','--acText':'#F8E71C'};
+const IC={dash:'M3 3h7v9H3zM14 3h7v5h-7zM14 12h7v9h-7zM3 16h7v5H3z',book:'M8 2v4M16 2v4M3 9h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM8 14l2.5 2.5L16 12',offer:'M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8zM7.5 7.5h.01',avail:'M12 7v5l3 2M12 3a9 9 0 1 0 0 18a9 9 0 1 0 0-18z',rev:'M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6',chart:'M3 3v18h18M7 15l4-5 4 3 5-7',eye:'M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12zM12 9a3 3 0 1 0 0 6a3 3 0 1 0 0-6z',content:'M4 4h16v16H4zM4 9h16M9 9v11',cal:'M8 2v4M16 2v4M3 9h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2zM8 13h3M8 17h6',users:'M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2M9 3a4 4 0 1 0 0 8a4 4 0 1 0 0-8zM23 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8',link:'M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7-7l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7 7l1.7-1.7',wallet:'M3 7h18v13H3zM3 7l3-4h12l3 4M16 13h2',plug:'M9 2v5M15 2v5M6 7h12v4a6 6 0 0 1-12 0zM12 17v5',bell:'M6 9a6 6 0 0 1 12 0c0 6 2.5 7.5 2.5 7.5h-17S6 15 6 9M10 20a2 2 0 0 0 4 0',alert:'M12 3l10 18H2zM12 10v5M12 18v.5',star:'M12 3l2.8 5.8 6.2.9-4.5 4.4 1 6.2L12 17.4 6.5 20.3l1-6.2L3 9.7l6.2-.9z',sync:'M21 12a9 9 0 0 1-15.5 6.2M3 12A9 9 0 0 1 18.5 5.8M18 2v4h-4M6 22v-4h4'};
+const NAV={partner:[['p-dash','Dashboard','dash'],['p-bookings','Bookings','book',1],['p-offers','Offerings','offer',1],['p-avail','Availability','avail',1],['p-revenue','Revenue & commissions','rev'],['p-analytics','Analytics','chart'],['p-appear','Where you appear','eye'],['p-conn','Connections','plug']],creator:[['c-dash','Dashboard','dash'],['c-content','Guides','content'],['c-schedule','Content schedule','cal'],['c-audience','Audience','users'],['c-referrals','Referrals','link'],['c-analytics','Analytics','chart'],['c-earnings','Earnings & payouts','wallet'],['c-conn','Connections','plug']]};
+const TITLES={'p-dash':'Overview','p-bookings':'Bookings','p-offers':'Offerings','p-offer-edit':'Edit offering','p-avail':'Availability','p-revenue':'Revenue & commissions','p-analytics':'Analytics','p-appear':'Where your offer appears','c-dash':'Overview','c-content':'Guides','c-guide-edit':'Edit guide','c-schedule':'Content schedule','c-audience':'Audience','c-referrals':'Referrals','c-analytics':'Analytics','c-earnings':'Earnings & payouts','p-conn':'Connections','c-conn':'Connections'};
+const OFFERS=[
+ {id:'o1',title:'Deluxe river room',cat:'Room',price:164,unit:'night',bookings:21,views:4820,status:'Live',img:'1533421821268-87e42c1d70b0',access:['Step-free entry','Elevator','Accessible bathroom'],desc:'Corner room over the Tejo. King bed, rain shower, balcony.'},
+ {id:'o2',title:'Classic double',cat:'Room',price:128,unit:'night',bookings:17,views:3610,status:'Live',img:'1605641532626-5ab1dab56350',access:['Elevator'],desc:'Quiet courtyard side, tiled floors.'},
+ {id:'o3',title:'Family suite',cat:'Room',price:219,unit:'night',bookings:6,views:1420,status:'Live',img:'1536663815808-535e2280d2c2',access:['Step-free entry','Elevator'],desc:'Two rooms, sofa bed, kitchenette.'},
+ {id:'o4',title:'Rooftop breakfast',cat:'Dining',price:18,unit:'person',bookings:14,views:2950,status:'Live',img:'1558102400-72da9fdbecae',access:['Elevator','Quiet hours'],desc:'Pastries, fruit and coffee above Alfama.'},
+ {id:'o5',title:'Sunset terrace dinner',cat:'Dining',price:46,unit:'person',bookings:9,views:2210,status:'Live',img:'1501927023255-9063be98970c',access:['Elevator'],desc:'Four courses, Portuguese wines.'},
+ {id:'o6',title:'Tile painting workshop',cat:'Experience',price:35,unit:'person',bookings:0,views:640,status:'Paused',img:'1599069158346-684fee0e414a',access:['Step-free entry'],desc:'Paint your own azulejo in 90 minutes.'}];
+const NAMES=[['Ana V.','AV'],['Jonas K.','JK'],['Marta S.','MS'],['Kenji O.','KO'],['Lea B.','LB'],['Sara P.','SP'],['Tom W.','TW'],['Priya N.','PN'],['Luca R.','LR'],['Emma D.','ED'],['Omar H.','OH'],['Chloé M.','CM'],['Diego F.','DF'],['Hana K.','HK']];
+const BSTAT=['Confirmed','Confirmed','Pending','Confirmed','Completed','Cancelled','Confirmed','Pending','Completed','Confirmed','Completed','Confirmed','Pending','Completed'];
+const BOOKINGS=NAMES.map(([n,i],k)=>{const o=OFFERS[[0,1,0,3,2,4,0,1,3,0,4,2,0,1][k]];const nights=o.unit==='night'?[3,2,4,1,3,2,3,2,1,4,1,2,3,2][k]:2;const amt=o.price*nights;return{id:'TW-'+(48213+k*37),guest:n,init:i,offer:o.title,oid:o.id,date:['12 Oct','12 Oct','13 Oct','13 Oct','09 Oct','14 Oct','15 Oct','16 Oct','08 Oct','18 Oct','07 Oct','19 Oct','20 Oct','05 Oct'][k],qty:o.unit==='night'?nights+' nights':nights+' guests',amount:amt,channel:k%3===0?'Creator · Inês R.':k%3===1?'TripWise engine':'Direct link',status:BSTAT[k],access:k%4===0?'Step-free route':k%4===2?'Quiet room':'—'};});
+const GUIDES=[
+ {id:'g1',title:'Lisbon on foot, no stairs',status:'Live',views:31200,saves:2410,bookings:118,earn:612,updated:'2d ago',img:'1599069158346-684fee0e414a'},
+ {id:'g2',title:'Riverside lunches',status:'Live',views:12400,saves:1090,bookings:54,earn:288,updated:'1w ago',img:'1558102400-72da9fdbecae'},
+ {id:'g3',title:'Sintra before the crowds',status:'Live',views:9800,saves:760,bookings:41,earn:236,updated:'3w ago',img:'1565865735988-fd5752a02846'},
+ {id:'g4',title:'Rainy-day Lisbon',status:'Scheduled',views:0,saves:0,bookings:0,earn:0,updated:'Goes live 18 Oct',img:'1605641532626-5ab1dab56350'},
+ {id:'g5',title:'Fado nights, step-free',status:'Draft',views:0,saves:0,bookings:0,earn:0,updated:'Edited today',img:'1501927023255-9063be98970c'}];
+const GSTOPS=[['Miradouro de Santa Luzia','Go before 10','1501927023255-9063be98970c','Open 24h'],['Sé de Lisboa','Use side entrance','1599069158346-684fee0e414a','Open 10–18'],['Castelo via free lift','Lift at Rua dos Fanqueiros','1536663815808-535e2280d2c2','Step-free ✓'],['Chapitô à Mesa','Book the terrace','1558102400-72da9fdbecae','Closes Mon']];
+const LINKS=[
+ {slug:'tw.link/ines/casadorio',partner:'Casa do Rio',type:'Hotel',clicks:1840,saves:420,bookings:31,value:7420,comm:297},
+ {slug:'tw.link/ines/sol',partner:'Taberna Sol',type:'Restaurant',clicks:1210,saves:310,bookings:44,value:2380,comm:95},
+ {slug:'tw.link/ines/fado',partner:'Casa Luz Fado',type:'Show',clicks:960,saves:205,bookings:22,value:1980,comm:79},
+ {slug:'tw.link/ines/tiles',partner:'Azulejo Studio',type:'Experience',clicks:640,saves:118,bookings:12,value:840,comm:34},
+ {slug:'tw.link/ines/ferry',partner:'Rio Ferries',type:'Transport',clicks:410,saves:62,bookings:9,value:270,comm:11}];
+const FOLLOWERS=[['Ana V.','@ana.wanders','Berlin','Accessibility','12 Oct',14],['Kenji O.','@kenji.go','Kyoto','Food','11 Oct',9],['Lea B.','@lea.b','Berlin','Slow travel','11 Oct',6],['Omar H.','@omarh','Dubai','Food','10 Oct',3],['Priya N.','@priya.n','London','Families','09 Oct',11],['Diego F.','@diegof','Madrid','Nightlife','08 Oct',2],['Hana K.','@hana.k','Seoul','Accessibility','08 Oct',7],['Tom W.','@tomw','NYC','Slow travel','07 Oct',4],['Chloé M.','@chloe.m','Paris','Food','06 Oct',8],['Luca R.','@luca.r','Milan','Families','05 Oct',5]];
+const SEGS=[['Accessibility',Y],['Food',O],['Slow travel','#FFB347'],['Families','#FFE98A'],['Nightlife','rgba(140,130,120,.55)']];
+const PLATS={Instagram:'#FFB347',TikTok:'#FFE98A',Blog:'#F8E71C',Newsletter:'#FFC77E',YouTube:'#FF9A3D'};
+const POSTS0={2:[['09:00','Instagram','Santa Luzia at 9am']],5:[['18:00','TikTok','No-stairs Alfama']],8:[['10:00','Blog','Riverside lunches']],9:[['19:00','Instagram','Fado night']],12:[['09:00','Newsletter','October picks'],['17:00','Instagram','Tile workshop']],15:[['12:00','TikTok','Free lift to the castle']],18:[['10:00','Blog','Rainy-day Lisbon'],['10:30','Instagram','Rainy-day Lisbon']],22:[['18:00','YouTube','Sintra early']],25:[['09:00','Instagram','Golden hour Graça']],29:[['09:00','Newsletter','Halloween in Lisbon']]};
+const RATES={Room:.12,Dining:.10,Experience:.15,Transport:.08};
+const CREATOR_RATE=.04,VAT=.23;
+const CH_P=[['Airbnb','Stays · listings & calendar','AB','#FF9A3D',1,'2 listings','Two-way calendar'],['Booking.com','Stays · rates & availability','BK','#FFE98A',1,'3 room types','Synced 4 min ago'],['Expedia','Stays · rates & availability','EX','#FFC77E',0],['Vrbo','Holiday rentals','VR','#FFB347',0],['GetYourGuide','Experiences & tours','GY','#F8E71C',0],['Viator','Experiences & tours','VI','#FFD84D',0],['Tripadvisor','Reviews & listing','TA','#FFE98A',0],['Google Business Profile','Maps, hours & reviews','GB','#FFC77E',1,'4.8 · 212 reviews','Hours synced'],['eBay','Gift vouchers','EB','#FFB347',0]];
+const CH_C=[['Instagram','Posts, reels & stories','IG','#FFB347',1,'@ines.walks','12.4k followers'],['TikTok','Short video','TT','#FFE98A',1,'@ines.walks','4.1k followers'],['YouTube','Long-form video','YT','#FF9A3D',0],['Pinterest','Pins & boards','PI','#FFC77E',0],['Substack','Newsletter','SB','#F8E71C',1,'2.3k subscribers','Weekly'],['WordPress','Blog','WP','#FFD84D',1,'inesrwalks.com','Auto-publish'],['Threads','Text posts','TH','#FFE98A',0],['Facebook','Page & groups','FB','#FFC77E',0],['X','Posts','X','#FFB347',0]];
+const PLAT_APP={Instagram:'Instagram',TikTok:'TikTok',YouTube:'YouTube',Blog:'WordPress',Newsletter:'Substack'};
+const NOTIFS={partner:[['n1','New booking request','Marta S. · Deluxe river room · 13 Oct · 4 nights','2 min ago','Review','book','#F8E71C',{drawer:{type:'booking',id:'TW-48287'},page:'p-bookings'}],['n2','Almost full on Saturday','Deluxe river room · 5 / 6 booked · 18 Oct','24 min ago','Open availability','alert','#FF9A3D',{page:'p-avail'}],['n3','Double booking prevented','Airbnb tried to sell 19 Oct · blocked by sync','1 h ago','View connection','sync','#FFE98A',{page:'p-conn'}],['n4','Payout in transit','PO-2291 · €6,240 · arrives 20 Oct','3 h ago','View payout','rev','#FFC77E',{page:'p-revenue'}],['n5','Inês R. added you to a guide','Lisbon on foot, no stairs · 31k views','Yesterday','See where you appear','link','#FFB347',{page:'p-appear'}],['n6','New 5★ review','“Perfect step-free stay by the river” · Lea B.','Yesterday','Open analytics','star','#FFE98A',{page:'p-analytics'}],['n7','Cancellation','Sara P. · Sunset terrace dinner · No commission charged','2 days ago','View booking','book','#FFC77E',{drawer:{type:'booking',id:'TW-48398'},page:'p-bookings'}]],
+ creator:[['n1','Referral booking','Casa do Rio · 3 nights · +€19.68 pending','4 min ago','View referrals','link','#F8E71C',{page:'c-referrals'}],['n2','2 posts go live tomorrow','Instagram 09:00 · TikTok 18:00','1 h ago','Open schedule','cal','#FFB347',{page:'c-schedule'}],['n3','Stop flagged by validation','Chapitô à Mesa closes Mondays · Lisbon on foot','3 h ago','Fix guide','alert','#FF9A3D',{edit:'g1'}],['n4','+124 followers','Mostly Accessibility & Food segments','Today','View audience','users','#FFE98A',{page:'c-audience'}],['n5','Payout scheduled','€842 · 1 Nov · IBAN •••• 0917','Yesterday','View earnings','wallet','#FFC77E',{page:'c-earnings'}],['n6','Instagram access expires in 5 days','Reconnect to keep scheduling','2 days ago','Reconnect','plug','#FFB347',{page:'c-conn'}]]};
+const RANGE={'7d':.24,'30d':1,'90d':2.85};
+const eur=n=>'€'+Math.round(n).toLocaleString('en-US');
+const k=n=>n>=1000?(n/1000).toFixed(n>=10000?1:1).replace(/\.0$/,'')+'k':String(Math.round(n));
+const path=(a,max,w=600,h=210)=>a.map((v,i)=>(i?'L':'M')+(i*w/(a.length-1)).toFixed(1)+' '+(h-6-(v/max)*(h-16)).toFixed(1)).join(' ');
+const spark=a=>{const mx=Math.max(...a),mn=Math.min(...a);return a.map((v,i)=>(i?'L':'M')+(i*120/(a.length-1)).toFixed(1)+' '+(27-((v-mn)/(mx-mn||1))*24).toFixed(1)).join(' ');};
+const pill=s=>({Confirmed:['var(--posBg)','var(--pos)'],Live:['var(--posBg)','var(--pos)'],Pending:['var(--warnBg)','var(--text)'],Scheduled:['var(--warnBg)','var(--text)'],Cancelled:['var(--negBg)','var(--neg)'],Completed:['var(--hover)','var(--muted)'],Draft:['var(--hover)','var(--muted)'],Paused:['var(--hover)','var(--muted)'],Paid:['var(--posBg)','var(--pos)'],'In transit':['var(--warnBg)','var(--text)']})[s]||['var(--hover)','var(--muted)'];
+const T=(t,o)=>Object.assign({isText:true,t:String(t),fw:400,color:'var(--text)',align:'left',justify:'flex-start',hasSub:false,sub:''},o||{});
+const NUM=(t,o)=>T(t,Object.assign({align:'right',justify:'flex-end',fw:600},o||{}));
+const PILL=s=>{const[b,c]=pill(s);return{isPill:true,t:s,pBg:b,pColor:c,align:'left',justify:'flex-start'};};
+const AV=(init,bg,title,sub,sq)=>({isAv:true,init,avBg:bg,avR:sq?'7px':'50%',isText:true,t:title,sub:sub||'',hasSub:!!sub,fw:600,color:'var(--text)',align:'left',justify:'flex-start'});
+const BAR=(pct,t,c)=>({isBar:true,w:pct+'%',t,barC:c||O,align:'left',justify:'flex-start'});
+const BTN=(t,act)=>({isBtn:true,t,act,align:'right',justify:'flex-end'});
+
+class Component extends DCLogic {
+  constructor(p){super(p);const q=new URLSearchParams(location.search);const role=(q.get('role')||this.props.role)==='creator'?'creator':'partner';
+    this.state={role,page:role==='partner'?'p-dash':'c-dash',theme:q.get('theme')==='dark'?'dark':'light',range:'30d',q:'',bTab:'All',drawer:null,toast:null,loading:false,mvp:false,dec:false,empty:false,offers:OFFERS.map(o=>({...o})),bookings:BOOKINGS.map(b=>({...b})),edit:null,closed:{},weekOff:0,offerSel:'o1',rules:{'Step-free needs':1,'Food first':1,'Slow pace':1,'Couples':1,'Families':0,'Budget €€+':1,'Nightlife':0},guides:GUIDES.map(g=>({...g})),gEdit:null,posts:JSON.parse(JSON.stringify(POSTS0)),compose:null,links:LINKS.map(l=>({...l})),seg:'All',payoutMethod:'IBAN',notifOpen:false,nTab:'All',read:{},conn:Object.fromEntries((role==='partner'?CH_P:CH_C).map(c=>[c[0],!!c[4]])),sync:role==='partner'?{two:1,dbl:1,rev:1,price:0,ical:1}:{ref:1,cross:0,ins:1,short:1},calc:{oid:'o1',ch:'creator',qty:3}};}
+  timers=[];
+  componentDidMount(){const q=new URLSearchParams(location.search);const pg=q.get('page');if(pg==='c-guide-edit'){q.get('new')?this.newGuide():this.editGuide(q.get('guide')||'g1');}else if(pg==='p-offer-edit'){q.get('new')?this.newOffer():this.editOffer(q.get('offer')||'o1');}else if(pg&&TITLES[pg])this.setState({page:pg});this.applyTheme();this.fit();this._r=()=>this.fit();window.addEventListener('resize',this._r);}
+  componentDidUpdate(){this.applyTheme();}
+  componentWillUnmount(){window.removeEventListener('resize',this._r);this.timers.forEach(clearTimeout);}
+  rootRef=el=>{this.root=el;if(el)this.applyTheme();};
+  outerRef=el=>{this.outer=el;this.fit();};
+  frameRef=el=>{this.frame=el;this.fit();};
+  fit(){if(!this.outer||!this.frame)return;const w=this.outer.clientWidth-48;const s=Math.min(1,w/1440);this.frame.style.transform=s<1?'scale('+s+')':'none';this.outer.style.height=(900*s+18)+'px';}
+  applyTheme(){if(!this.root)return;const v=this.state.theme==='dark'?DARK:LIGHT;Object.entries(v).forEach(([a,b])=>this.root.style.setProperty(a,b));}
+  later(ms,f){this.timers.push(setTimeout(f,ms));}
+  toast(t){this.setState({toast:t});this.later(1800,()=>this.setState({toast:null}));}
+  go(page){this.setState({page,drawer:null,q:'',edit:null,gEdit:null});}
+  seg(opts,cur,set){return opts.map(([v,l])=>{const on=cur===v;return{label:l||v,bg:on?'var(--surface)':'transparent',color:on?'var(--text)':'var(--muted)',shadow:on?'0 1px 2px rgba(0,0,0,.12)':'none',set:()=>set(v)};});}
+  chips(all,sel,toggle){return all.map(t=>{const on=!!sel[t]||(Array.isArray(sel)&&sel.includes(t));return{t,bg:on?Y:'var(--surface)',color:on?INK:'var(--text)',border:on?Y:'var(--border2)',op:1,toggle:()=>toggle(t)};});}
+  sec(o){return Object.assign({col:'span 12',hasHead:true,headBorder:'var(--border)',title:'',sub:'',hasSub:!!o.sub,hasTabs:!!o.tabs,tabs:o.tabs||[],hasLegend:!!o.legend,legend:o.legend||[],hasAction:!!o.action,action:o.action||'',onAction:o.onAction||(()=>{}),hasPin:false,pinN:'',pinLabel:'',isEmpty:false,empty:'',hasEmptyCta:!!o.emptyCta,emptyCta:o.emptyCta||'',onEmptyCta:o.onEmptyCta||(()=>{}),isChart:false,isBars:false,isTable:false,isList:false,isFunnel:false,isSplit:false,isPayout:false,isWeek:false,isMonth:false,isAppear:false,isForm:false,isPreview:false,hasFoot:!!o.foot,foot:o.foot||'',hasSave:false},o);}
+  pin(s,n,label){if(this.state.dec){s.hasPin=true;s.pinN=n;s.pinLabel=label;}return s;}
+  chart(o){const all=o.series.flatMap(s=>s.v);const mx=Math.max(...all)*1.1;const yl=[mx,mx*.66,mx*.33,0].map(v=>o.fmt?o.fmt(v):k(v));
+    return this.sec(Object.assign(o,{isChart:true,yLabels:yl,legend:o.series.map(s=>({t:s.name,c:s.c})),series:o.series.map((s,i)=>{const d=path(s.v,mx);return{d,c:s.c,dash:s.dash||'none',area:i===0?d+' L600 210 L0 210 Z':'',fill:i===0?'rgba(248,231,28,.16)':'none'};})}));}
+  table(o){const cols=o.cols;const rows=(o.rows||[]).map((r,i)=>({cols,cells:r.cells,open:r.open||(()=>{}),cursor:r.open?'pointer':'default',bg:r.hl?'var(--hover)':'transparent'}));
+    return this.sec(Object.assign(o,{isTable:rows.length>0,isEmpty:rows.length===0,rows,heads:o.heads.map((h,i)=>({t:h,align:(o.right||[]).includes(i)?'right':'left'}))}));}
+  kpi(label,value,delta,series,foot,neg){const up=!neg;return{label,value,delta,dColor:up?'var(--pos)':'var(--neg)',dBg:up?'var(--posBg)':'var(--negBg)',spark:spark(series),sparkColor:up?O:'var(--neg)',foot};}
+
+  partner(r){
+    const st=this.state,E=st.empty,q=st.q.trim().toLowerCase(),page=st.page;
+    const live=st.bookings.filter(b=>b.status!=='Cancelled');const gross=E?0:live.reduce((a,b)=>a+b.amount,0)*r*1.9;
+    const weeks=[8.2,9.1,8.6,10.4,11.2,10.8,12.6,13.1,12.2,14.8,15.6,17.2].map(v=>E?0:v*1000*r/1);
+    const net=weeks.map(v=>v*.84);
+    let kpis=[],sections=[];
+    const fee=.12,cfee=.04;
+    if(page==='p-dash'){
+      kpis=[this.kpi('Bookings',E?'0':String(Math.round(118*r)),'+14%',[5,7,6,8,9,8,11,12],'vs previous period'),this.kpi('Gross revenue',eur(E?0:24860*r),'+19%',[10,12,11,14,15,14,17,19],'Before fees'),this.kpi('Net payout',eur(E?0:24860*r*(1-fee-cfee*.35)),'+17%',[9,10,10,12,13,12,15,16],'After 12% platform fee'),this.kpi('View → booking',E?'—':'4.1%','+0.6pt',[3,3.2,3.4,3.3,3.6,3.8,3.9,4.1],'Profile-matched views')];
+      sections.push(E?this.sec({col:'span 8',title:'Revenue',isEmpty:true,empty:'No bookings yet · Publish your first offering',emptyCta:'Add offering',onEmptyCta:()=>this.newOffer()}):this.chart({col:'span 8',title:'Revenue',sub:'Weekly · gross vs net',series:[{name:'Gross',v:weeks,c:O},{name:'Net payout',v:net,c:'var(--text)',dash:'4 4'}],xLabels:['W31','W33','W35','W37','W39','W41','W42'],fmt:v=>'€'+k(v)}));
+      sections.push(this.sec({col:'span 4',title:'Next payout',isPayout:true,amount:eur(E?0:6240*r),when:'Arrives 20 Oct · Weekly',lines:[{k:'Gross',v:eur(E?0:7429*r),c:'var(--text)'},{k:'Platform commission · 12%',v:'−'+eur(E?0:891*r),c:'var(--neg)'},{k:'Creator referrals · 4%',v:'−'+eur(E?0:298*r),c:'var(--neg)'}],bank:'IBAN •••• 4821 · Casa do Rio Lda'}));
+      const top=[...st.offers].sort((a,b)=>b.bookings-a.bookings).slice(0,5);
+      sections.push(this.table({col:'span 7',title:'Top offerings',action:'View all',onAction:()=>this.go('p-offers'),cols:'minmax(0,2.2fr) 1fr 1fr 1.4fr',heads:['Offering','Bookings','Revenue','Conversion'],right:[1,2],rows:E?[]:top.map(o=>({cells:[AV('',BG(o.img),o.title,o.cat+' · €'+o.price+' / '+o.unit,1),NUM(Math.round(o.bookings*r)),NUM(eur(o.bookings*o.price*2.4*r)),BAR(Math.min(100,o.bookings/o.views*100*22),(o.bookings/o.views*100).toFixed(1)+'%')],open:()=>this.editOffer(o.id)})),empty:'No offerings yet',emptyCta:'Add offering',onEmptyCta:()=>this.newOffer()}));
+      sections.push(this.sec({col:'span 5',title:'Recent bookings',action:'All bookings',onAction:()=>this.go('p-bookings'),isList:!E,isEmpty:E,empty:'Bookings appear here as they land',items:st.bookings.slice(0,5).map((b,i)=>{const[pb]=pill(b.status);return{init:b.init,bg:[Y,O,'#FFB347','#FFE98A'][i%4],r:'50%',title:b.guest+' · '+b.offer,meta:b.date+' · '+b.qty+' · '+b.channel,value:eur(b.amount),vsub:b.status,subColor:pill(b.status)[1],sep:i?'1px solid var(--border)':'none',hasBar:false};})}));
+    }
+    if(page==='p-bookings'){
+      const tabs=['All','Confirmed','Pending','Completed','Cancelled'];
+      const rows=E?[]:st.bookings.filter(b=>(st.bTab==='All'||b.status===st.bTab)&&(!q||(b.guest+b.offer+b.id).toLowerCase().includes(q)));
+      kpis=[this.kpi('Upcoming',E?'0':String(st.bookings.filter(b=>b.status==='Confirmed').length),'+3',[3,4,4,5,6,6,7,8],'Next 14 days'),this.kpi('Awaiting response',E?'0':String(st.bookings.filter(b=>b.status==='Pending').length),'Reply < 2h',[4,3,3,2,3,2,3,3],'Avg 1h 12m'),this.kpi('Cancellation rate',E?'—':'3.2%','−0.8pt',[5,4.6,4.4,4,3.9,3.6,3.4,3.2],'Last 30 days'),this.kpi('Via creators',E?'0':'31%','+6pt',[20,22,23,25,26,28,30,31],'Referral share')];
+      sections.push(this.pin(this.table({title:'All bookings',sub:rows.length+' results',tabs:tabs.map(t=>({label:t,count:E?0:(t==='All'?st.bookings.length:st.bookings.filter(b=>b.status===t).length),bg:st.bTab===t?'var(--hover)':'transparent',color:st.bTab===t?'var(--text)':'var(--muted)',set:()=>this.setState({bTab:t})})),cols:'110px minmax(0,1.5fr) minmax(0,1.5fr) 90px 100px minmax(0,1.3fr) 100px 110px',heads:['Booking','Guest','Offering','Date','Qty','Channel','Amount','Status'],right:[6],rows:rows.map(b=>({hl:st.drawer&&st.drawer.id===b.id,cells:[T(b.id,{fw:600,color:'var(--muted)'}),AV(b.init,Y,b.guest,b.access!=='—'?'Needs · '+b.access:''),T(b.offer),T(b.date),T(b.qty,{color:'var(--muted)'}),T(b.channel,{color:'var(--muted)'}),NUM(eur(b.amount)),PILL(b.status)],open:()=>this.setState({drawer:{type:'booking',id:b.id}})})),empty:E?'No bookings yet · They’ll show here':'No bookings match · Clear filters',emptyCta:E?'':'Clear filters',onEmptyCta:()=>this.setState({bTab:'All',q:''}),foot:'Bookings sync to traveler itineraries as anchors'}),3,'Bookings are anchors'));
+    }
+    if(page==='p-offers'){
+      const rows=E?[]:st.offers.filter(o=>!q||(o.title+o.cat).toLowerCase().includes(q));
+      sections.push(this.table({title:'Offerings',sub:st.offers.filter(o=>o.status==='Live').length+' live · '+st.offers.filter(o=>o.status!=='Live').length+' paused',cols:'minmax(0,2.4fr) 120px 120px 110px 110px minmax(0,1.6fr) 100px 90px',heads:['Offering','Category','Price','Views','Bookings','Accessibility','Status',''],right:[2,3,4],rows:rows.map(o=>({cells:[AV('',BG(o.img),o.title,o.desc,1),T(o.cat),NUM('€'+o.price,{sub:'/ '+o.unit,hasSub:true}),NUM(k(o.views*r)),NUM(Math.round(o.bookings*r)),T(o.access.join(' · ')||'—',{color:'var(--muted)'}),PILL(o.status),BTN(o.status==='Live'?'Pause':'Go live',e=>{e.stopPropagation();this.setState(s=>({offers:s.offers.map(x=>x.id===o.id?{...x,status:x.status==='Live'?'Paused':'Live'}:x)}));this.toast(o.title+(o.status==='Live'?' paused':' is live'));})],open:()=>this.editOffer(o.id)})),empty:'No offerings yet · Add your first',emptyCta:'Add offering',onEmptyCta:()=>this.newOffer()}));
+    }
+    if(page==='p-offer-edit'&&st.edit){
+      const e=st.edit,set=(kk)=>ev=>this.setState({edit:{...e,[kk]:ev.target.value}});
+      const ACC=['Step-free entry','Elevator','Accessible bathroom','Quiet hours','Braille menu','Service animals welcome','Hearing loop'];
+      const CATS=['Room','Dining','Experience','Transport'];
+      sections.push(this.pin(this.sec({col:'span 8',title:e.isNew?'New offering':e.title,sub:'Details travelers and the engine see',isForm:true,hasSave:true,saveLabel:e.isNew?'Publish':'Save changes',onSave:()=>this.saveOffer(),onCancel:()=>this.go('p-offers'),fields:[
+        {label:'Title',isInput:true,v:e.title,on:set('title')},
+        {label:'Description',isArea:true,v:e.desc,on:set('desc')},
+        {label:'Media',isMedia:true,media:[BG(e.img),BG('1536663815808-535e2280d2c2'),BG('1501927023255-9063be98970c'),BG('1558102400-72da9fdbecae')],on:()=>this.toast('Media picker · demo')},
+        {label:'Category',isChips:true,opts:this.chips(CATS,[e.cat],t=>this.setState({edit:{...e,cat:t}}))},
+        {label:'Price (€)',isInput:true,v:String(e.price),on:ev=>this.setState({edit:{...e,price:ev.target.value.replace(/[^0-9]/g,'')}})},
+        {label:'Location',isInput:true,v:e.loc||'Rua de São Miguel 12, Alfama, Lisbon',on:set('loc')},
+        {label:'Accessibility attributes · hard constraints for matching',isChips:true,opts:this.chips(ACC,e.access,t=>this.setState({edit:{...e,access:e.access.includes(t)?e.access.filter(x=>x!==t):[...e.access,t]}}))},
+        {label:'Availability rules',isRules:true,rules:[['Capacity per slot',e.cat==='Room'?'1 room':'12 guests'],['Bookable',e.cat==='Room'?'Check-in 15:00 · out 11:00':'Daily · 08:00–10:30'],['Lead time','Up to 2h before'],['Cancellation','Free until 48h']].map(([kk,v],i)=>({k:kk,v,sep:i?'1px solid var(--border)':'none'}))}]}),5,'Accessibility = hard constraint'));
+      sections.push(this.sec({col:'span 4',title:'Traveler preview',isPreview:true,img:BG(e.img),tag:'Partner',tagColor:'#D44A00',pTitle:e.title||'Untitled',pSub:'€'+(e.price||0)+' / '+e.unit+' · Alfama',checks:[{t:'Labelled “Partner” everywhere',d:'M5 12.5l4.5 4.5L19 7',bg:'var(--posBg)',c:'var(--pos)'},{t:e.access.length?'Matches '+e.access.length+' accessibility needs':'Add accessibility so the engine can match',d:e.access.length?'M5 12.5l4.5 4.5L19 7':'M12 7v6M12 17v.5',bg:e.access.length?'var(--posBg)':'var(--warnBg)',c:e.access.length?'var(--pos)':'var(--text)'},{t:'Opening hours validated',d:'M5 12.5l4.5 4.5L19 7',bg:'var(--posBg)',c:'var(--pos)'}]}));
+    }
+    if(page==='p-avail'){
+      const days=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'].map((d,i)=>{const dt=new Date(2026,9,12+i+st.weekOff*7);return d+' '+dt.getDate();});
+      const o=st.offers.find(x=>x.id===st.offerSel)||st.offers[0];const room=o.cat==='Room';
+      const slots=room?['Night']:o.cat==='Dining'&&o.id==='o4'?['08:00','09:00','10:00']:['18:30','20:00','21:30'];
+      const cap=room?(o.id==='o3'?2:6):12;let seed=3+st.weekOff;const rnd=()=>{seed=(seed*9301+49297)%233280;return seed/233280;};
+      const grid=slots.map((t,si)=>({t,cells:days.map((d,di)=>{const key=o.id+st.weekOff+si+'-'+di;const closed=!!st.closed[key];const booked=E?0:Math.min(cap,Math.round(cap*(di>=4?.7+rnd()*.4:.25+rnd()*.5)));const full=booked>=cap;return{t:closed?'Closed':booked+' / '+cap,w:(booked/cap*100)+'%',bg:closed?'repeating-linear-gradient(45deg,var(--hover) 0 3px,transparent 3px 8px)':full?O:booked/cap>.6?'rgba(248,231,28,.55)':'var(--surface2)',border:closed?'var(--border2)':'var(--border)',color:closed?'var(--faint)':full?INK:'var(--text)',trackBg:closed?'transparent':full?'rgba(20,18,16,.2)':'var(--border2)',fill:full?INK:O,toggle:()=>{this.setState(s=>({closed:{...s.closed,[key]:!s.closed[key]}}));this.toast((closed?'Opened ':'Closed ')+d+' '+t);}};})}));
+      sections.push(this.sec({col:'span 3',title:'Offering',isList:true,items:st.offers.map((x,i)=>({init:'',bg:BG(x.img),r:'8px',title:x.title,meta:x.cat,value:'',vsub:x.id===st.offerSel?'Selected':'',subColor:'var(--acText)',sep:i?'1px solid var(--border)':'none',hasBar:false}))}));
+      sections[0].items=sections[0].items;sections[0].onPick=null;
+      sections.push(this.sec({col:'span 9',title:o.title+' · capacity per slot',sub:'Week of '+days[0].split(' ')[1]+(st.weekOff>2?' Nov':' Oct'),tabs:[{label:'‹ Prev',count:'',bg:'transparent',color:'var(--muted)',set:()=>this.setState(s=>({weekOff:s.weekOff-1}))},{label:'This week',count:'',bg:st.weekOff===0?'var(--hover)':'transparent',color:'var(--text)',set:()=>this.setState({weekOff:0})},{label:'Next ›',count:'',bg:'transparent',color:'var(--muted)',set:()=>this.setState(s=>({weekOff:s.weekOff+1}))}],isWeek:true,days:days.map((t,i)=>({t,color:i>=5?'var(--acText)':'var(--text)'})),slots:grid}));
+      sections.push(this.sec({col:'span 12',title:'Switch offering',isTable:false,isEmpty:false,hasHead:true,tabs:st.offers.map(x=>({label:x.title,count:'',bg:x.id===st.offerSel?Y:'transparent',color:x.id===st.offerSel?INK:'var(--muted)',set:()=>this.setState({offerSel:x.id})})),headBorder:'transparent'}));
+      sections=[sections[2],sections[1]];sections[0].col='span 12';sections[1].col='span 12';
+    }
+    if(page==='p-revenue'){
+      const bk=st.bookings.map(b=>{const o=st.offers.find(x=>x.id===b.oid)||st.offers[0];const rate=RATES[o.cat]||.12;const viaC=b.channel.startsWith('Creator');const charged=b.status!=='Cancelled';return{...b,cat:o.cat,rate,plat:charged?b.amount*rate:0,cr:charged&&viaC?b.amount*CREATOR_RATE:0,charged};});
+      const G=E?0:24860*r,PF=E?0:G*.118,CR=E?0:G*.31*CREATOR_RATE,NET=G-PF-CR;
+      kpis=[this.kpi('Gross bookings',eur(G),'+19%',[10,12,11,14,15,14,17,19],'What travelers paid'),this.kpi('Platform commission',eur(PF),'11.8% blended',[10,12,11,14,15,14,17,19],'By category · incl. payments'),this.kpi('Creator referrals',eur(CR),'4% · referred only',[2,3,3,4,4,5,5,6],'31% of bookings'),this.kpi('Net to you',eur(NET),'+17%',[9,10,10,12,13,12,15,16],'Paid weekly · IBAN •••• 4821')];
+      sections.push(this.sec({col:'span 12',title:'How TripWise commission works',sub:'You only pay when a stay or experience is completed',isHow:true,how:[{n:1,t:'Traveler pays full price',d:'Your listed price. No traveler surcharges added by TripWise.',v:'100%'},{n:2,t:'Platform commission',d:'Set by category. Includes payment processing, fraud and support.',v:'8–15%'},{n:3,t:'Creator referral',d:'Only when the booking came through a creator’s guide or link.',v:'+4%'},{n:4,t:'Your payout',d:'Sent weekly, 2 days after checkout or the experience.',v:'81–92%'}],policy:['No commission on cancelled or refunded bookings','No listing, setup or monthly fees','Commission invoiced monthly · +23% VAT (PT)','Direct-link bookings: platform commission only']}));
+      const c=st.calc,o=st.offers.find(x=>x.id===c.oid)||st.offers[0],rate=RATES[o.cat],gross=o.price*c.qty,pf=gross*rate,cr=c.ch==='creator'?gross*CREATOR_RATE:0,cNet=gross-pf-cr;
+      const setC=x=>this.setState(s=>({calc:{...s.calc,...x}}));
+      sections.push(this.sec({col:'span 7',title:'Commission calculator',sub:'See exactly what you keep on any booking',isCalc:true,
+        cOffers:this.chips(st.offers.slice(0,5).map(x=>x.title),[o.title],t=>setC({oid:st.offers.find(x=>x.title===t).id})),
+        cChannels:[['engine','TripWise engine'],['creator','Creator referral'],['direct','Direct link']].map(([v,t])=>{const on=c.ch===v;return{t,bg:on?Y:'var(--surface)',color:on?INK:'var(--text)',border:on?Y:'var(--border2)',op:1,toggle:()=>setC({ch:v})};}),
+        qtyLabel:o.unit==='night'?'Nights':'Guests',qty:c.qty,dec:()=>setC({qty:Math.max(1,c.qty-1)}),inc:()=>setC({qty:Math.min(14,c.qty+1)}),
+        cParts:[[cNet,Y],[pf,O],[cr,'#FFB347']].filter(p=>p[0]>0).map(([v,col])=>({w:(v/gross*100)+'%',c:col})),
+        cRows:[['Booking value','€'+o.price+' × '+c.qty+' '+(o.unit==='night'?'nights':'guests'),eur(gross),'var(--text)','transparent',600,'var(--border2)'],['Platform commission · '+Math.round(rate*100)+'%',o.cat+' rate · incl. payment processing','−'+eur(pf),'var(--neg)','transparent',500,O],['Creator referral · 4%',c.ch==='creator'?'Paid to Inês R. after the stay':'Not applied · not referred',c.ch==='creator'?'−'+eur(cr):'€0','var(--neg)','transparent',500,'#FFB347'],['You receive',Math.round(cNet/gross*1000)/10+'% of booking value',eur(cNet),'var(--text)','var(--hover)',800,Y],['VAT on commission · 23%','Invoiced monthly, not deducted from payout',eur((pf)*VAT),'var(--faint)','transparent',400,'transparent']].map(([k2,sub,v,col,bg,fw,dot],i)=>({k:k2,sub,v,c:col,bg,fw,dot,sep:i?'1px solid var(--border)':'none'}))}));
+      sections.push(this.table({col:'span 5',title:'Rates by category',sub:'Your commission per category',cols:'minmax(0,1.3fr) 70px 90px 100px',heads:['Category','Rate','Bookings','Paid · '+st.range],right:[1,2,3],rows:Object.entries(RATES).map(([cat,rt])=>{const b=bk.filter(x=>x.cat===cat);return{cells:[T(cat==='Room'?'Rooms & stays':cat==='Dining'?'Dining':cat==='Experience'?'Experiences':'Transport',{fw:600,sub:cat==='Room'?'Per night':'Per person',hasSub:true}),NUM(Math.round(rt*100)+'%',{color:'var(--acText)'}),NUM(E?0:Math.round(b.length*r*8)),NUM(eur(E?0:b.reduce((a,x)=>a+x.plat,0)*r*8))]};}),foot:'Creator referral is always 4%, on top of the category rate'}));
+      sections.push(E?this.sec({col:'span 8',title:'Revenue',isEmpty:true,empty:'No revenue yet'}):this.chart({col:'span 8',title:'Gross vs net',sub:'Weekly',series:[{name:'Gross',v:weeks,c:O},{name:'Net',v:net,c:'var(--text)',dash:'4 4'}],xLabels:['W31','W33','W35','W37','W39','W41','W42'],fmt:v=>'€'+k(v)}));
+      sections.push(this.sec({col:'span 4',title:'Where every €100 goes',isSplit:true,parts:[['You receive',NET/(G||1),Y],['Platform commission',PF/(G||1),O],['Creator referrals',CR/(G||1),'#FFB347']].map(([label,p,col])=>({label,c:col,w:(p*100)+'%',pct:Math.round(p*1000)/10+'%',value:'€'+(E?0:(p*100).toFixed(2))}))}));
+      sections.push(this.table({title:'Commission ledger',sub:'Per booking · charged on completion',cols:'110px minmax(0,1.6fr) minmax(0,1.2fr) 100px 120px 110px 100px 140px',heads:['Booking','Offering','Channel','Gross','Platform','Creator 4%','Net','Commission'],right:[3,4,5,6],rows:E?[]:bk.slice(0,8).map(b=>({cells:[T(b.id,{fw:600,color:'var(--muted)'}),T(b.offer,{sub:b.cat+' · '+Math.round(b.rate*100)+'%',hasSub:true}),T(b.channel,{color:'var(--muted)'}),NUM(eur(b.amount)),NUM(b.charged?'−'+eur(b.plat):'€0',{color:b.charged?'var(--neg)':'var(--faint)'}),NUM(b.cr?'−'+eur(b.cr):'—',{color:b.cr?'var(--neg)':'var(--faint)'}),NUM(eur(b.amount-b.plat-b.cr)),PILL(b.status==='Cancelled'?'Not charged':b.status==='Completed'?'Charged':'On completion')],open:()=>this.setState({drawer:{type:'booking',id:b.id}})})),empty:'Commission appears after your first booking'}));
+      sections.push(this.table({col:'span 7',title:'Payouts',cols:'110px minmax(0,1fr) 110px 120px 110px 110px',heads:['Payout','Period','Gross','Commission','Net','Status'],right:[2,3,4],rows:E?[]:[['PO-2291','6 – 12 Oct',7429,'In transit'],['PO-2274','29 Sep – 5 Oct',6810,'Paid'],['PO-2258','22 – 28 Sep',6120,'Paid'],['PO-2241','15 – 21 Sep',5540,'Paid']].map(([id,p,g,s])=>({cells:[T(id,{fw:600,color:'var(--muted)'}),T(p),NUM(eur(g*r)),NUM('−'+eur(g*r*.16),{color:'var(--neg)'}),NUM(eur(g*r*.84)),PILL(s)]})),empty:'First payout after your first stay'}));
+      sections.push(this.table({col:'span 5',title:'Paid to creators',cols:'minmax(0,1.6fr) 80px 100px',heads:['Creator','Bookings','Commission'],right:[1,2],rows:E?[]:[['Inês R.','IR',31,297],['Tomás M.','TM',12,118],['Jules A.','JA',7,64],['Mei L.','ML',4,31]].map(([n,i,b,cm])=>({cells:[AV(i,O,n,'Referral · 4%'),NUM(Math.round(b*r)),NUM(eur(cm*r))]})),empty:'No creator referrals yet',foot:'Paid only on completed stays from their links'}));
+    }
+    if(page==='p-conn'||page==='c-conn'){
+      const list=st.role==='partner'?CH_P:CH_C;const on=list.filter(c=>st.conn[c[0]]).length;
+      sections.push(this.sec({col:'span 12',title:st.role==='partner'?'Sales channels':'Social accounts',sub:on+' connected · '+(st.role==='partner'?'Keep calendars, prices and reviews in sync':'Schedule posts and pull insights'),isConnect:true,apps:list.map(([name,cat,init,tile,_,s1,s2])=>{const c=!!st.conn[name];return{name,cat,init,tile,on:c,desc:st.role==='partner'?(c?'Calendar and bookings sync both ways. No double bookings.':'Import listings and sync availability so TripWise never oversells.'):(c?'Scheduling on. Insights refresh hourly.':'Connect to schedule posts and attach referral links.'),stat1:s1||'',stat2:s2||'',border:c?'rgba(46,125,79,.35)':'var(--border)',bg:c?'var(--surface)':'var(--surface2)',btn:c?'Manage':'Connect',btnBg:c?'var(--surface)':Y,btnColor:c?'var(--text)':INK,btnBorder:c?'var(--border2)':Y,act:()=>this.connOpen(name)};})}));
+      const sy=st.sync,tgl=(key,label,sub)=>({label,sub,track:sy[key]?O:'var(--border2)',knob:sy[key]?'18px':'2px',toggle:()=>this.setState(s=>({sync:{...s.sync,[key]:s.sync[key]?0:1}}))});
+      const tg=(st.role==='partner'?[tgl('two','Two-way availability','Bookings anywhere close the slot everywhere'),tgl('dbl','Block double bookings','Hold a slot while a channel confirms'),tgl('rev','Import reviews','Show channel reviews on your TripWise profile'),tgl('price','Push price changes','Update channel prices from TripWise'),tgl('ical','iCal fallback','For channels without an API')]:[tgl('ref','Auto-add referral links','Partner stops get your link in every post'),tgl('cross','Cross-post guides','Publish new guides to your blog'),tgl('ins','Import insights','Reach and saves from each account'),tgl('short','Short links','tw.link/ines/… on all posts')]).map((t,i)=>({...t,sep:i?'1px solid var(--border)':'none'}));
+      sections.push(this.sec({col:'span 6',title:st.role==='partner'?'Sync settings':'Publishing settings',isToggles:true,toggles:tg}));
+      sections.push(this.sec({col:'span 6',title:'Recent activity',isList:true,items:(st.role==='partner'?[['Booking.com','Imported booking · 12 Oct · Classic double','4 min ago'],['Airbnb','Blocked 19 Oct · sold on TripWise','1 h ago'],['Google Business Profile','Opening hours updated','Yesterday'],['Airbnb','Calendar synced · 2 listings','Yesterday']]:[['Instagram','Post published · Santa Luzia at 9am','2 Oct'],['TikTok','Insights imported · 41k views','Today'],['Substack','Newsletter sent · October picks','Scheduled'],['WordPress','Draft created · Rainy-day Lisbon','Yesterday']]).map(([t,m,v],i)=>({init:t.slice(0,2).toUpperCase(),bg:(list.find(c=>c[0]===t)||[])[3]||Y,r:'8px',title:t,meta:m,value:'',vsub:v,subColor:'var(--faint)',sep:i?'1px solid var(--border)':'none',hasBar:false}))}));
+    }
+    if(page==='p-analytics'){
+      kpis=[this.kpi('Profile-matched views',k(E?0:15640*r),'+22%',[8,9,10,11,12,12,14,15],'Only matching travelers'),this.kpi('Saves to trips',k(E?0:1920*r),'+15%',[5,6,6,7,7,8,8,9],'12.3% of views'),this.kpi('Added to itinerary',k(E?0:860*r),'+11%',[3,3,4,4,4,5,5,5],'By the engine'),this.kpi('Avg rating',E?'—':'4.8','+0.1',[4.5,4.6,4.6,4.7,4.7,4.7,4.8,4.8],'212 reviews')];
+      sections.push(this.sec({col:'span 5',title:'Funnel',sub:'Profile match → booking',isFunnel:true,steps:[['Shown to matching travelers',15640],['Opened',6210],['Saved to trip',1920],['Added to itinerary',860],['Booked',642]].map(([label,v],i,a)=>({label,value:k(E?0:v*r),pct:i?Math.round(v/a[0][1]*1000)/10+'%':'',w:Math.max(3,v/a[0][1]*100)+'%',c:i===a.length-1?O:i?'rgba(248,231,28,.75)':'rgba(255,122,0,.35)'}))}));
+      sections.push(this.sec({col:'span 7',title:'Bookings by weekday',isBars:true,bars:[['Mon',38],['Tue',31],['Wed',36],['Thu',44],['Fri',68],['Sat',82],['Sun',59]].map(([l,v])=>({l,v:E?0:Math.round(v*r),h:(E?2:v/82*100)+'%',c:v>60?O:'rgba(248,231,28,.8)'}))}));
+      sections.push(this.sec({col:'span 6',title:'Traveler segments',sub:'Who books you',isSplit:true,parts:[['Couples · slow pace',.38,O],['Step-free needs',.24,Y],['Food first',.21,'#FFB347'],['Families',.11,'#FFE98A'],['Solo',.06,'rgba(140,130,120,.55)']].map(([label,p,c])=>({label,c,w:p*100+'%',pct:Math.round(p*100)+'%',value:Math.round(E?0:642*r*p)}))}));
+      sections.push(this.sec({col:'span 6',title:'Top source markets',isList:true,items:[['Germany','DE',.27],['United Kingdom','UK',.19],['USA','US',.16],['France','FR',.12],['Netherlands','NL',.09]].map(([t,i,p],j)=>({init:i,bg:[Y,O,'#FFB347','#FFE98A','#FFC77E'][j],r:'8px',title:t,meta:Math.round(642*r*p)+' bookings',value:Math.round(p*100)+'%',vsub:'',subColor:'var(--faint)',sep:j?'1px solid var(--border)':'none',hasBar:true,w:p*100/0.27+'%',barC:O}))}));
+    }
+    if(page==='p-appear'){
+      const on=Object.keys(st.rules).filter(x=>st.rules[x]);const reach=Math.round((1200+on.length*1850)*r);
+      sections.push(this.pin(this.sec({col:'span 12',title:'Where your offer appears',sub:'Only inside matching travelers’ itineraries · Always labelled',isAppear:true,offerTitle:'Rooftop breakfast',offerSub:'08:30 · Casa do Rio · €18',reach:[{v:k(E?0:reach),l:'Matching travelers · '+st.range},{v:on.length+' rules',l:'Active filters'},{v:'0',l:'Unlabelled placements'}],rules:Object.keys(st.rules).map(t=>{const a=!!st.rules[t];return{t,bg:a?Y:'var(--surface)',color:a?INK:'var(--text)',border:a?Y:'var(--border2)',toggle:()=>this.setState(s=>({rules:{...s.rules,[t]:!s.rules[t]}}))};}),guarantees:['Shown only when the traveler profile matches','Never replaces a booked anchor','Accessibility needs are never overridden','Labelled “Partner” on every surface']}),7,'Partner offers always labelled'));
+    }
+    return{kpis,sections};
+  }
+
+  creator(r){
+    const st=this.state,E=st.empty,q=st.q.trim().toLowerCase(),page=st.page;
+    let kpis=[],sections=[];
+    const growth=[14.1,14.6,15.0,15.3,15.9,16.2,16.6,16.9,17.3,17.6,17.9,18.2].map(v=>E?0:v*1000);
+    if(page==='c-dash'){
+      kpis=[this.kpi('Followers',E?'0':'18.2k','+1.4k',[14,14.6,15,15.3,15.9,16.6,17.3,18.2],'+8.3% this period'),this.kpi('Guide views',k(E?0:53400*r),'+24%',[20,24,23,28,31,30,35,38],'Across 3 live guides'),this.kpi('Saves to trips',k(E?0:4260*r),'+18%',[2,2.4,2.6,2.9,3.1,3.4,3.9,4.2],'8.0% of views'),this.kpi('Affiliate earnings',eur(E?0:1284*r),'+18%',[6,7,7,8,9,10,11,12],'4% of referred stays')];
+      sections.push(E?this.sec({col:'span 8',title:'Growth',isEmpty:true,empty:'Publish a guide to start growing',emptyCta:'New guide',onEmptyCta:()=>this.newGuide()}):this.chart({col:'span 8',title:'Audience & saves',sub:'Weekly',series:[{name:'Followers',v:growth,c:O},{name:'Saves × 4',v:growth.map((v,i)=>v*.2+i*420),c:'var(--text)',dash:'4 4'}],xLabels:['W31','W33','W35','W37','W39','W41','W42'],fmt:v=>k(v)}));
+      sections.push(this.sec({col:'span 4',title:'Up next',sub:'Scheduled content',action:'Schedule',onAction:()=>this.go('c-schedule'),isList:!E,isEmpty:E,empty:'Nothing scheduled',items:Object.entries(st.posts).filter(([d])=>+d>=12).slice(0,5).flatMap(([d,ps])=>ps.map(p=>[d,p])).slice(0,5).map(([d,[t,plat,title]],i)=>({init:plat.slice(0,2),bg:PLATS[plat],r:'8px',title,meta:plat+' · '+d+' Oct · '+t,value:'',vsub:'',subColor:'var(--faint)',sep:i?'1px solid var(--border)':'none',hasBar:false}))}));
+      sections.push(this.table({col:'span 7',title:'Top guides',action:'All guides',onAction:()=>this.go('c-content'),cols:'minmax(0,2fr) 90px 90px 90px 100px',heads:['Guide','Views','Saves','Bookings','Earned'],right:[1,2,3,4],rows:E?[]:st.guides.filter(g=>g.status==='Live').map(g=>({cells:[AV('',BG(g.img),g.title,g.updated,1),NUM(k(g.views*r)),NUM(k(g.saves*r)),NUM(Math.round(g.bookings*r)),NUM(eur(g.earn*r))],open:()=>this.editGuide(g.id)})),empty:'No guides yet',emptyCta:'New guide',onEmptyCta:()=>this.newGuide()}));
+      sections.push(this.sec({col:'span 5',title:'Referral pipeline',sub:'Clicks → bookings',isFunnel:true,steps:[['Link clicks',5060],['Saved to trip',1115],['Booked',118],['Completed stays',96]].map(([label,v],i,a)=>({label,value:k(E?0:v*r),pct:i?Math.round(v/a[0][1]*1000)/10+'%':'',w:Math.max(3,v/a[0][1]*100)+'%',c:i===a.length-1?O:'rgba(248,231,28,.75)'}))}));
+    }
+    if(page==='c-content'){
+      const rows=E?[]:st.guides.filter(g=>!q||g.title.toLowerCase().includes(q));
+      sections.push(this.table({title:'Guides',sub:st.guides.filter(g=>g.status==='Live').length+' live · '+st.guides.filter(g=>g.status!=='Live').length+' in progress',cols:'minmax(0,2.4fr) 110px 100px 100px 100px 110px minmax(0,1.2fr)',heads:['Guide','Status','Views','Saves','Bookings','Earned','Updated'],right:[2,3,4,5],rows:rows.map(g=>({cells:[AV('',BG(g.img),g.title,'',1),PILL(g.status),NUM(g.views?k(g.views*r):'—'),NUM(g.saves?k(g.saves*r):'—'),NUM(g.bookings?Math.round(g.bookings*r):'—'),NUM(g.earn?eur(g.earn*r):'—'),T(g.updated,{color:'var(--muted)'})],open:()=>this.editGuide(g.id)})),empty:'No guides yet · Start with 4 stops',emptyCta:'New guide',onEmptyCta:()=>this.newGuide()}));
+    }
+    if(page==='c-guide-edit'&&st.gEdit){
+      const g=st.gEdit,set=kk=>ev=>this.setState({gEdit:{...g,[kk]:ev.target.value}});
+      const stops=g.stops.map((s,i)=>({n:i+1,t:s[0],tip:s[1],img:BG(s[2]),check:s[3],vColor:/Closes|Mon/.test(s[3])?'var(--neg)':'var(--pos)',up:ev=>{ev.stopPropagation();if(!i)return;const a=[...g.stops];[a[i-1],a[i]]=[a[i],a[i-1]];this.setState({gEdit:{...g,stops:a}});},remove:ev=>{ev.stopPropagation();this.setState({gEdit:{...g,stops:g.stops.filter((_,j)=>j!==i)}});}}));
+      sections.push(this.pin(this.sec({col:'span 8',title:g.isNew?'New guide':g.title,sub:'Stops are validated before travelers see them',isForm:true,hasSave:true,saveLabel:g.status==='Live'?'Update guide':'Publish',onSave:()=>this.saveGuide(),onCancel:()=>this.go('c-content'),fields:[
+        {label:'Title',isInput:true,v:g.title,on:set('title')},
+        {label:'Intro',isArea:true,v:g.intro,on:set('intro')},
+        {label:'Stops · '+g.stops.length,isStops:true,stops,on:()=>this.setState({gEdit:{...g,stops:[...g.stops,['Miradouro da Graça','Golden hour','1501927023255-9063be98970c','Open 24h']]}})},
+        {label:'Photos',isMedia:true,media:g.stops.slice(0,4).map(s=>BG(s[2])),on:()=>this.toast('Photo picker · demo')},
+        {label:'Tags',isChips:true,opts:this.chips(['Step-free','Food','Viewpoints','Rainy day','Budget','Night'],g.tags,t=>this.setState({gEdit:{...g,tags:g.tags.includes(t)?g.tags.filter(x=>x!==t):[...g.tags,t]}}))}]}),4,'Validate before showing'));
+      sections.push(this.sec({col:'span 4',title:'Traveler preview',isPreview:true,img:BG(g.stops[0]?g.stops[0][2]:g.img),tag:'Guide · '+g.stops.length+' stops',tagColor:'#141210',pTitle:g.title||'Untitled',pSub:'Inês R. · 18.2k followers',checks:[{t:'Opening hours checked for every stop',d:'M5 12.5l4.5 4.5L19 7',bg:'var(--posBg)',c:'var(--pos)'},{t:'1 stop closed on Mondays · flagged',d:'M12 7v6M12 17v.5',bg:'var(--warnBg)',c:'var(--text)'},{t:'Partner stops carry your referral link',d:'M5 12.5l4.5 4.5L19 7',bg:'var(--posBg)',c:'var(--pos)'}]}));
+    }
+    if(page==='c-schedule'){
+      const cells=[];for(let i=0;i<35;i++){const d=i-2;const inM=d>=1&&d<=31;const ps=inM?(st.posts[d]||[]):[];cells.push({d:inM?d:'',fw:d===12?800:600,dColor:d===12?'var(--acText)':'var(--text)',bg:inM?'var(--surface)':'transparent',border:d===12?'#FF7A00':inM?'var(--border)':'transparent',op:inM?(d<12?.6:1):0,posts:ps.slice(0,2).map(([time,plat])=>({time,plat,bg:PLATS[plat]})),open:()=>inM&&this.openCompose(d)});}
+      const n=Object.values(st.posts).flat().length;
+      kpis=[this.kpi('Scheduled',String(E?0:n),'This month',[3,4,4,5,6,6,7,n],'Across 5 channels'),this.kpi('Avg reach / post',E?'—':'6.4k','+12%',[4,4.6,5,5.2,5.6,5.9,6.1,6.4],'Last 30 days'),this.kpi('Best slot',E?'—':'Sat 09:00','2.1× avg',[1,2,3,2,3,4,3,5],'For your audience'),this.kpi('Link clicks',k(E?0:5060*r),'+21%',[2,2.5,3,3.2,3.8,4.1,4.6,5],'From posts')];
+      sections.push(this.sec({col:'span 9',title:'October 2026',sub:'Click a day to schedule',isMonth:true,wd:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],cells,legend:Object.entries(PLATS).map(([t,c])=>({t,c}))}));
+      sections.push(this.sec({col:'span 3',title:'Queue',isList:true,items:Object.entries(st.posts).filter(([d])=>+d>=12).flatMap(([d,ps])=>ps.map(p=>[d,p])).slice(0,7).map(([d,[t,plat,title]],i)=>({init:plat.slice(0,2),bg:PLATS[plat],r:'8px',title,meta:d+' Oct · '+t,value:'',vsub:plat,subColor:'var(--faint)',sep:i?'1px solid var(--border)':'none',hasBar:false}))}));
+    }
+    if(page==='c-audience'){
+      const segs=['All',...SEGS.map(s=>s[0])];
+      const rows=E?[]:FOLLOWERS.filter(f=>(st.seg==='All'||f[3]===st.seg)&&(!q||(f[0]+f[1]+f[2]).toLowerCase().includes(q)));
+      kpis=[this.kpi('Followers',E?'0':'18.2k','+1.4k',[14,14.6,15,15.3,15.9,16.6,17.3,18.2],'Net new this period'),this.kpi('Engaged',E?'—':'41%','+3pt',[34,35,36,37,38,39,40,41],'Saved in 30 days'),this.kpi('Planning a trip',E?'0':'2.9k','Lisbon · Oct–Dec',[1,1.4,1.7,2,2.2,2.5,2.7,2.9],'Hot leads for guides'),this.kpi('Unfollows',E?'0':'86','−12%',[12,11,10,11,9,9,8,8],'Healthy',false)];
+      sections.push(E?this.sec({col:'span 8',title:'Growth',isEmpty:true,empty:'No followers yet'}):this.chart({col:'span 8',title:'Follower growth',series:[{name:'Followers',v:growth,c:O}],xLabels:['W31','W33','W35','W37','W39','W41','W42'],fmt:v=>k(v)}));
+      sections.push(this.sec({col:'span 4',title:'Segments',sub:'By travel interest',isSplit:true,parts:[[SEGS[0][0],.32],[SEGS[1][0],.27],[SEGS[2][0],.19],[SEGS[3][0],.14],[SEGS[4][0],.08]].map(([label,p],i)=>({label,c:SEGS[i][1],w:p*100+'%',pct:Math.round(p*100)+'%',value:k(E?0:18200*p)}))}));
+      sections.push(this.table({title:'Followers',sub:rows.length+' shown',tabs:segs.map(s=>({label:s,count:'',bg:st.seg===s?'var(--hover)':'transparent',color:st.seg===s?'var(--text)':'var(--muted)',set:()=>this.setState({seg:s})})),cols:'minmax(0,1.8fr) minmax(0,1fr) minmax(0,1fr) 110px 120px 110px',heads:['Follower','Home','Segment','Followed','Saves from you',''],right:[4],rows:rows.map((f,i)=>({cells:[AV(f[0].split(' ').map(w=>w[0]).join(''),[Y,O,'#FFB347','#FFE98A'][i%4],f[0],f[1]),T(f[2]),PILL(f[3]),T(f[4],{color:'var(--muted)'}),NUM(f[5]),BTN('Message',ev=>{ev.stopPropagation();this.toast('Message to '+f[0]+' · demo');})]})),empty:E?'No followers yet':'No followers in this segment',emptyCta:E?'':'Show all',onEmptyCta:()=>this.setState({seg:'All',q:''})}));
+    }
+    if(page==='c-referrals'){
+      const rows=E?[]:st.links.filter(l=>!q||(l.partner+l.slug).toLowerCase().includes(q));
+      const tot=st.links.reduce((a,l)=>({c:a.c+l.clicks,b:a.b+l.bookings,v:a.v+l.value,m:a.m+l.comm}),{c:0,b:0,v:0,m:0});
+      kpis=[this.kpi('Link clicks',k(E?0:tot.c*r),'+21%',[2,2.5,3,3.2,3.8,4.1,4.6,5],'5 active links'),this.kpi('Referred bookings',String(E?0:Math.round(tot.b*r)),'+16%',[60,70,74,82,90,98,108,118],'2.3% click → book'),this.kpi('Booking value',eur(E?0:tot.v*r),'+19%',[6,7,8,8,9,10,11,12],'Gross, referred'),this.kpi('Commission',eur(E?0:tot.m*r),'4% rate',[3,3.4,3.6,4,4.2,4.5,4.8,5.2],'Pending until stay')];
+      sections.push(this.table({title:'Referral links',sub:'One link per partner · Auto-added to guide stops',action:'+ Create link',onAction:()=>this.setState({drawer:{type:'link'},compose:{partner:'Pastéis do Rio',slug:'pasteis'}}),cols:'minmax(0,1.8fr) minmax(0,1.6fr) 90px 90px 90px 110px 100px 90px',heads:['Partner','Link','Clicks','Saves','Bookings','Value','Commission',''],right:[2,3,4,5,6],rows:rows.map((l,i)=>({cells:[AV(l.partner.split(' ').map(w=>w[0]).join('').slice(0,2),[O,Y,'#FFB347','#FFE98A','#FFC77E'][i%5],l.partner,l.type,1),T(l.slug,{color:'var(--acText)',fw:600}),NUM(k(l.clicks*r)),NUM(k(l.saves*r)),NUM(Math.round(l.bookings*r)),NUM(eur(l.value*r)),NUM(eur(l.comm*r)),BTN('Copy',ev=>{ev.stopPropagation();this.toast('Copied '+l.slug);})]})),empty:E?'No links yet · Create your first':'No links match',emptyCta:'Create link',onEmptyCta:()=>this.setState({drawer:{type:'link'},compose:{partner:'Pastéis do Rio',slug:'pasteis'}})}));
+      sections.push(this.sec({col:'span 6',title:'Pipeline',sub:'Where referrals drop off',isFunnel:true,steps:[['Clicked',tot.c],['Saved to trip',tot.saves||1115],['Booked',tot.b],['Stay completed',96]].map(([label,v],i,a)=>({label,value:k(E?0:v*r),pct:i?Math.round(v/a[0][1]*1000)/10+'%':'',w:Math.max(3,v/a[0][1]*100)+'%',c:i===a.length-1?O:'rgba(248,231,28,.75)'}))}));
+      sections.push(this.sec({col:'span 6',title:'By partner type',isSplit:true,parts:[['Hotels',.58,O],['Restaurants',.19,Y],['Shows',.15,'#FFB347'],['Experiences & transport',.08,'#FFE98A']].map(([label,p,c])=>({label,c,w:p*100+'%',pct:Math.round(p*100)+'%',value:eur(E?0:tot.m*r*p)}))}));
+    }
+    if(page==='c-analytics'){
+      kpis=[this.kpi('Profile visits',k(E?0:22400*r),'+17%',[10,12,13,14,15,17,19,22],'From Discover'),this.kpi('Guide completion',E?'—':'63%','+5pt',[52,54,55,57,58,60,61,63],'Travelers who finish'),this.kpi('Stops added to plans',k(E?0:7800*r),'+26%',[3,3.6,4,4.8,5.4,6,7,7.8],'By the engine'),this.kpi('Avg rating',E?'—':'4.9','+0.1',[4.7,4.7,4.8,4.8,4.8,4.9,4.9,4.9],'318 reviews')];
+      sections.push(this.sec({col:'span 7',title:'Views by guide',isBars:true,bars:st.guides.filter(g=>g.views).map(g=>({l:g.title.split(' ').slice(0,2).join(' '),v:k(E?0:g.views*r),h:(E?2:g.views/31200*100)+'%',c:O})).concat([{l:'Profile',v:k(E?0:22400*r),h:(E?2:72)+'%',c:'rgba(248,231,28,.8)'}])}));
+      sections.push(this.sec({col:'span 5',title:'Traffic sources',isSplit:true,parts:[['TripWise Discover',.44,O],['Instagram',.26,'#FFB347'],['TikTok',.14,'#FFE98A'],['Blog & newsletter',.11,Y],['Other',.05,'rgba(140,130,120,.55)']].map(([label,p,c])=>({label,c,w:p*100+'%',pct:Math.round(p*100)+'%',value:k(E?0:53400*r*p)}))}));
+      sections.push(this.sec({col:'span 12',title:'Top-performing stops',isList:true,items:GSTOPS.map((s,i)=>({init:'',bg:BG(s[2]),r:'8px',title:s[0],meta:['Lisbon on foot, no stairs','Lisbon on foot, no stairs','Lisbon on foot, no stairs','Riverside lunches'][i],value:k([4200,3100,2800,1900][i]*r)+' adds',vsub:['+31%','+18%','+12%','+9%'][i],subColor:'var(--pos)',sep:i?'1px solid var(--border)':'none',hasBar:true,w:[100,74,67,45][i]+'%',barC:O}))}));
+    }
+    if(page==='c-conn'){const x=this.partner(r);sections=x.sections;}
+    if(page==='c-earnings'){
+      kpis=[this.kpi('Available',eur(E?0:842),'Pays 1 Nov',[3,4,5,5,6,7,8,8.4],'Completed stays'),this.kpi('Pending',eur(E?0:442*r),'Until checkout',[2,2,3,3,3,4,4,4.4],'Upcoming stays'),this.kpi('Lifetime',eur(E?0:9620),'+€1.3k',[5,6,6.5,7,7.6,8.2,8.9,9.6],'Since Feb 2025'),this.kpi('Conversion',E?'—':'2.3%','+0.4pt',[1.6,1.7,1.8,1.9,2,2.1,2.2,2.3],'Click → booking')];
+      sections.push(this.sec({col:'span 7',title:'Monthly earnings',isBars:true,bars:[['May',640],['Jun',780],['Jul',1020],['Aug',1180],['Sep',1090],['Oct',1284]].map(([l,v])=>({l,v:eur(E?0:v),h:(E?2:v/1284*100)+'%',c:l==='Oct'?O:'rgba(248,231,28,.8)'}))}));
+      sections.push(this.sec({col:'span 5',title:'Next payout',isPayout:true,amount:eur(E?0:842),when:'1 Nov · Monthly · Min €50',lines:[{k:'Completed stays',v:'31',c:'var(--text)'},{k:'Commission rate',v:'4%',c:'var(--text)'},{k:'Payout method',v:st.payoutMethod,c:'var(--text)'}],bank:'IBAN •••• 0917 · Inês Rocha'}));
+      sections.push(this.table({title:'Payout history',cols:'110px minmax(0,1fr) 100px 110px 110px',heads:['Payout','Period','Stays','Amount','Status'],right:[2,3],rows:E?[]:[['CP-1182','September',27,1090,'Paid'],['CP-1129','August',30,1180,'Paid'],['CP-1077','July',26,1020,'Paid'],['CP-1021','June',19,780,'Paid']].map(([id,p,n,a,s])=>({cells:[T(id,{fw:600,color:'var(--muted)'}),T(p+' 2026'),NUM(n),NUM(eur(a)),PILL(s)]})),empty:'First payout after €50 in completed stays'}));
+    }
+    return{kpis,sections};
+  }
+  openCompose(d){const pad=n=>String(n).padStart(2,'0');const plats={};Object.keys(PLATS).forEach(p=>{if(p==='Instagram'&&this.state.conn[PLAT_APP[p]])plats[p]=1;});this.setState({drawer:{type:'compose'},compose:{date:'2026-10-'+pad(d),time:'09:00',plats,caption:'',media:[],link:LINKS[0].slug,guide:'g1'}});}
+  connOpen(name){this.setState({drawer:{type:'connect',name}});}
+  editOffer(id){const o=this.state.offers.find(x=>x.id===id);this.setState({page:'p-offer-edit',edit:{...o,access:[...o.access]},drawer:null});}
+  newOffer(){this.setState({page:'p-offer-edit',edit:{id:'o'+Date.now(),isNew:true,title:'',desc:'',cat:'Experience',price:'40',unit:'person',bookings:0,views:0,status:'Live',img:'1562195168-c82fea0f0953',access:[]}});}
+  saveOffer(){const e=this.state.edit;if(!e.title.trim()){this.toast('Add a title first');return;}this.setState(s=>({offers:e.isNew?[{...e,isNew:false,price:+e.price||0},...s.offers]:s.offers.map(o=>o.id===e.id?{...e,price:+e.price||0}:o),page:'p-offers',edit:null}));this.toast(e.isNew?'Offering published':'Changes saved');}
+  editGuide(id){const g=this.state.guides.find(x=>x.id===id);this.setState({page:'c-guide-edit',gEdit:{...g,intro:'A flat route through Alfama using lifts, ramps and quiet lanes.',stops:GSTOPS.map(s=>[...s]),tags:['Step-free','Viewpoints']}});}
+  newGuide(){this.setState({page:'c-guide-edit',gEdit:{id:'g'+Date.now(),isNew:true,title:'',intro:'',status:'Draft',views:0,saves:0,bookings:0,earn:0,updated:'Edited now',img:'1562195168-c82fea0f0953',stops:[],tags:[]}});}
+  saveGuide(){const g=this.state.gEdit;if(!g.title.trim()){this.toast('Add a title first');return;}if(g.stops.length<2){this.toast('Add at least 2 stops');return;}const ng={...g,isNew:false,status:g.status==='Draft'?'Live':g.status,updated:'Just now'};delete ng.stops;this.setState(s=>({guides:g.isNew?[ng,...s.guides]:s.guides.map(x=>x.id===g.id?{...x,...ng}:x),page:'c-content',gEdit:null}));this.toast(g.isNew?'Guide published':'Guide updated');}
+
+  drawerVals(){
+    const st=this.state,d=st.drawer;const base={hasDrawer:!!d,dKicker:'',dTitle:'',dHasPill:false,dPill:'',dPillBg:'',dPillColor:'',dRows:[],dHasForm:false,dForm:[],dHasNote:false,dNote:'',dActions:[],dHasPin:false,dPinN:'',dPinLabel:''};
+    if(!d)return base;const close=()=>this.setState({drawer:null});
+    const btn=(t,act,primary)=>({t,act,bg:primary?Y:'var(--surface)',color:primary?INK:'var(--text)',border:primary?Y:'var(--border2)'});
+    const rows=a=>a.map(([k2,v],i)=>({k:k2,v:String(v),sep:i?'1px solid var(--border)':'none'}));
+    if(d.type==='booking'){const b=st.bookings.find(x=>x.id===d.id);const bRate=RATES[(st.offers.find(x=>x.id===b.oid)||{}).cat]||.12;const[pb,pc]=pill(b.status);
+      const setS=s=>{this.setState(x=>({bookings:x.bookings.map(y=>y.id===b.id?{...y,status:s}:y)}));this.toast(b.id+' · '+s);};
+      return{...base,dKicker:'Booking '+b.id,dTitle:b.guest,dHasPill:true,dPill:b.status,dPillBg:pb,dPillColor:pc,dHasPin:st.dec,dPinN:'3',dPinLabel:'Bookings are anchors',
+        dRows:rows([['Offering',b.offer],['Date',b.date+' 2026'],['Quantity',b.qty],['Channel',b.channel],['Accessibility',b.access],['Amount',eur(b.amount)],['Platform commission · '+Math.round(bRate*100)+'%','−'+eur(b.amount*bRate)],['Creator referral · 4%',b.channel.startsWith('Creator')?'−'+eur(b.amount*.04):'—'],['Net to you',eur(b.amount*(1-bRate-(b.channel.startsWith('Creator')?.04:0)))],['Commission charged','On completion']]),
+        dHasNote:true,dNote:'Locked in the traveler’s itinerary as an anchor. Changes need their approval.',
+        dActions:b.status==='Pending'?[btn('Decline',()=>{setS('Cancelled');close();}),btn('Confirm',()=>{setS('Confirmed');close();},1)]:b.status==='Confirmed'?[btn('Message guest',()=>this.toast('Message · demo')),btn('Mark completed',()=>{setS('Completed');close();},1)]:[btn('Close',close,1)]};}
+    if(d.type==='compose'){const c=st.compose;const set=o=>this.setState(s=>({compose:{...s.compose,...o}}));
+      const dt=new Date(c.date+'T'+c.time);const nice=isNaN(dt)?'Pick a date':dt.toLocaleDateString('en-GB',{weekday:'short',day:'numeric',month:'short'})+' · '+c.time;
+      const selP=Object.keys(c.plats).filter(p=>c.plats[p]);
+      const qm=['1599069158346-684fee0e414a','1536663815808-535e2280d2c2','1501927023255-9063be98970c','1558102400-72da9fdbecae','1565865735988-fd5752a02846'];
+      return{...base,dKicker:'Schedule post',dTitle:nice,dHasForm:true,dForm:[
+        {label:'Media · '+c.media.length+' / 10',isUpload:true,hasMedia:c.media.length>0,media:c.media.map((m,i)=>({bg:m.video?'#1E1A12':'url('+m.url+')',isVideo:!!m.video,isCover:i===0,outline:i===0?'2px solid #FF7A00':'none',remove:ev=>{ev.preventDefault();ev.stopPropagation();set({media:c.media.filter((_,j)=>j!==i)});}})),
+          onFiles:ev=>{const fs=[...(ev.target.files||[])].slice(0,10-c.media.length).map(f=>({url:URL.createObjectURL(f),video:f.type.startsWith('video'),name:f.name}));ev.target.value='';this.setState(s=>({compose:{...s.compose,media:[...s.compose.media,...fs]}}));if(fs.length)this.toast(fs.length+' file'+(fs.length>1?'s':'')+' added');},
+          quickMedia:qm.map(id=>({bg:BG(id),add:()=>c.media.length<10&&set({media:[...c.media,{url:U(id)}]})}))},
+        {label:'Caption · '+c.caption.length+' / 2,200',isArea:true,v:c.caption,ph:'Write a caption…',on:e=>set({caption:e.target.value.slice(0,2200)})},
+        {label:'Post to',isChips:true,opts:Object.keys(PLATS).map(p=>{const ok=!!st.conn[PLAT_APP[p]];const on=!!c.plats[p];return{t:ok?p:p+' · Connect',bg:on?Y:'var(--surface)',color:on?INK:'var(--text)',border:on?Y:'var(--border2)',op:ok?1:.5,toggle:()=>ok?set({plats:{...c.plats,[p]:!on}}):this.setState({drawer:{type:'connect',name:PLAT_APP[p],back:'compose'}})};})},
+        {label:'Date & time',isDateTime:true,date:c.date,time:c.time,scheme:st.theme==='dark'?'dark':'light',onDate:e=>set({date:e.target.value}),onTime:e=>set({time:e.target.value}),tz:'Lisbon time · WEST (UTC+1)',quick:[['Best · Sat 09:00','2026-10-17','09:00'],['Tue 18:30','2026-10-20','18:30'],['Sun 12:15','2026-10-18','12:15']].map(([t,dd,tt])=>{const on=c.date===dd&&c.time===tt;return{t,bg:on?Y:'var(--surface)',color:on?INK:'var(--text)',border:on?Y:'var(--border2)',op:1,toggle:()=>set({date:dd,time:tt})};})},
+        {label:'Referral link',isSelect:true,v:c.link,on:e=>set({link:e.target.value}),options:[{v:'',t:'No referral link'}].concat(st.links.map(l=>({v:l.slug,t:l.partner+' · '+l.slug}))),hasHint:!!c.link,hint:c.link?'4% on completed stays · 30-day window':''},
+        {label:'Linked guide',isSelect:true,v:c.guide,on:e=>set({guide:e.target.value}),options:[{v:'',t:'None'}].concat(st.guides.map(g=>({v:g.id,t:g.title+(g.status!=='Live'?' · '+g.status:'')}))),hasHint:false,hint:''}],
+        dRows:[],dHasNote:selP.length===0||c.media.length===0,dNote:c.media.length===0?'Add at least one photo or video to schedule.':'Pick at least one connected channel.',
+        dActions:[btn('Save draft',()=>{this.setState({drawer:null});this.toast('Draft saved');}),btn('Schedule'+(selP.length>1?' · '+selP.length+' channels':''),()=>{if(!c.media.length){this.toast('Add media first');return;}if(!selP.length){this.toast('Pick a channel');return;}const m=+c.date.slice(5,7),day=+c.date.slice(8,10);const g=st.guides.find(x=>x.id===c.guide);const title=(c.caption||(g?g.title:'New post')).slice(0,40);this.setState(s=>({posts:m===10?{...s.posts,[day]:[...(s.posts[day]||[]),...selP.map(p=>[c.time,p,title])]}:s.posts,drawer:null}));this.toast('Scheduled · '+nice);},1)]};}
+    if(d.type==='addch'){const list=st.role==='partner'?CH_P:CH_C;const aq=(st.addQ||'').toLowerCase();const avail=list.filter(c=>!st.conn[c[0]]&&(!aq||(c[0]+c[1]).toLowerCase().includes(aq)));
+      return{...base,dKicker:st.role==='partner'?'Sales channels':'Social accounts',dTitle:st.role==='partner'?'Add a channel':'Add an account',dHasForm:true,
+        dForm:[{label:'Search',isInput:true,v:st.addQ||'',on:e=>this.setState({addQ:e.target.value})},{label:avail.length?'Available · '+avail.length:'Everything is connected',isChips:true,opts:avail.map(c=>({t:c[0]+' · '+c[1].split(' ·')[0],bg:'var(--surface)',color:'var(--text)',border:'var(--border2)',op:1,toggle:()=>this.setState({drawer:{type:'connect',name:c[0],back:'addch'}})}))}],
+        dRows:rows([['Connected',String(list.filter(c=>st.conn[c[0]]).length)],['Not listed?','Use iCal or request below']]),dHasNote:true,dNote:st.role==='partner'?'Channels sync availability both ways, so a slot sold anywhere closes everywhere.':'TripWise only posts what you schedule.',
+        dActions:[btn('Request a channel',()=>this.toast('Request sent · we’ll email you')),btn('Done',close,1)]};}
+    if(d.type==='connect'){const name=d.name;const list=st.role==='partner'?CH_P:CH_C;const a=list.find(x=>x[0]===name)||[name,'',''];const on=!!st.conn[name];
+      const perms=st.role==='partner'?[['Read listings & rates','Required'],['Two-way calendar sync','Required'],['Import bookings','Required'],['Read reviews','Optional']]:[['Publish scheduled posts','Required'],['Read reach & saves','Required'],['Read follower insights','Optional']];
+      const back=()=>d.back==='compose'?this.setState({drawer:{type:'compose'}}):d.back==='addch'?this.setState({drawer:{type:'addch'}}):this.setState({drawer:null});
+      return{...base,dKicker:a[1]||'Connection',dTitle:name,dHasPill:true,dPill:on?'Connected':'Not connected',dPillBg:on?'var(--posBg)':'var(--hover)',dPillColor:on?'var(--pos)':'var(--muted)',
+        dRows:rows(on?[['Account',a[5]||'Linked'],['Status',a[6]||'Healthy'],['Last sync','4 min ago'],...perms.map(p=>[p[0],'Granted'])]:perms),
+        dHasNote:true,dNote:st.role==='partner'?'TripWise never changes prices or accepts bookings on other channels without your rules.':'TripWise only posts what you schedule. Partner stops stay labelled “Partner”.',
+        dActions:on?[btn('Disconnect',()=>{this.setState(s=>({conn:{...s.conn,[name]:false},drawer:null}));this.toast(name+' disconnected');}),btn('Sync now',()=>{this.toast(name+' synced');},1)]:[btn('Cancel',back),btn('Authorize & connect',()=>{this.setState(s=>({conn:{...s.conn,[name]:true}}));back();this.toast(name+' connected');},1)]};}
+    if(d.type==='link'){const c=st.compose||{};const set=o=>this.setState({compose:{...c,...o}});
+      return{...base,dKicker:'Referrals',dTitle:'New referral link',dHasForm:true,dForm:[{label:'Partner',isChips:true,opts:this.chips(['Pastéis do Rio','Casa do Rio','Rio Ferries','Tejo Bikes'],[c.partner],t=>set({partner:t,slug:t.toLowerCase().split(' ')[0].normalize('NFD').replace(/[^a-z]/g,'')}))},{label:'Slug',isInput:true,v:c.slug||'',on:e=>set({slug:e.target.value.replace(/[^a-z0-9-]/gi,'').toLowerCase()})}],
+        dRows:rows([['Link','tw.link/ines/'+(c.slug||'')],['Commission','4% of completed stays'],['Cookie window','30 days']]),dHasNote:true,dNote:'Travelers always see partner stops labelled “Partner”, even from your guides.',
+        dActions:[btn('Cancel',close),btn('Create link',()=>{this.setState(s=>({links:[{slug:'tw.link/ines/'+(c.slug||'new'),partner:c.partner,type:'Partner',clicks:0,saves:0,bookings:0,value:0,comm:0},...s.links],drawer:null}));this.toast('Link created');},1)]};}
+    return base;
+  }
+
+  renderVals(){
+    const st=this.state,role=st.role,r=RANGE[st.range];
+    const data=role==='partner'?this.partner(r):this.creator(r);
+    const unread=NOTIFS[role].filter(n=>!st.read[n[0]]).length;const nl=NOTIFS[role].filter(n=>st.nTab==='All'||(st.nTab==='Unread'&&!st.read[n[0]])||(st.nTab==='Bookings'&&['book','alert'].includes(n[5]))||(st.nTab==='Content'&&['cal','alert','link'].includes(n[5])));
+    const mvpPages=['p-bookings','p-offers','p-offer-edit','p-avail'];
+    const later=st.mvp&&!mvpPages.includes(st.page);
+    const navList=NAV[role].map(([id,label,ic,mvp])=>{const on=st.page===id||(id==='p-offers'&&st.page==='p-offer-edit')||(id==='c-content'&&st.page==='c-guide-edit');return{label,d:IC[ic],fw:on?700:500,color:on?'var(--text)':'var(--muted)',iconColor:on?O:'var(--faint)',bg:on?'var(--hover)':'transparent',op:st.mvp&&!mvp?.45:1,hasBadge:id==='p-bookings'&&!st.empty&&st.bookings.some(b=>b.status==='Pending'),badge:String(st.bookings.filter(b=>b.status==='Pending').length),later:st.mvp&&!mvp,mvp:st.mvp&&!!mvp,go:()=>this.go(id)};});
+    const acc=role==='partner'?{init:'CR',bg:'var(--text)',color:'var(--surface)',r:'8px',name:'Casa do Rio',sub:'Hotel · Alfama, Lisbon'}:{init:'IR',bg:O,color:INK,r:'50%',name:'Inês R.',sub:'@ines.walks · 18.2k'};
+    const tg=(label,on,f)=>({label,toggle:f,track:on?O:'var(--border2)',knob:on?'16px':'2px',border:on?'rgba(255,122,0,.5)':'var(--border)'});
+    const prim={'p-dash':['New offering',()=>this.newOffer()],'p-bookings':['Manual booking',()=>this.toast('Manual booking · demo')],'p-offers':['New offering',()=>this.newOffer()],'p-offer-edit':['Save',()=>this.saveOffer()],'p-avail':['Block dates',()=>this.toast('Block dates · demo')],'p-revenue':['Export CSV',()=>this.toast('Exported revenue.csv')],'p-analytics':['Export report',()=>this.toast('Report exported')],'p-appear':['Preview as traveler',()=>this.toast('Opening preview')],'c-dash':['New guide',()=>this.newGuide()],'c-content':['New guide',()=>this.newGuide()],'c-guide-edit':['Save',()=>this.saveGuide()],'c-schedule':['Schedule post',()=>this.openCompose(14)],'p-conn':['Add channel',()=>this.setState({drawer:{type:'addch'},addQ:''})],'c-conn':['Add account',()=>this.setState({drawer:{type:'addch'},addQ:''})],'c-audience':['Export list',()=>this.toast('Exported followers.csv')],'c-referrals':['Create link',()=>this.setState({drawer:{type:'link'},compose:{partner:'Pastéis do Rio',slug:'pasteis'}})],'c-analytics':['Export report',()=>this.toast('Report exported')],'c-earnings':['Payout settings',()=>this.setState(s=>({payoutMethod:s.payoutMethod==='IBAN'?'PayPal':'IBAN'}))]}[st.page]||['New',()=>{}];
+    return{
+      rootRef:this.rootRef,outerRef:this.outerRef,frameRef:this.frameRef,
+      backHref:'TripWise App v2.dc.html?role='+role+'&view=settings',
+      stripToggles:[tg('Show MVP scope',st.mvp,()=>this.setState(s=>({mvp:!s.mvp}))),tg('Show product decisions',st.dec,()=>this.setState(s=>({dec:!s.dec}))),tg('Empty account',st.empty,()=>this.setState(s=>({empty:!s.empty})))],
+      urlPath:(role==='partner'?'casadorio':'ines.walks')+'/'+st.page.slice(2),
+      roleTabs:this.seg([['partner','Partner'],['creator','Creator']],role,v=>this.setState({role:v,page:v==='partner'?'p-dash':'c-dash',drawer:null,q:'',edit:null,gEdit:null})),
+      themeTabs:this.seg([['light','Light'],['dark','Dark']],st.theme,v=>this.setState({theme:v})).map((t,i)=>({...t,d:i?'M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z':'M12 3v2M12 19v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M3 12h2M19 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4M12 8a4 4 0 1 0 0 8a4 4 0 1 0 0-8z'})),
+      accInit:acc.init,accBg:acc.bg,accColor:acc.color,accRadius:acc.r,accName:acc.name,accSub:acc.sub,roleLabel:role==='partner'?'Partner':'Creator',
+      nav:navList,crumb:(role==='partner'?'Casa do Rio':'Inês R.')+' / '+(TITLES[st.page]||''),pageTitle:TITLES[st.page]||'',pageLater:later,
+      q:st.q,onQ:e=>this.setState({q:e.target.value}),searchPh:role==='partner'?'Search bookings, offerings…':'Search guides, followers, links…',
+      ranges:this.seg([['7d','7D'],['30d','30D'],['90d','90D']],st.range,v=>{this.setState({range:v,loading:true});this.later(450,()=>this.setState({loading:false}));}),
+      bell:()=>this.setState(s=>({notifOpen:!s.notifOpen})),bellBg:st.notifOpen?'var(--hover)':'transparent',bellBorder:st.notifOpen?'var(--border2)':'var(--border)',
+      notifOpen:st.notifOpen,closeNotif:()=>this.setState({notifOpen:false}),notifRight:'176px',hasUnread:unread>0,unreadCount:String(unread),noNotifs:nl.length===0,
+      markAll:()=>this.setState({read:Object.fromEntries(NOTIFS[role].map(n=>[n[0],1]))}),notifSettings:()=>{this.setState({notifOpen:false});this.toast('Notification settings · in the app');},
+      nTabs:['All','Unread',role==='partner'?'Bookings':'Content'].map(t=>({label:t,bg:st.nTab===t?'var(--hover)':'transparent',color:st.nTab===t?'var(--text)':'var(--muted)',set:()=>this.setState({nTab:t})})),
+      notifs:nl.map(([id,title,meta,time,cta,ic,tile,tgt])=>{const un=!st.read[id];return{title,meta,time,cta,d:IC[ic],tile,unread:un,fw:un?700:500,bg:un?'var(--surface)':'transparent',go:()=>{this.setState(s=>({read:{...s.read,[id]:1},notifOpen:false}));if(tgt.edit){this.editGuide(tgt.edit);return;}this.setState({page:tgt.page,drawer:tgt.drawer||null,q:'',edit:null,gEdit:null});}};}),
+      primary:prim[1],primaryLabel:prim[0],
+      contentOp:later?.45:1,contentFilter:later?'saturate(.3)':'none',
+      hasKpis:data.kpis.length>0,kpis:data.kpis,kpiCols:data.kpis.length||4,loading:st.loading,notLoading:!st.loading,
+      sections:data.sections,
+      ...(()=>{const d=this.drawerVals();return{...d,dHasRows:d.dRows.length>0};})(),closeDrawer:()=>this.setState({drawer:null}),
+      hasToast:!!st.toast,toast:st.toast
+    };
+  }
+}
+</script>
+</body>
+</html>

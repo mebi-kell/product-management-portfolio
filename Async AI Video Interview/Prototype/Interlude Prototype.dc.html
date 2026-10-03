@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{margin:0}*{box-sizing:border-box}button,input,select,textarea{font:inherit;color:inherit}
+[data-theme="light"]{--bg:#F5F4F1;--surface:#FFFFFF;--surface-2:#EFEDE8;--line:#E4E1DA;--line-2:#D3CFC6;--ink:#141518;--ink-2:#4A4C53;--ink-3:#7C7E85;--accent:oklch(0.46 0.17 268);--accent-ink:oklch(0.42 0.17 268);--accent-soft:oklch(0.95 0.025 268);--on-accent:#FFFFFF;--s0:#A9AAAE;--s1:oklch(0.6 0.16 32);--s3:oklch(0.75 0.13 78);--s4:oklch(0.63 0.12 158);--s5:oklch(0.49 0.11 172);--warn-soft:oklch(0.96 0.03 60);--ok-soft:oklch(0.96 0.03 160);--rec:oklch(0.6 0.21 27);--pin-bg:#141518;--pin-ink:#F5F4F1;--cam:#1A1B1F;--sans:"Hanken Grotesk",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;color-scheme:light}
+[data-theme="dark"]{--bg:#0E0F11;--surface:#16171A;--surface-2:#1E2024;--line:#26282D;--line-2:#34373D;--ink:#ECEBE7;--ink-2:#B2B2AF;--ink-3:#7E7F84;--accent:oklch(0.7 0.14 268);--accent-ink:oklch(0.78 0.11 268);--accent-soft:oklch(0.26 0.05 268);--on-accent:#0E0F11;--s0:#55575D;--s1:oklch(0.66 0.16 32);--s3:oklch(0.78 0.13 78);--s4:oklch(0.7 0.12 158);--s5:oklch(0.62 0.11 172);--warn-soft:oklch(0.26 0.04 60);--ok-soft:oklch(0.25 0.04 160);--rec:oklch(0.66 0.2 27);--pin-bg:#ECEBE7;--pin-ink:#0E0F11;--cam:#08090A;--sans:"Hanken Grotesk",system-ui,sans-serif;--mono:"IBM Plex Mono",ui-monospace,monospace;color-scheme:dark}
+a{color:var(--accent-ink)}a:hover{color:var(--ink)}
+@keyframes pulse{0%{box-shadow:0 0 0 0 oklch(0.6 0.21 27 / .55)}100%{box-shadow:0 0 0 12px oklch(0.6 0.21 27 / 0)}}
+@keyframes grow{from{transform:scaleX(0)}to{transform:scaleX(1)}}
+@keyframes mic{0%,100%{transform:scaleY(.25)}50%{transform:scaleY(1)}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+</style>
+</helmet>
+<div data-theme="{{ theme }}" style="min-height:100vh;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:14px;line-height:1.45;padding-bottom:72px;transition:background .3s">
+
+<header style="position:sticky;top:0;z-index:40;background:var(--bg);border-bottom:1px solid var(--line)">
+  <div style="max-width:1320px;margin:0 auto;padding:10px 28px;min-height:56px;display:flex;align-items:center;gap:28px;flex-wrap:wrap">
+    <div onClick="{{ goHome }}" style="display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;letter-spacing:-.01em;cursor:pointer">
+      <span style="width:18px;height:18px;border-radius:5px;background:var(--ink);display:grid;place-items:center"><span style="width:8px;height:8px;border-radius:50%;background:var(--bg)"></span></span>Interlude
+    </div>
+    <sc-if value="{{ notCandidate }}" hint-placeholder-val="{{ true }}">
+      <nav style="display:flex;gap:2px;font-size:14px">
+        <span onClick="{{ goHome }}" style="padding:6px 10px;border-radius:6px;background:var(--surface-2);font-weight:600;cursor:pointer">Interviews</span>
+        <span style="padding:6px 10px;color:var(--ink-3)">Brightwater Freight</span>
+      </nav>
+    </sc-if>
+    <sc-if value="{{ isCandidate }}">
+      <span style="font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Candidate view · what Amara sees</span>
+    </sc-if>
+    <div style="margin-left:auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <sc-if value="{{ notCandidate }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;align-items:center;gap:8px">
+          <span style="font:500 11px var(--mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.06em">Role</span>
+          <div style="display:flex;padding:3px;background:var(--surface-2);border-radius:8px;gap:2px">
+            <sc-for list="{{ roles }}" as="r" hint-placeholder-count="3">
+              <button onClick="{{ r.onClick }}" style="border:0;padding:4px 10px;border-radius:6px;font-size:13px;font-weight:500;cursor:pointer;background:{{ r.bg }};color:{{ r.fg }};box-shadow:{{ r.shadow }}">{{ r.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+      <button onClick="{{ toggleTheme }}" style="height:30px;padding:0 10px;border-radius:7px;border:1px solid var(--line-2);background:var(--surface);font-size:13px;cursor:pointer">{{ themeLabel }}</button>
+      <button onClick="{{ toggleDecisions }}" style="display:flex;align-items:center;gap:8px;height:30px;padding:0 10px 0 6px;border-radius:7px;border:1px solid var(--line-2);background:var(--surface);font-size:13px;font-weight:500;cursor:pointer">
+        <span style="width:28px;height:16px;border-radius:8px;background:{{ swBg }};position:relative;transition:background .2s"><span style="position:absolute;top:2px;left:{{ swX }};width:12px;height:12px;border-radius:50%;background:var(--surface);transition:left .2s"></span></span>Show product decisions
+      </button>
+    </div>
+  </div>
+</header>
+
+<main style="max-width:1320px;margin:0 auto;padding:32px 28px 40px">
+
+<sc-if value="{{ isViewer }}">
+  <div style="margin:-12px 0 24px;padding:10px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface-2);font-size:13px;color:var(--ink-2);display:flex;gap:10px;align-items:center"><span style="font:600 11px var(--mono);letter-spacing:.06em;text-transform:uppercase">View only</span>You can open interviews and reports. Building, inviting and template changes need Recruiter or Admin access.</div>
+</sc-if>
+
+<!-- HOME -->
+<sc-if value="{{ vHome }}" hint-placeholder-val="{{ true }}">
+  <section data-screen-label="Interviews" style="display:flex;flex-direction:column;gap:28px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <div><div style="font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Brightwater Freight · Hiring workspace</div><h1 style="margin:6px 0 0;font-size:32px;letter-spacing:-.02em;font-weight:600">Interviews</h1></div>
+      <sc-if value="{{ homeHasList }}"><sc-if value="{{ canEdit }}"><button onClick="{{ newInterview }}" style="height:36px;padding:0 16px;border-radius:8px;border:0;background:var(--accent);color:var(--on-accent);font-weight:600;cursor:pointer">New interview</button></sc-if></sc-if>
+    </div>
+    <sc-if value="{{ homeEmpty }}" hint-placeholder-val="{{ true }}">
+      <div style="border:1px dashed var(--line-2);border-radius:16px;padding:88px 32px;display:flex;flex-direction:column;align-items:center;text-align:center;gap:14px">
+        <div style="font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">No interviews yet</div>
+        <h2 style="margin:0;font-size:24px;font-weight:600;letter-spacing:-.015em;max-width:460px;text-wrap:balance">Build your first recorded interview</h2>
+        <p style="margin:0;color:var(--ink-2);max-width:440px;text-wrap:pretty">Choose up to ten questions, invite candidates by email, and review a transcript-based report for every answer.</p>
+        <sc-if value="{{ canEdit }}"><button onClick="{{ newInterview }}" style="margin-top:8px;height:40px;padding:0 20px;border-radius:8px;border:0;background:var(--accent);color:var(--on-accent);font-weight:600;cursor:pointer">Create interview</button></sc-if>
+        <sc-if value="{{ isViewer }}"><div style="font-size:13px;color:var(--ink-3)">A recruiter or admin can create the first interview.</div></sc-if>
+      </div>
+    </sc-if>
+    <sc-if value="{{ homeHasList }}">
+      <div style="background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden">
+        <div style="display:grid;grid-template-columns:minmax(0,2.4fr) 1fr 1fr 1.4fr 1fr;gap:16px;padding:10px 20px;border-bottom:1px solid var(--line);font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)"><span>Interview</span><span>Questions</span><span>Candidates</span><span>Not started · Started · Done</span><span>Status</span></div>
+        <div onClick="{{ openInterview }}" style="display:grid;grid-template-columns:minmax(0,2.4fr) 1fr 1fr 1.4fr 1fr;gap:16px;padding:16px 20px;align-items:center;cursor:pointer" style-hover="background:var(--surface-2)">
+          <div><div style="font-weight:600;font-size:15px">{{ title }}</div><div style="font:400 12px var(--mono);color:var(--ink-3);margin-top:2px">Created 1 Oct by Jules Hartman</div></div>
+          <span style="font-family:var(--mono)">{{ homeQ }}</span><span style="font-family:var(--mono)">{{ homeC }}</span><span style="font-family:var(--mono)">{{ homeMix }}</span>
+          <span style="display:flex;align-items:center;gap:6px;font-size:13px"><span style="width:7px;height:7px;border-radius:50%;background:{{ homeDot }}"></span>{{ homeStatus }}</span>
+        </div>
+      </div>
+    </sc-if>
+  </section>
+</sc-if>
+
+<!-- BUILDER -->
+<sc-if value="{{ vBuilder }}">
+  <section data-screen-label="Build interview" style="display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <div style="flex:1 1 420px;min-width:0">
+        <div style="font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Interviews / New interview</div>
+        <input value="{{ title }}" onChange="{{ onTitle }}" readOnly="{{ isViewer }}" style="margin-top:6px;width:100%;border:0;background:transparent;font-size:30px;font-weight:600;letter-spacing:-.02em;padding:0;outline:none">
+      </div>
+      <div style="display:flex;align-items:center;gap:10px;font-size:13px">
+        <span style="display:flex;align-items:center;gap:6px;font-weight:600"><span style="width:20px;height:20px;border-radius:50%;background:var(--ink);color:var(--bg);display:grid;place-items:center;font:600 11px var(--mono)">1</span>Questions</span>
+        <span style="width:24px;height:1px;background:var(--line-2)"></span>
+        <span style="display:flex;align-items:center;gap:6px;color:var(--ink-3)"><span style="width:20px;height:20px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center;font:600 11px var(--mono)">2</span>Invite</span>
+      </div>
+    </div>
+    <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start">
+      <div style="flex:1 1 520px;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:12px">
+        <div style="display:flex;gap:4px;padding:0 16px;border-bottom:1px solid var(--line)">
+          <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3">
+            <div style="position:relative">
+              <button onClick="{{ t.onClick }}" style="display:flex;align-items:center;gap:6px;border:0;background:transparent;padding:14px 10px 12px;font-size:14px;font-weight:{{ t.weight }};color:{{ t.color }};border-bottom:2px solid {{ t.line }};margin-bottom:-1px;cursor:pointer">{{ t.label }}<span style="font:500 11px var(--mono);color:var(--ink-3)">{{ t.count }}</span></button>
+              <sc-if value="{{ t.pin }}"><div style="position:absolute;z-index:20;top:-30px;left:0;display:flex;align-items:flex-start;gap:8px;width:max-content;max-width:280px;padding:6px 10px 6px 6px;background:var(--pin-bg);color:var(--pin-ink);border-radius:10px;font-size:12px;line-height:1.35;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.18);animation:fadeUp .25s ease-out"><span style="flex:none;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font:600 10px/1 var(--mono)">1</span>A customer request became a scoped product model</div></sc-if>
+            </div>
+          </sc-for>
+        </div>
+
+        <sc-if value="{{ tabCatalogue }}" hint-placeholder-val="{{ true }}">
+          <div style="padding:8px 20px 16px">
+            <p style="margin:12px 0 4px;font-size:13px;color:var(--ink-2)">Maintained by Interlude. Each question is written to be answerable from experience in under three minutes.</p>
+            <sc-for list="{{ catalogue }}" as="q" hint-placeholder-count="6">
+              <div style="display:flex;gap:16px;align-items:flex-start;padding:16px 0;border-top:1px solid var(--line)">
+                <div style="flex:1;min-width:0">
+                  <div style="font:500 11px var(--mono);letter-spacing:.05em;text-transform:uppercase;color:var(--ink-3)">{{ q.cat }}</div>
+                  <div style="margin-top:4px;font-size:15px;font-weight:500;text-wrap:pretty">{{ q.text }}</div>
+                  <sc-if value="{{ q.hasSubs }}"><div style="margin-top:4px;font-size:13px;color:var(--ink-2)">{{ q.subsLine }}</div></sc-if>
+                  <div style="margin-top:6px;font:400 12px var(--mono);color:var(--ink-3)">{{ q.meta }}</div>
+                </div>
+                <sc-if value="{{ q.canAdd }}"><button onClick="{{ q.onAdd }}" style="flex:none;height:32px;padding:0 12px;border-radius:7px;border:1px solid var(--line-2);background:var(--surface);font-size:13px;font-weight:500;cursor:pointer" style-hover="border-color:var(--ink)">Add</button></sc-if>
+                <sc-if value="{{ q.added }}"><span style="flex:none;height:32px;padding:0 10px;display:flex;align-items:center;font-size:13px;color:var(--accent-ink);font-weight:600">Added</span></sc-if>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabTemplates }}">
+          <div style="padding:20px;display:flex;flex-direction:column;gap:16px">
+            <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+              <p style="margin:0;font-size:13px;color:var(--ink-2);max-width:520px">{{ tplIntro }}</p>
+              <sc-if value="{{ isAdmin }}"><button onClick="{{ newTemplate }}" style="height:32px;padding:0 12px;border-radius:7px;border:1px solid var(--line-2);background:var(--surface);font-size:13px;font-weight:500;cursor:pointer">New template</button></sc-if>
+            </div>
+            <sc-for list="{{ templates }}" as="t" hint-placeholder-count="3">
+              <div style="border:1px solid var(--line);border-radius:10px">
+                <div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap">
+                  <div style="flex:1;min-width:0"><div style="font-weight:600;font-size:15px">{{ t.name }}</div><div style="font:400 12px var(--mono);color:var(--ink-3);margin-top:2px">{{ t.updated }}</div></div>
+                  <sc-if value="{{ t.showLock }}">
+                    <div style="position:relative">
+                      <span style="display:flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:999px;background:var(--surface-2);font-size:12px;font-weight:500;color:var(--ink-2)"><svg width="11" height="12" viewBox="0 0 11 12" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="1" y="5.2" width="9" height="6" rx="1.4"></rect><path d="M3 5.2V3.6a2.5 2.5 0 0 1 5 0v1.6"></path></svg>Managed by admins</span>
+                      <sc-if value="{{ t.pin }}"><div style="position:absolute;z-index:20;top:-36px;right:0;display:flex;align-items:flex-start;gap:8px;width:max-content;max-width:280px;padding:6px 10px 6px 6px;background:var(--pin-bg);color:var(--pin-ink);border-radius:10px;font-size:12px;line-height:1.35;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.18);animation:fadeUp .25s ease-out"><span style="flex:none;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font:600 10px/1 var(--mono)">2</span>Permissions protect consistency, not just access</div></sc-if>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ t.canManage }}">
+                    <div style="position:relative;display:flex;gap:8px">
+                      <button onClick="{{ t.onEdit }}" style="height:28px;padding:0 10px;border-radius:7px;border:1px solid var(--line-2);background:var(--surface);font-size:12px;font-weight:500;cursor:pointer">Edit template</button>
+                      <sc-if value="{{ t.pin }}"><div style="position:absolute;z-index:20;top:-36px;right:0;display:flex;align-items:flex-start;gap:8px;width:max-content;max-width:280px;padding:6px 10px 6px 6px;background:var(--pin-bg);color:var(--pin-ink);border-radius:10px;font-size:12px;line-height:1.35;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.18);animation:fadeUp .25s ease-out"><span style="flex:none;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font:600 10px/1 var(--mono)">2</span>Permissions protect consistency, not just access</div></sc-if>
+                    </div>
+                  </sc-if>
+                </div>
+                <sc-for list="{{ t.qs }}" as="q" hint-placeholder-count="2">
+                  <div style="display:flex;gap:16px;align-items:center;padding:12px 16px;border-top:1px solid var(--line)">
+                    <div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:500">{{ q.text }}</div><div style="margin-top:3px;font:400 12px var(--mono);color:var(--ink-3)">{{ q.meta }}</div></div>
+                    <sc-if value="{{ q.canAdd }}"><button onClick="{{ q.onAdd }}" style="flex:none;height:30px;padding:0 12px;border-radius:7px;border:1px solid var(--line-2);background:var(--surface);font-size:13px;font-weight:500;cursor:pointer">Add</button></sc-if>
+                    <sc-if value="{{ q.added }}"><span style="flex:none;font-size:13px;color:var(--accent-ink);font-weight:600">Added</span></sc-if>
+                  </div>
+                </sc-for>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ tabCustom }}">
+          <div style="padding:20px;display:flex;flex-direction:column;gap:20px">
+            <label style="display:flex;flex-direction:column;gap:8px">
+              <span style="font-size:13px;font-weight:600">Main question</span>
+              <textarea value="{{ cqText }}" onChange="{{ onCqText }}" disabled="{{ isViewer }}" rows="3" placeholder="e.g. Tell us about a week when two of your carriers were unavailable." style="resize:vertical;padding:10px 12px;border-radius:8px;border:1px solid var(--line-2);background:var(--bg);font-size:15px;outline:none"></textarea>
+            </label>
+            <div style="display:flex;flex-direction:column;gap:8px">
+              <span style="font-size:13px;font-weight:600">Sub-questions <span style="font-weight:400;color:var(--ink-3)">· optional, shown under the main question</span></span>
+              <sc-for list="{{ cqSubs }}" as="s" hint-placeholder-count="0">
+                <div style="display:flex;gap:8px;align-items:center">
+                  <span style="font:500 12px var(--mono);color:var(--ink-3);width:22px">{{ s.n }}</span>
+                  <input value="{{ s.val }}" onChange="{{ s.onChange }}" placeholder="Follow-up prompt" style="flex:1;height:36px;padding:0 12px;border-radius:8px;border:1px solid var(--line-2);background:var(--bg);outline:none">
+                  <button onClick="{{ s.onRemove }}" style="height:36px;width:36px;border-radius:8px;border:1px solid var(--line);background:transparent;color:var(--ink-3);cursor:pointer">×</button>
+                </div>
+              </sc-for>
+              <sc-if value="{{ canAddSub }}"><button onClick="{{ addSub }}" style="align-self:flex-start;height:30px;padding:0 10px;border-radius:7px;border:1px dashed var(--line-2);background:transparent;font-size:13px;color:var(--ink-2);cursor:pointer">+ Add sub-question</button></sc-if>
+            </div>
+            <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:16px">
+              <label style="display:flex;flex-direction:column;gap:8px"><span style="font-size:13px;font-weight:600">Thinking time</span>
+                <select value="{{ cqThink }}" onChange="{{ onCqThink }}" style="height:38px;padding:0 10px;border-radius:8px;border:1px solid var(--line-2);background:var(--bg)"><option value="15">0:15</option><option value="30">0:30</option><option value="45">0:45</option><option value="60">1:00</option><option value="120">2:00</option></select></label>
+              <label style="display:flex;flex-direction:column;gap:8px"><span style="font-size:13px;font-weight:600">Answer time <span style="font-weight:400;color:var(--ink-3)">· max 15 min</span></span>
+                <select value="{{ cqAnswer }}" onChange="{{ onCqAnswer }}" style="height:38px;padding:0 10px;border-radius:8px;border:1px solid var(--line-2);background:var(--bg)"><option value="60">1 min</option><option value="120">2 min</option><option value="180">3 min</option><option value="300">5 min</option><option value="600">10 min</option><option value="900">15 min</option></select></label>
+              <div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:13px;font-weight:600">Takes allowed</span>
+                <div style="display:flex;align-items:center;height:38px;border:1px solid var(--line-2);border-radius:8px;background:var(--bg)">
+                  <button onClick="{{ takesDown }}" style="width:38px;height:100%;border:0;background:transparent;cursor:pointer;font-size:16px">−</button>
+                  <span style="flex:1;text-align:center;font:500 14px var(--mono)">{{ cqTakes }}</span>
+                  <button onClick="{{ takesUp }}" style="width:38px;height:100%;border:0;background:transparent;cursor:pointer;font-size:16px">+</button>
+                </div><span style="font-size:12px;color:var(--ink-3)">Default is 2: one recording, one retake.</span></div>
+            </div>
+            <div style="display:flex;justify-content:flex-end"><button onClick="{{ addCustom }}" disabled="{{ cqDisabled }}" style="height:36px;padding:0 16px;border-radius:8px;border:0;background:var(--accent);color:var(--on-accent);font-weight:600;cursor:pointer;opacity:{{ cqOpacity }}">Add to interview</button></div>
+          </div>
+        </sc-if>
+      </div>
+
+      <aside style="flex:0 1 360px;min-width:300px;position:sticky;top:80px;background:var(--surface);border:1px solid var(--line);border-radius:12px;display:flex;flex-direction:column">
+        <div style="padding:18px 20px;border-bottom:1px solid var(--line)">
+          <div style="font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Interview summary</div>
+          <div style="display:flex;gap:32px;margin-top:12px">
+            <div><div style="font:500 26px var(--mono);letter-spacing:-.02em">{{ selCount }}<span style="color:var(--ink-3);font-size:16px">/10</span></div><div style="font-size:12px;color:var(--ink-3)">Questions</div></div>
+            <div><div style="font:500 26px var(--mono);letter-spacing:-.02em">{{ estDur }}</div><div style="font-size:12px;color:var(--ink-3)">Est. candidate time</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(10,1fr);gap:3px;margin-top:14px">
+            <sc-for list="{{ capSegs }}" as="c" hint-placeholder-count="10"><span style="height:4px;border-radius:2px;background:{{ c.bg }};transition:background .3s"></span></sc-for>
+          </div>
+        </div>
+        <sc-if value="{{ selEmpty }}" hint-placeholder-val="{{ true }}">
+          <div style="padding:32px 20px;text-align:center;color:var(--ink-3);font-size:13px;text-wrap:pretty">No questions yet. Add from the catalogue, a company template, or write your own.</div>
+        </sc-if>
+        <div style="display:flex;flex-direction:column;max-height:46vh;overflow:auto">
+          <sc-for list="{{ selList }}" as="q" hint-placeholder-count="0">
+            <div style="display:flex;gap:12px;padding:12px 20px;border-bottom:1px solid var(--line);animation:fadeUp .25s ease-out">
+              <span style="font:500 12px var(--mono);color:var(--ink-3);padding-top:2px">{{ q.n }}</span>
+              <div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:500;text-wrap:pretty">{{ q.text }}</div><div style="margin-top:3px;font:400 11px var(--mono);color:var(--ink-3)">{{ q.meta }}</div></div>
+              <sc-if value="{{ q.canRemove }}"><button onClick="{{ q.onRemove }}" style="flex:none;width:24px;height:24px;border-radius:6px;border:0;background:transparent;color:var(--ink-3);cursor:pointer" style-hover="background:var(--surface-2)">×</button></sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <div style="padding:16px 20px;display:flex;flex-direction:column;gap:8px">
+          <button onClick="{{ toInvite }}" disabled="{{ contDisabled }}" style="height:40px;border-radius:8px;border:0;background:var(--accent);color:var(--on-accent);font-weight:600;cursor:pointer;opacity:{{ contOpacity }}">Continue to invitations</button>
+          <span style="font-size:12px;color:var(--ink-3);text-align:center">Includes about 3 minutes for setup and camera check.</span>
+        </div>
+      </aside>
+    </div>
+  </section>
+</sc-if>
+
+<!-- INVITE -->
+<sc-if value="{{ vInvite }}">
+  <section data-screen-label="Invite candidates" style="display:flex;flex-direction:column;gap:24px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <div><div style="font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">{{ title }}</div><h1 style="margin:6px 0 0;font-size:30px;font-weight:600;letter-spacing:-.02em">Invite candidates</h1></div>
+      <div style="display:flex;align-items:center;gap:10px;font-size:13px">
+        <sc-for list="{{ invSteps }}" as="s" hint-placeholder-count="3">
+          <span style="display:flex;align-items:center;gap:6px;font-weight:{{ s.weight }};color:{{ s.color }}"><span style="width:20px;height:20px;border-radius:50%;background:{{ s.dotBg }};color:{{ s.dotFg }};border:1px solid {{ s.dotLine }};display:grid;place-items:center;font:600 11px var(--mono)">{{ s.n }}</span>{{ s.label }}</span>
+        </sc-for>
+      </div>
+    </div>
+
+    <sc-if value="{{ inv1 }}">
+      <div style="display:flex;gap:24px;flex-wrap:wrap;align-items:flex-start">
+        <div style="flex:1 1 520px;min-width:0;background:var(--surface);border:1px solid var(--line);border-radius:12px">
+          <div style="display:flex;gap:4px;padding:0 16px;border-bottom:1px solid var(--line)">
+            <sc-for list="{{ srcTabs }}" as="t" hint-placeholder-count="3">
+              <button onClick="{{ t.onClick }}" style="border:0;background:transparent;padding:14px 10px 12px;font-size:14px;font-weight:{{ t.weight }};color:{{ t.color }};border-bottom:2px solid {{ t.line }};margin-bottom:-1px;cursor:pointer">{{ t.label }}</button>
+            </sc-for>
+          </div>
+          <sc-if value="{{ srcPool }}">
+            <div>
+              <sc-for list="{{ poolRows }}" as="p" hint-placeholder-count="8">
+                <label style="display:flex;align-items:center;gap:14px;padding:12px 20px;border-bottom:1px solid var(--line);cursor:pointer" style-hover="background:var(--surface-2)">
+                  <input type="checkbox" checked="{{ p.checked }}" onChange="{{ p.onToggle }}" style="width:16px;height:16px;accent-color:var(--accent)">
+                  <span style="width:30px;height:30px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font:600 11px var(--mono);color:var(--ink-2)">{{ p.ini }}</span>
+                  <span style="flex:1;min-width:0"><span style="display:block;font-weight:500">{{ p.n }}</span><span style="display:block;font:400 12px var(--mono);color:var(--ink-3)">{{ p.e }}</span></span>
+                  <span style="font-size:12px;color:var(--ink-3)">{{ p.note }}</span>
+                </label>
+              </sc-for>
+            </div>
+          </sc-if>
+          <sc-if value="{{ srcManual }}">
+            <div style="padding:20px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px">
+                <input value="{{ mName }}" onChange="{{ onMName }}" placeholder="Full name" style="height:38px;padding:0 12px;border-radius:8px;border:1px solid var(--line-2);background:var(--bg);outline:none">
+                <input value="{{ mEmail }}" onChange="{{ onMEmail }}" placeholder="Email address" style="height:38px;padding:0 12px;border-radius:8px;border:1px solid var(--line-2);background:var(--bg);outline:none">
+              </div>
+              <button onClick="{{ addManual }}" style="align-self:flex-start;height:34px;padding:0 14px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);font-weight:500;cursor:pointer">Add candidate</button>
+            </div>
+          </sc-if>
+          <sc-if value="{{ srcUpload }}">
+            <div style="padding:20px">
+              <div onClick="{{ doUpload }}" style="border:1px dashed var(--line-2);border-radius:10px;padding:40px 20px;text-align:center;cursor:pointer" style-hover="background:var(--surface-2)">
+                <div style="font-weight:600">{{ uploadTitle }}</div>
+                <div style="margin-top:4px;font-size:13px;color:var(--ink-3)">{{ uploadSub }}</div>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+        <aside style="flex:0 1 340px;min-width:280px;background:var(--surface);border:1px solid var(--line);border-radius:12px">
+          <div style="padding:18px 20px;border-bottom:1px solid var(--line)"><div style="font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Inviting</div><div style="font:500 26px var(--mono);margin-top:8px">{{ invCount }}</div></div>
+          <div style="max-height:320px;overflow:auto">
+            <sc-for list="{{ invitees }}" as="p" hint-placeholder-count="4"><div style="padding:9px 20px;border-bottom:1px solid var(--line);font-size:13px">{{ p.n }}</div></sc-for>
+          </div>
+          <div style="padding:16px 20px"><button onClick="{{ toStep2 }}" disabled="{{ invNone }}" style="width:100%;height:40px;border-radius:8px;border:0;background:var(--accent);color:var(--on-accent);font-weight:600;cursor:pointer;opacity:{{ invOpacity }}">Review email</button></div>
+        </aside>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ inv2 }}">
+      <div style="max-width:720px;background:var(--surface);border:1px solid var(--line);border-radius:12px">
+        <div style="padding:16px 24px;border-bottom:1px solid var(--line);display:grid;grid-template-columns:80px 1fr;gap:8px;font-size:13px">
+          <span style="color:var(--ink-3)">From</span><span>Brightwater Freight Hiring &lt;hiring@brightwater.example&gt;</span>
+          <span style="color:var(--ink-3)">To</span><span>{{ invCount }} candidates, sent individually</span>
+          <span style="color:var(--ink-3)">Subject</span><span style="font-weight:600">Your recorded interview for Operations Coordinator</span>
+        </div>
+        <div style="padding:24px;font-size:15px;line-height:1.6;display:flex;flex-direction:column;gap:12px;max-width:600px">
+          <p style="margin:0">Hi <span style="font-family:var(--mono);font-size:13px;background:var(--accent-soft);color:var(--accent-ink);padding:1px 6px;border-radius:4px">first_name</span>,</p>
+          <p style="margin:0">Thanks for applying to Brightwater Freight. The next step is a short recorded interview you can complete whenever suits you before 8 October.</p>
+          <p style="margin:0">You'll answer 6 questions on camera. It takes about 25 minutes, and you can retake each answer once.</p>
+          <span style="align-self:flex-start;padding:10px 18px;border-radius:8px;background:var(--ink);color:var(--bg);font-weight:600;font-size:14px">Start your interview</span>
+          <p style="margin:0;color:var(--ink-2)">Jules Hartman, Talent team</p>
+        </div>
+        <div style="padding:16px 24px;border-top:1px solid var(--line);display:flex;justify-content:space-between;gap:12px">
+          <button onClick="{{ toStep1 }}" style="height:38px;padding:0 14px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);font-weight:500;cursor:pointer">Back</button>
+          <button onClick="{{ toStep3 }}" style="height:38px;padding:0 16px;border-radius:8px;border:0;background:var(--accent);color:var(--on-accent);font-weight:600;cursor:pointer">Continue</button>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ inv3 }}">
+      <div style="max-width:560px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:28px;display:flex;flex-direction:column;gap:18px">
+        <div style="font-size:20px;font-weight:600;letter-spacing:-.01em">{{ sendHeadline }}</div>
+        <div style="font-size:14px;color:var(--ink-2)">Each candidate gets their own interview session and link. Sessions are created before any email goes out.</div>
+        <sc-if value="{{ isSending }}">
+          <div style="display:flex;flex-direction:column;gap:8px">
+            <div style="height:6px;border-radius:3px;background:var(--surface-2);overflow:hidden"><div style="height:100%;width:{{ sendPct }};background:var(--accent);transition:width .18s linear"></div></div>
+            <div style="font:400 12px var(--mono);color:var(--ink-3)">{{ sendLine }}</div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ notSending }}">
+          <div style="display:flex;justify-content:space-between;gap:12px">
+            <button onClick="{{ toStep2 }}" style="height:38px;padding:0 14px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);font-weight:500;cursor:pointer">Back</button>
+            <button onClick="{{ doSend }}" style="height:38px;padding:0 16px;border-radius:8px;border:0;background:var(--accent);color:var(--on-accent);font-weight:600;cursor:pointer">{{ sendBtn }}</button>
+          </div>
+        </sc-if>
+      </div>
+    </sc-if>
+  </section>
+</sc-if>
+
+<!-- TRACKING -->
+<sc-if value="{{ vTracking }}">
+  <section data-screen-label="Track candidates" style="display:flex;flex-direction:column;gap:20px">
+    <div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+      <div><div style="font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Interviews / Active</div><h1 style="margin:6px 0 4px;font-size:30px;font-weight:600;letter-spacing:-.02em">{{ title }}</h1><div style="font:400 12px var(--mono);color:var(--ink-3)">6 questions · ~25 min · Due 8 Oct</div></div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <sc-if value="{{ notDays }}"><button onClick="{{ fastForward }}" style="height:36px;padding:0 14px;border-radius:8px;border:1px dashed var(--line-2);background:transparent;font-size:13px;color:var(--ink-2);cursor:pointer">Prototype: skip ahead 3 days</button></sc-if>
+        <sc-if value="{{ canEdit }}"><button onClick="{{ toInviteMore }}" style="height:36px;padding:0 14px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);font-weight:500;cursor:pointer">Invite more</button></sc-if>
+      </div>
+    </div>
+
+    <sc-if value="{{ bPartial }}">
+      <div style="display:flex;gap:16px;align-items:center;padding:14px 18px;border-radius:10px;background:var(--warn-soft);border:1px solid var(--line);flex-wrap:wrap;animation:fadeUp .3s ease-out">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--s1);flex:none"></span>
+        <div style="flex:1;min-width:240px"><div style="font-weight:600">Invitations failed for {{ failN }} candidates</div><div style="font-size:13px;color:var(--ink-2)">The mail server didn't accept these addresses. Their interview sessions already exist, so retrying only resends the email.</div></div>
+        <sc-if value="{{ canEdit }}"><button onClick="{{ doRetry }}" style="height:34px;padding:0 14px;border-radius:8px;border:1px solid var(--ink);background:var(--surface);font-weight:600;cursor:pointer">Retry {{ failN }}</button></sc-if>
+      </div>
+    </sc-if>
+    <sc-if value="{{ bRetrying }}">
+      <div style="display:flex;gap:12px;align-items:center;padding:14px 18px;border-radius:10px;background:var(--surface);border:1px solid var(--line)"><span style="width:14px;height:14px;border-radius:50%;border:2px solid var(--line-2);border-top-color:var(--accent);animation:spin .8s linear infinite"></span><span style="font-size:13px">Resending to existing sessions…</span></div>
+    </sc-if>
+    <sc-if value="{{ bDone }}">
+      <div style="position:relative;display:flex;gap:14px;align-items:center;padding:14px 18px;border-radius:10px;background:var(--ok-soft);border:1px solid var(--line);flex-wrap:wrap;animation:fadeUp .3s ease-out">
+        <span style="width:8px;height:8px;border-radius:50%;background:var(--s4)"></span>
+        <span style="font:600 14px var(--mono)">{{ failN }} sent · 0 duplicates created</span>
+        <span style="font-size:13px;color:var(--ink-2)">Retried against the original sessions. No candidate received two links.</span>
+        <sc-if value="{{ showDecisions }}"><div style="position:absolute;z-index:20;top:-18px;right:18px;display:flex;align-items:flex-start;gap:8px;width:max-content;max-width:280px;padding:6px 10px 6px 6px;background:var(--pin-bg);color:var(--pin-ink);border-radius:10px;font-size:12px;line-height:1.35;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.18);animation:fadeUp .25s ease-out"><span style="flex:none;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font:600 10px/1 var(--mono)">4</span>Retry-safe creation: no half-built interviews</div></sc-if>
+      </div>
+    </sc-if>
+
+    <div style="position:relative;display:flex;gap:8px;flex-wrap:wrap">
+      <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
+        <button onClick="{{ f.onClick }}" style="display:flex;align-items:center;gap:8px;height:32px;padding:0 12px;border-radius:999px;border:1px solid {{ f.line }};background:{{ f.bg }};font-size:13px;font-weight:500;cursor:pointer"><sc-if value="{{ f.hasDot }}"><span style="width:7px;height:7px;border-radius:50%;background:{{ f.dot }}"></span></sc-if>{{ f.label }}<span style="font:500 12px var(--mono);color:var(--ink-3)">{{ f.count }}</span></button>
+      </sc-for>
+      <sc-if value="{{ showDecisions }}"><div style="position:absolute;z-index:20;top:-34px;left:110px;display:flex;align-items:flex-start;gap:8px;width:max-content;max-width:280px;padding:6px 10px 6px 6px;background:var(--pin-bg);color:var(--pin-ink);border-radius:10px;font-size:12px;line-height:1.35;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.18);animation:fadeUp .25s ease-out"><span style="flex:none;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font:600 10px/1 var(--mono)">3</span>Only states a recruiter can act on</div></sc-if>
+    </div>
+
+    <div style="background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow-x:auto">
+      <div style="min-width:860px">
+        <div style="display:grid;grid-template-columns:minmax(0,2.2fr) 1.1fr .8fr 1.2fr 1.1fr 1.3fr;gap:16px;padding:10px 20px;border-bottom:1px solid var(--line);font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)"><span>Candidate</span><span>Status</span><span>Answers</span><span>Invitation</span><span>Last activity</span><span>Answer quality</span></div>
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="8">
+          <div style="display:grid;grid-template-columns:minmax(0,2.2fr) 1.1fr .8fr 1.2fr 1.1fr 1.3fr;gap:16px;padding:12px 20px;border-bottom:1px solid var(--line);align-items:center">
+            <div style="display:flex;align-items:center;gap:12px;min-width:0"><span style="flex:none;width:30px;height:30px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font:600 11px var(--mono);color:var(--ink-2)">{{ r.ini }}</span><span style="min-width:0"><span style="display:block;font-weight:500">{{ r.n }}</span><span style="display:block;font:400 12px var(--mono);color:var(--ink-3);overflow:hidden;text-overflow:ellipsis">{{ r.e }}</span></span></div>
+            <span style="display:flex;align-items:center;gap:8px;font-size:13px"><span style="width:7px;height:7px;border-radius:50%;background:{{ r.dot }}"></span>{{ r.status }}</span>
+            <span style="font:400 13px var(--mono);color:var(--ink-2)">{{ r.prog }}</span>
+            <span style="font-size:13px;color:{{ r.invColor }};font-weight:{{ r.invWeight }}">{{ r.inv }}</span>
+            <span style="font:400 12px var(--mono);color:var(--ink-3)">{{ r.act }}</span>
+            <span>
+              <sc-if value="{{ r.qAnalyzing }}"><button onClick="{{ r.onOpen }}" style="display:flex;align-items:center;gap:8px;border:0;background:transparent;padding:0;font-size:13px;color:var(--accent-ink);font-weight:600;cursor:pointer"><span style="width:12px;height:12px;border-radius:50%;border:2px solid var(--line-2);border-top-color:var(--accent);animation:spin .9s linear infinite"></span>Analyzing</button></sc-if>
+              <sc-if value="{{ r.qReady }}"><button onClick="{{ r.onOpen }}" style="display:flex;align-items:center;gap:10px;border:0;background:transparent;padding:0;cursor:pointer"><span style="font:600 15px var(--mono)">43</span><span style="font-size:13px;color:var(--accent-ink);font-weight:600">Open report →</span></button></sc-if>
+              <sc-if value="{{ r.qNone }}"><span style="color:var(--ink-3)">—</span></sc-if>
+            </span>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+</sc-if>
+
+<!-- ANALYZING -->
+<sc-if value="{{ vAnalyzing }}">
+  <section data-screen-label="Analyzing" style="display:flex;justify-content:center;padding:40px 0">
+    <div style="width:100%;max-width:540px;background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:32px;display:flex;flex-direction:column;gap:22px">
+      <div style="display:flex;justify-content:space-between;align-items:center"><span style="font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Amara Okafor · 6 answers</span><span style="font:500 11px var(--mono);padding:3px 8px;border:1px dashed var(--line-2);border-radius:999px;color:var(--ink-2)">Conceptual state</span></div>
+      <h2 style="margin:0;font-size:24px;font-weight:600;letter-spacing:-.015em">{{ anTitle }}</h2>
+      <div style="display:flex;flex-direction:column">
+        <sc-for list="{{ anSteps }}" as="s" hint-placeholder-count="5">
+          <div style="display:flex;gap:14px;align-items:center;padding:11px 0;border-top:1px solid var(--line)">
+            <span style="width:16px;height:16px;border-radius:50%;flex:none;background:{{ s.dotBg }};border:2px solid {{ s.dotLine }};animation:{{ s.anim }}"></span>
+            <span style="flex:1;font-size:14px;color:{{ s.color }}">{{ s.label }}</span>
+            <span style="font:500 11px var(--mono);padding:2px 7px;border-radius:5px;background:{{ s.tagBg }};color:{{ s.tagFg }}">{{ s.tag }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <sc-if value="{{ anDone }}"><button onClick="{{ openReport }}" style="height:40px;border-radius:8px;border:0;background:var(--accent);color:var(--on-accent);font-weight:600;cursor:pointer;animation:fadeUp .3s ease-out">Open report</button></sc-if>
+      <div style="font-size:12px;color:var(--ink-3)">Usually under two minutes per interview. You'll get an email when the report is ready.</div>
+    </div>
+  </section>
+</sc-if>
+
+<!-- REPORT -->
+<sc-if value="{{ vReport }}">
+  <section data-screen-label="AI report" style="display:flex;flex-direction:column;gap:20px">
+    <div style="font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)"><span onClick="{{ toTracking }}" style="cursor:pointer">{{ title }}</span> / {{ L.report }}</div>
+    <div style="background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:24px 28px;display:flex;gap:28px;align-items:center;flex-wrap:wrap">
+      <span style="width:56px;height:56px;border-radius:50%;background:var(--surface-2);display:grid;place-items:center;font:600 16px var(--mono);color:var(--ink-2)">AO</span>
+      <div style="flex:1 1 260px;min-width:0">
+        <h1 style="margin:0;font-size:28px;font-weight:600;letter-spacing:-.02em">Amara Okafor</h1>
+        <div style="margin-top:4px;font:400 12px var(--mono);color:var(--ink-3)">{{ L.meta }}</div>
+      </div>
+      <div style="display:flex;align-items:center;gap:16px;padding:0 24px;border-left:1px solid var(--line)">
+        <div><div style="font:500 44px/1 var(--mono);letter-spacing:-.03em">43<span style="font-size:16px;color:var(--ink-3)">/100</span></div><div style="margin-top:6px;font-size:12px;color:var(--ink-3)">{{ L.overall }}</div></div>
+        <div style="font-size:12px;color:var(--ink-2);max-width:170px;text-wrap:pretty">{{ L.overallSub }}</div>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+        <div style="display:flex;padding:3px;background:var(--surface-2);border-radius:8px;gap:2px">
+          <sc-for list="{{ langs }}" as="l" hint-placeholder-count="2"><button onClick="{{ l.onClick }}" style="border:0;padding:4px 10px;border-radius:6px;font:500 12px var(--mono);cursor:pointer;background:{{ l.bg }};color:{{ l.fg }}">{{ l.label }}</button></sc-for>
+        </div>
+        <button onClick="{{ toggleHow }}" style="height:34px;padding:0 12px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);font-size:13px;font-weight:500;cursor:pointer">{{ L.how }}</button>
+        <button onClick="{{ doExport }}" style="height:34px;padding:0 14px;border-radius:8px;border:0;background:var(--ink);color:var(--bg);font-size:13px;font-weight:600;cursor:pointer">{{ L.export }}</button>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start">
+      <nav style="flex:0 1 270px;min-width:240px;background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:visible;position:sticky;top:80px">
+        <sc-for list="{{ qList }}" as="q" hint-placeholder-count="6">
+          <div onClick="{{ q.onClick }}" style="position:relative;display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid var(--line);cursor:pointer;background:{{ q.bg }};box-shadow:inset 2px 0 0 {{ q.edge }}">
+            <span style="font:500 12px var(--mono);color:var(--ink-3);padding-top:1px">{{ q.n }}</span>
+            <div style="flex:1;min-width:0">
+              <div style="font-size:13px;font-weight:500;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden">{{ q.text }}</div>
+              <div style="display:flex;align-items:center;gap:8px;margin-top:8px">
+                <span style="flex:1;height:3px;border-radius:2px;background:var(--surface-2);overflow:hidden"><span style="display:block;height:100%;width:{{ q.w }};background:{{ q.color }};transform-origin:left;animation:grow .8s ease-out"></span></span>
+                <span style="font:600 12px var(--mono);width:22px;text-align:right">{{ q.quality }}</span>
+              </div>
+              <sc-if value="{{ q.hasFlag }}"><div style="margin-top:6px;font:500 10.5px var(--mono);letter-spacing:.04em;text-transform:uppercase;color:var(--ink-3)">{{ q.flag }}</div></sc-if>
+            </div>
+            <sc-if value="{{ q.pin }}"><div style="position:absolute;z-index:20;top:10px;left:calc(100% + 10px);display:flex;align-items:flex-start;gap:8px;width:max-content;max-width:220px;padding:6px 10px 6px 6px;background:var(--pin-bg);color:var(--pin-ink);border-radius:10px;font-size:12px;line-height:1.35;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.18);animation:fadeUp .25s ease-out"><span style="flex:none;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font:600 10px/1 var(--mono)">5</span>Relevance gates the score</div></sc-if>
+          </div>
+        </sc-for>
+      </nav>
+
+      <div style="flex:1 1 560px;min-width:0;display:flex;flex-direction:column;gap:20px">
+        <div style="background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:24px 28px;display:flex;flex-direction:column;gap:20px">
+          <div>
+            <div style="font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">{{ L.question }} {{ rq.n }} · {{ rq.cat }}</div>
+            <h2 style="margin:6px 0 0;font-size:22px;font-weight:600;letter-spacing:-.015em;text-wrap:pretty;max-width:760px">{{ rq.text }}</h2>
+            <sc-for list="{{ rq.subs }}" as="s" hint-placeholder-count="0"><div style="margin-top:6px;font-size:14px;color:var(--ink-2)">— {{ s }}</div></sc-for>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px">
+            <div style="aspect-ratio:16/10;border-radius:10px;background:var(--cam);position:relative;overflow:hidden;display:grid;place-items:center">
+              <div style="position:absolute;inset:0;background:radial-gradient(ellipse 40% 50% at 50% 45%, rgba(255,255,255,.08), transparent 70%)"></div>
+              <span style="width:52px;height:52px;border-radius:50%;background:rgba(255,255,255,.12);display:grid;place-items:center;position:relative"><span style="width:0;height:0;border-left:14px solid #fff;border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:4px"></span></span>
+              <div style="position:absolute;left:12px;right:12px;bottom:12px;display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.8);font:500 11px var(--mono)"><span>0:00</span><span style="flex:1;height:3px;border-radius:2px;background:rgba(255,255,255,.2)"></span><span>{{ rq.dur }}</span></div>
+              <div style="position:absolute;top:12px;left:12px;font:500 10px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.55)">Video placeholder</div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+              <div style="display:flex;justify-content:space-between;gap:8px"><span style="font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">{{ L.transcript }}</span><span style="font:400 11px var(--mono);color:var(--ink-3)">{{ rq.words }}</span></div>
+              <div style="max-height:220px;overflow:auto;font-size:14px;line-height:1.6;color:var(--ink-2);padding-right:6px;font-style:{{ rq.tStyle }};text-wrap:pretty">{{ rq.transcript }}</div>
+              <div style="font-size:11px;color:var(--ink-3)">{{ L.transcriptNote }}</div>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:20px;padding:16px 0 4px;border-top:1px solid var(--line);flex-wrap:wrap">
+            <div style="display:flex;align-items:baseline;gap:8px"><span style="font:500 36px/1 var(--mono);letter-spacing:-.03em">{{ rq.quality }}</span><span style="font-size:13px;color:var(--ink-3)">{{ L.aq }}</span></div>
+            <sc-if value="{{ rq.relHint }}"><span style="display:flex;align-items:center;gap:8px;height:28px;padding:0 12px;border-radius:999px;background:var(--warn-soft);font-size:13px;font-weight:600"><span style="width:7px;height:7px;border-radius:50%;background:var(--s1)"></span>{{ L.relHint }}</span></sc-if>
+            <sc-if value="{{ rq.hasCap }}">
+              <span style="position:relative;display:flex;align-items:center;gap:8px;min-height:28px;padding:4px 12px;border-radius:999px;background:var(--surface-2);font-size:13px;color:var(--ink-2)">{{ rq.capText }}
+                <sc-if value="{{ rq.capPin }}"><span style="position:absolute;z-index:20;top:-36px;left:0;display:flex;align-items:flex-start;gap:8px;width:max-content;max-width:280px;padding:6px 10px 6px 6px;background:var(--pin-bg);color:var(--pin-ink);border-radius:10px;font-size:12px;line-height:1.35;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.18);animation:fadeUp .25s ease-out"><span style="flex:none;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font:600 10px/1 var(--mono)">9</span>Caps stop fluent, generic answers from scoring high</span></sc-if>
+              </span>
+            </sc-if>
+          </div>
+
+          <div>
+            <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px"><span style="font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">{{ L.criteria }}</span>
+              <span style="display:flex;gap:12px;flex-wrap:wrap;font:400 11px var(--mono);color:var(--ink-3)"><sc-for list="{{ legend }}" as="g" hint-placeholder-count="5"><span style="display:flex;align-items:center;gap:5px"><span style="width:7px;height:7px;border-radius:2px;background:{{ g.color }}"></span>{{ g.v }} {{ g.label }}</span></sc-for></span>
+            </div>
+            <sc-for list="{{ rq.crit }}" as="c" hint-placeholder-count="5">
+              <div style="display:grid;grid-template-columns:110px minmax(0,1fr) 110px;gap:18px;align-items:start;padding:14px 0;border-top:1px solid var(--line)">
+                <div style="font-size:14px;font-weight:600">{{ c.name }}</div>
+                <div style="display:flex;flex-direction:column;gap:8px;min-width:0">
+                  <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:3px;height:6px;padding-top:6px;box-sizing:content-box">
+                    <sc-for list="{{ c.cells }}" as="x" hint-placeholder-count="5"><span style="border-radius:2px;background:{{ x.bg }};transform-origin:left;animation:grow .5s ease-out both;animation-delay:{{ x.delay }};transition:background .4s"></span></sc-for>
+                  </div>
+                  <div style="font-size:13px;color:var(--ink-2);line-height:1.45;text-wrap:pretty">{{ c.ev }}</div>
+                  <sc-if value="{{ c.capped }}"><div style="font:500 11px var(--mono);color:var(--ink-3)">{{ c.capNote }}</div></sc-if>
+                </div>
+                <div style="display:flex;align-items:baseline;gap:10px;justify-content:flex-end"><span style="font-size:13px;font-weight:500;color:var(--ink-2)">{{ c.label }}</span><span style="font:600 15px var(--mono)">{{ c.score }}</span></div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="position:relative;padding:18px 20px;border-radius:10px;background:var(--bg);border:1px solid var(--line)">
+            <div style="font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">{{ L.summary }}</div>
+            <p style="margin:8px 0 10px;font-size:15px;line-height:1.6;text-wrap:pretty">{{ rq.summary }}</p>
+            <div style="font-size:12px;color:var(--ink-3)">{{ L.summaryNote }}</div>
+            <sc-if value="{{ showDecisions }}"><div style="position:absolute;z-index:20;top:-14px;right:16px;display:flex;align-items:flex-start;gap:8px;width:max-content;max-width:280px;padding:6px 10px 6px 6px;background:var(--pin-bg);color:var(--pin-ink);border-radius:10px;font-size:12px;line-height:1.35;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.18);animation:fadeUp .25s ease-out"><span style="flex:none;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font:600 10px/1 var(--mono)">7</span>The AI describes; the recruiter decides</div></sc-if>
+          </div>
+        </div>
+
+        <div style="position:relative;border:1px dashed var(--line-2);border-radius:12px;padding:20px 24px;color:var(--ink-2)">
+          <div style="font-size:14px;font-weight:600;color:var(--ink-2)">{{ L.signals }}</div>
+          <div style="font-size:13px;color:var(--ink-3)">{{ L.signalsSub }}</div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-top:16px">
+            <sc-for list="{{ rq.signals }}" as="s" hint-placeholder-count="3"><div><div style="font:400 11px var(--mono);color:var(--ink-3);text-transform:uppercase;letter-spacing:.05em">{{ s.k }}</div><div style="margin-top:2px;font-size:14px">{{ s.v }}</div></div></sc-for>
+          </div>
+          <div style="margin-top:14px;font-size:12px;color:var(--ink-3);text-wrap:pretty">{{ L.signalsNote }}</div>
+          <sc-if value="{{ showDecisions }}"><div style="position:absolute;z-index:20;top:-14px;right:16px;display:flex;align-items:flex-start;gap:8px;width:max-content;max-width:280px;padding:6px 10px 6px 6px;background:var(--pin-bg);color:var(--pin-ink);border-radius:10px;font-size:12px;line-height:1.35;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.18);animation:fadeUp .25s ease-out"><span style="flex:none;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font:600 10px/1 var(--mono)">6</span>Not every AI signal becomes a score</div></sc-if>
+        </div>
+      </div>
+    </div>
+
+    <sc-if value="{{ howOpen }}">
+      <div onClick="{{ toggleHow }}" style="position:fixed;inset:0;z-index:60;background:rgba(10,10,12,.28)"></div>
+      <aside style="position:fixed;z-index:61;top:0;right:0;bottom:0;width:min(440px,100vw);background:var(--surface);border-left:1px solid var(--line);overflow:auto;padding:28px;display:flex;flex-direction:column;gap:20px;animation:fadeUp .25s ease-out">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+          <div><div style="font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Question {{ rq.n }}</div><h3 style="margin:4px 0 0;font-size:20px;font-weight:600;letter-spacing:-.01em">How this score was produced</h3></div>
+          <button onClick="{{ toggleHow }}" style="width:30px;height:30px;border-radius:7px;border:1px solid var(--line);background:transparent;cursor:pointer">×</button>
+        </div>
+        <div style="display:flex;flex-direction:column">
+          <sc-for list="{{ howSteps }}" as="s" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:28px 1fr;gap:12px">
+              <div style="display:flex;flex-direction:column;align-items:center"><span style="width:24px;height:24px;border-radius:50%;border:1px solid var(--line-2);display:grid;place-items:center;font:600 11px var(--mono);background:var(--surface)">{{ s.n }}</span><span style="flex:1;width:1px;background:var(--line);min-height:16px"></span></div>
+              <div style="padding-bottom:20px">
+                <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span style="font-weight:600">{{ s.title }}</span><span style="font:500 10.5px var(--mono);padding:2px 7px;border-radius:5px;background:{{ s.tagBg }};color:{{ s.tagFg }}">{{ s.tag }}</span></div>
+                <div style="margin-top:3px;font-size:13px;color:var(--ink-2);text-wrap:pretty">{{ s.desc }}</div>
+                <div style="margin-top:8px;padding:8px 10px;border-radius:7px;background:var(--bg);font:400 12px var(--mono);color:var(--ink)">{{ s.val }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+        <div style="border-top:1px solid var(--line);padding-top:16px">
+          <div style="font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Relevance gate</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-top:10px;font:500 12px var(--mono);text-align:center">
+            <sc-for list="{{ gateRows }}" as="g" hint-placeholder-count="4"><div style="padding:8px 4px;border-radius:7px;border:1px solid {{ g.line }};background:{{ g.bg }}"><div style="color:var(--ink-3)">R {{ g.r }}</div><div style="margin-top:2px">× {{ g.m }}</div></div></sc-for>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--ink-3);text-wrap:pretty">Behavioral signals are not an input at any step. The same transcript always produces the same arithmetic; only the scoring steps marked LLM involve a model.</div>
+      </aside>
+    </sc-if>
+  </section>
+</sc-if>
+
+<!-- CANDIDATE -->
+<sc-if value="{{ isCandidate }}">
+  <section style="max-width:1080px;margin:0 auto;display:flex;flex-direction:column;gap:28px">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;padding-bottom:20px;border-bottom:1px solid var(--line)">
+      <div style="display:flex;align-items:center;gap:10px"><span style="width:22px;height:22px;border-radius:50%;background:oklch(0.55 0.09 205);display:grid;place-items:end center;overflow:hidden"><span style="width:22px;height:9px;background:oklch(0.78 0.07 205)"></span></span><span style="font-weight:700;font-size:16px;letter-spacing:-.01em">Brightwater Freight</span></div>
+      <span style="font:400 12px var(--mono);color:var(--ink-3)">{{ cTopRight }}</span>
+    </div>
+
+    <sc-if value="{{ vCLanding }}">
+      <div data-screen-label="Candidate landing" style="display:flex;gap:56px;flex-wrap:wrap;padding:24px 0">
+        <div style="flex:1 1 440px;display:flex;flex-direction:column;gap:20px">
+          <div style="font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)">Recorded interview · Due 8 October</div>
+          <h1 style="margin:0;font-size:48px;line-height:1.05;font-weight:600;letter-spacing:-.03em;text-wrap:balance">Operations Coordinator, Rotterdam hub</h1>
+          <p style="margin:0;font-size:17px;color:var(--ink-2);max-width:520px;text-wrap:pretty">Hi Amara. You'll answer six questions on camera, in your own time. There's no one watching live, and you can pause between questions.</p>
+          <div style="display:flex;gap:32px;flex-wrap:wrap;padding:8px 0">
+            <div><div style="font:500 22px var(--mono)">6</div><div style="font-size:13px;color:var(--ink-3)">questions</div></div>
+            <div><div style="font:500 22px var(--mono)">~25 min</div><div style="font-size:13px;color:var(--ink-3)">in total</div></div>
+            <div><div style="font:500 22px var(--mono)">2 takes</div><div style="font-size:13px;color:var(--ink-3)">per answer</div></div>
+          </div>
+          <button onClick="{{ toConsent }}" style="align-self:flex-start;height:48px;padding:0 28px;border-radius:10px;border:0;background:var(--accent);color:var(--on-accent);font-size:16px;font-weight:600;cursor:pointer">Begin</button>
+        </div>
+        <div style="flex:1 1 320px;display:flex;flex-direction:column">
+          <div style="font:500 11px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);padding-bottom:12px">How it works</div>
+          <div style="display:flex;gap:16px;padding:16px 0;border-top:1px solid var(--line)"><span style="font:500 13px var(--mono);color:var(--ink-3)">01</span><div><div style="font-weight:600">Read and think</div><div style="font-size:14px;color:var(--ink-2)">Each question gives you thinking time. Your camera stays off.</div></div></div>
+          <div style="display:flex;gap:16px;padding:16px 0;border-top:1px solid var(--line)"><span style="font:500 13px var(--mono);color:var(--ink-3)">02</span><div><div style="font-weight:600">Answer out loud</div><div style="font-size:14px;color:var(--ink-2)">Recording starts on its own when thinking time ends.</div></div></div>
+          <div style="display:flex;gap:16px;padding:16px 0;border-top:1px solid var(--line)"><span style="font:500 13px var(--mono);color:var(--ink-3)">03</span><div><div style="font-weight:600">Review and send</div><div style="font-size:14px;color:var(--ink-2)">Watch your answers back and retake any one once before submitting.</div></div></div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ vCConsent }}">
+      <div data-screen-label="Candidate consent" style="max-width:620px;display:flex;flex-direction:column;gap:20px;padding:16px 0">
+        <h1 style="margin:0;font-size:32px;font-weight:600;letter-spacing:-.02em">Before you start</h1>
+        <p style="margin:0;font-size:16px;color:var(--ink-2);text-wrap:pretty">Your answers are recorded and transcribed. Software summarises what you said to help the hiring team review it. A person at Brightwater reads your answers and makes every decision.</p>
+        <div style="display:flex;flex-direction:column;border-top:1px solid var(--line)">
+          <sc-for list="{{ consentItems }}" as="c" hint-placeholder-count="3">
+            <label style="display:flex;gap:14px;align-items:flex-start;padding:16px 0;border-bottom:1px solid var(--line);cursor:pointer"><input type="checkbox" checked="{{ c.checked }}" onChange="{{ c.onToggle }}" style="margin-top:3px;width:18px;height:18px;accent-color:var(--accent)"><span style="font-size:15px;text-wrap:pretty">{{ c.text }}</span></label>
+          </sc-for>
+        </div>
+        <div style="display:flex;gap:12px;align-items:center">
+          <button onClick="{{ toCheck }}" disabled="{{ consentBlocked }}" style="height:46px;padding:0 24px;border-radius:10px;border:0;background:var(--accent);color:var(--on-accent);font-size:15px;font-weight:600;cursor:pointer;opacity:{{ consentOpacity }}">Agree and continue</button>
+          <span style="font-size:13px;color:var(--ink-3)">You can withdraw at any time by emailing the hiring team.</span>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ vCCheck }}">
+      <div data-screen-label="Camera check" style="display:flex;gap:40px;flex-wrap:wrap;align-items:flex-start;padding:8px 0">
+        <div style="flex:1 1 480px;aspect-ratio:4/3;max-height:480px;border-radius:16px;background:var(--cam);position:relative;overflow:hidden">
+          <div style="position:absolute;left:50%;top:30%;width:120px;height:120px;margin-left:-60px;border-radius:50%;background:rgba(255,255,255,.07)"></div>
+          <div style="position:absolute;left:50%;bottom:-40px;width:300px;height:180px;margin-left:-150px;border-radius:150px 150px 0 0;background:rgba(255,255,255,.05)"></div>
+          <div style="position:absolute;top:14px;left:14px;font:500 10px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:rgba(255,255,255,.55)">Simulated camera · no device access</div>
+          <div style="position:absolute;bottom:16px;left:16px;display:flex;align-items:flex-end;gap:3px;height:22px">
+            <span style="width:4px;height:100%;background:#fff;border-radius:2px;transform-origin:bottom;animation:mic .9s ease-in-out infinite"></span><span style="width:4px;height:100%;background:#fff;border-radius:2px;transform-origin:bottom;animation:mic .9s ease-in-out .15s infinite"></span><span style="width:4px;height:100%;background:#fff;border-radius:2px;transform-origin:bottom;animation:mic .9s ease-in-out .3s infinite"></span><span style="width:4px;height:100%;background:#fff;border-radius:2px;transform-origin:bottom;animation:mic .9s ease-in-out .45s infinite"></span><span style="width:4px;height:100%;background:#fff;border-radius:2px;transform-origin:bottom;animation:mic .9s ease-in-out .6s infinite"></span>
+          </div>
+        </div>
+        <div style="flex:1 1 300px;display:flex;flex-direction:column;gap:20px">
+          <h1 style="margin:0;font-size:32px;font-weight:600;letter-spacing:-.02em">Check your camera and mic</h1>
+          <p style="margin:0;font-size:15px;color:var(--ink-2)">Say a few words. The bars should move when you speak.</p>
+          <div style="display:flex;flex-direction:column;border-top:1px solid var(--line)">
+            <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)"><span>Camera</span><span style="font:500 13px var(--mono);color:var(--s5)">Ready</span></div>
+            <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)"><span>Microphone</span><span style="font:500 13px var(--mono);color:var(--s5)">Ready</span></div>
+            <div style="display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)"><span>Connection</span><span style="font:500 13px var(--mono);color:var(--s5)">Stable</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <button onClick="{{ toPractice }}" style="height:46px;border-radius:10px;border:0;background:var(--accent);color:var(--on-accent);font-size:15px;font-weight:600;cursor:pointer">Try a practice question</button>
+            <button onClick="{{ startInterview }}" style="height:46px;border-radius:10px;border:1px solid var(--line-2);background:transparent;font-size:15px;font-weight:500;cursor:pointer">Skip to the interview</button>
+            <span style="font-size:13px;color:var(--ink-3)">Practice answers aren't saved or shared.</span>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ vCQuestion }}">
+      <div data-screen-label="Question" style="display:flex;flex-direction:column;gap:28px">
+        <div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap">
+          <span style="font:500 12px var(--mono);color:var(--ink-3)">{{ cProgLabel }}</span>
+          <div style="flex:1;min-width:200px;display:grid;grid-template-columns:repeat({{ cSegCount }},1fr);gap:4px">
+            <sc-for list="{{ cSegs }}" as="s" hint-placeholder-count="6"><span style="height:3px;border-radius:2px;background:{{ s.bg }}"></span></sc-for>
+          </div>
+        </div>
+        <div style="display:flex;gap:48px;flex-wrap:wrap;align-items:flex-start">
+          <div style="flex:1 1 380px;display:flex;flex-direction:column;gap:18px">
+            <h1 style="margin:0;font-size:32px;line-height:1.2;font-weight:600;letter-spacing:-.02em;text-wrap:pretty">{{ cQ.text }}</h1>
+            <sc-for list="{{ cQ.subs }}" as="s" hint-placeholder-count="0"><div style="display:flex;gap:12px;font-size:17px;color:var(--ink-2)"><span style="color:var(--ink-3)">—</span><span>{{ s }}</span></div></sc-for>
+            <div style="display:flex;gap:20px;flex-wrap:wrap;padding-top:12px;border-top:1px solid var(--line);font:400 12px var(--mono);color:var(--ink-3)"><span>Think {{ cQ.thinkF }}</span><span>Answer up to {{ cQ.answerF }}</span><span>{{ cTakesLine }}</span></div>
+          </div>
+          <div style="flex:1 1 440px;min-width:0">
+            <sc-if value="{{ phThink }}">
+              <div style="position:relative;aspect-ratio:4/3;border-radius:16px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px">
+                <div style="position:relative;width:180px;height:180px">
+                  <svg width="180" height="180" viewBox="0 0 180 180" style="transform:rotate(-90deg)"><circle cx="90" cy="90" r="80" fill="none" stroke="var(--surface-2)" stroke-width="6"></circle><circle cx="90" cy="90" r="80" fill="none" stroke="var(--accent)" stroke-width="6" stroke-linecap="round" stroke-dasharray="502.65" stroke-dashoffset="{{ ringOffset }}" style="transition:stroke-dashoffset 1s linear"></circle></svg>
+                  <div style="position:absolute;inset:0;display:grid;place-items:center;font:500 52px var(--mono);letter-spacing:-.03em">{{ remainingF }}</div>
+                </div>
+                <div style="text-align:center"><div style="font-weight:600;font-size:16px">Thinking time</div><div style="font-size:14px;color:var(--ink-3)">Your camera is off. Recording starts when the timer ends.</div></div>
+                <button onClick="{{ startNow }}" style="height:42px;padding:0 20px;border-radius:10px;border:1px solid var(--line-2);background:var(--surface);font-weight:600;cursor:pointer">Start answering now</button>
+                <sc-if value="{{ showDecisions }}"><div style="position:absolute;z-index:20;top:-14px;right:16px;display:flex;align-items:flex-start;gap:8px;width:max-content;max-width:280px;padding:6px 10px 6px 6px;background:var(--pin-bg);color:var(--pin-ink);border-radius:10px;font-size:12px;line-height:1.35;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.18);animation:fadeUp .25s ease-out"><span style="flex:none;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font:600 10px/1 var(--mono)">8</span>Camera off while thinking: less pressure, more considered answers</div></sc-if>
+              </div>
+            </sc-if>
+            <sc-if value="{{ phRec }}">
+              <div style="display:flex;flex-direction:column;gap:14px">
+                <div style="aspect-ratio:4/3;border-radius:16px;background:var(--cam);position:relative;overflow:hidden">
+                  <div style="position:absolute;left:50%;top:28%;width:120px;height:120px;margin-left:-60px;border-radius:50%;background:rgba(255,255,255,.07)"></div>
+                  <div style="position:absolute;left:50%;bottom:-40px;width:300px;height:180px;margin-left:-150px;border-radius:150px 150px 0 0;background:rgba(255,255,255,.05)"></div>
+                  <div style="position:absolute;top:16px;left:16px;display:flex;align-items:center;gap:8px;padding:5px 10px 5px 8px;border-radius:999px;background:rgba(0,0,0,.45);color:#fff;font:600 11px var(--mono);letter-spacing:.06em"><span style="width:9px;height:9px;border-radius:50%;background:var(--rec);animation:pulse 1.4s ease-out infinite"></span>REC</div>
+                  <div style="position:absolute;bottom:16px;left:16px;right:16px;display:flex;align-items:flex-end;justify-content:space-between;color:#fff"><span style="font:500 44px/1 var(--mono);letter-spacing:-.03em">{{ elapsedF }}</span><span style="font:500 14px var(--mono);color:rgba(255,255,255,.6)">/ {{ cQ.answerF }}</span></div>
+                </div>
+                <div style="height:4px;border-radius:2px;background:var(--surface-2);overflow:hidden"><div style="height:100%;width:{{ recPct }};background:var(--rec);transition:width 1s linear"></div></div>
+                <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+                  <span style="font-size:13px;color:var(--ink-3)">Your answer is sent automatically when time runs out.</span>
+                  <button onClick="{{ finishNow }}" style="height:42px;padding:0 20px;border-radius:10px;border:0;background:var(--ink);color:var(--bg);font-weight:600;cursor:pointer">Finish answer</button>
+                </div>
+              </div>
+            </sc-if>
+            <sc-if value="{{ phSaved }}">
+              <div style="aspect-ratio:4/3;border-radius:16px;background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px;animation:fadeUp .3s ease-out">
+                <span style="width:44px;height:44px;border-radius:50%;background:var(--ok-soft);display:grid;place-items:center"><svg width="18" height="14" viewBox="0 0 18 14" fill="none" stroke="var(--s5)" stroke-width="2"><path d="M1.5 7.5l5 5L16.5 1.5"></path></svg></span>
+                <div style="font-size:20px;font-weight:600">{{ savedTitle }}</div>
+                <div style="font-size:14px;color:var(--ink-2);max-width:320px">{{ savedSub }}</div>
+                <button onClick="{{ nextQ }}" style="margin-top:6px;height:44px;padding:0 22px;border-radius:10px;border:0;background:var(--accent);color:var(--on-accent);font-weight:600;cursor:pointer">{{ nextLabel }}</button>
+              </div>
+            </sc-if>
+          </div>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ vCReview }}">
+      <div data-screen-label="Review answers" style="max-width:820px;display:flex;flex-direction:column;gap:20px">
+        <h1 style="margin:0;font-size:32px;font-weight:600;letter-spacing:-.02em">Review your answers</h1>
+        <p style="margin:0;font-size:15px;color:var(--ink-2)">Watch any answer back. You can re-record each one once. Nothing is sent until you submit.</p>
+        <div style="position:relative;display:flex;flex-direction:column;border-top:1px solid var(--line)">
+          <sc-if value="{{ showDecisions }}"><div style="position:absolute;z-index:20;top:-14px;right:0;display:flex;align-items:flex-start;gap:8px;width:max-content;max-width:280px;padding:6px 10px 6px 6px;background:var(--pin-bg);color:var(--pin-ink);border-radius:10px;font-size:12px;line-height:1.35;font-weight:500;box-shadow:0 6px 20px rgba(0,0,0,.18);animation:fadeUp .25s ease-out"><span style="flex:none;width:18px;height:18px;border-radius:50%;background:var(--accent);color:var(--on-accent);display:grid;place-items:center;font:600 10px/1 var(--mono)">10</span>Retakes are a fixed budget set by the recruiter, the same for every candidate</div></sc-if>
+          <sc-for list="{{ reviewRows }}" as="r" hint-placeholder-count="6">
+            <div style="display:flex;gap:18px;align-items:center;padding:16px 0;border-bottom:1px solid var(--line);flex-wrap:wrap">
+              <span style="width:84px;aspect-ratio:16/10;border-radius:6px;background:var(--cam);display:grid;place-items:center;flex:none"><span style="width:0;height:0;border-left:9px solid rgba(255,255,255,.8);border-top:6px solid transparent;border-bottom:6px solid transparent;margin-left:3px"></span></span>
+              <div style="flex:1 1 280px;min-width:0"><div style="font:500 11px var(--mono);color:var(--ink-3)">Q{{ r.n }} · {{ r.dur }}</div><div style="margin-top:2px;font-size:15px;font-weight:500;text-wrap:pretty">{{ r.text }}</div></div>
+              <span style="font:500 11px var(--mono);padding:4px 9px;border-radius:999px;background:{{ r.badgeBg }};color:{{ r.badgeFg }}">{{ r.badge }}</span>
+              <sc-if value="{{ r.canRetake }}"><button onClick="{{ r.onRetake }}" style="height:34px;padding:0 14px;border-radius:8px;border:1px solid var(--line-2);background:var(--surface);font-weight:500;cursor:pointer">Re-record</button></sc-if>
+            </div>
+          </sc-for>
+        </div>
+        <button onClick="{{ toThanks }}" style="align-self:flex-start;height:48px;padding:0 28px;border-radius:10px;border:0;background:var(--accent);color:var(--on-accent);font-size:16px;font-weight:600;cursor:pointer">Submit interview</button>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ vCThanks }}">
+      <div data-screen-label="Thank you" style="max-width:560px;margin:40px auto;text-align:center;display:flex;flex-direction:column;align-items:center;gap:16px;animation:fadeUp .4s ease-out">
+        <span style="width:56px;height:56px;border-radius:50%;background:var(--ok-soft);display:grid;place-items:center"><svg width="22" height="16" viewBox="0 0 18 14" fill="none" stroke="var(--s5)" stroke-width="2"><path d="M1.5 7.5l5 5L16.5 1.5"></path></svg></span>
+        <h1 style="margin:0;font-size:36px;font-weight:600;letter-spacing:-.025em">Thank you, Amara</h1>
+        <p style="margin:0;font-size:16px;color:var(--ink-2);text-wrap:pretty">Your six answers are with the Brightwater hiring team. You'll hear from them by 15 October. You can close this window.</p>
+        <button onClick="{{ backToRecruiter }}" style="margin-top:16px;height:40px;padding:0 18px;border-radius:8px;border:1px dashed var(--line-2);background:transparent;font-size:13px;color:var(--ink-2);cursor:pointer">Prototype: return to the recruiter view</button>
+      </div>
+    </sc-if>
+  </section>
+</sc-if>
+</main>
+
+<sc-if value="{{ hasToast }}"><div style="position:fixed;z-index:70;left:50%;bottom:64px;transform:translateX(-50%);padding:10px 16px;border-radius:10px;background:var(--ink);color:var(--bg);font-size:13px;font-weight:500;box-shadow:0 8px 24px rgba(0,0,0,.2);animation:fadeUp .25s ease-out">{{ toast }}</div></sc-if>
+
+<footer style="position:fixed;z-index:50;left:0;right:0;bottom:0;background:var(--bg);border-top:1px solid var(--line)">
+  <div style="max-width:1320px;margin:0 auto;padding:10px 28px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+    <span style="font:500 11px var(--mono);letter-spacing:.04em;color:var(--ink-3);padding:4px 10px;border:1px solid var(--line-2);border-radius:999px">Portfolio reconstruction · Synthetic data · AI scoring simulated</span>
+    <div style="display:flex;align-items:center;gap:4px;font:500 12px var(--mono)">
+      <span style="color:var(--ink-3);margin-right:6px">Jump to</span>
+      <sc-for list="{{ jumps }}" as="j" hint-placeholder-count="5"><button onClick="{{ j.onClick }}" style="border:0;padding:5px 9px;border-radius:6px;font:500 12px var(--mono);cursor:pointer;background:{{ j.bg }};color:{{ j.fg }}">{{ j.label }}</button></sc-for>
+      <sc-if value="{{ vCQuestionRec }}"><button onClick="{{ jumpEnd }}" style="margin-left:8px;border:1px dashed var(--line-2);padding:4px 9px;border-radius:6px;font:500 12px var(--mono);cursor:pointer;background:transparent;color:var(--ink-2)">Skip to last 5 s</button></sc-if>
+    </div>
+  </div>
+</footer>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const fmt = s => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+const Q = {
+  c1: { cat: 'Handling disruption', text: 'Tell us about a time a delivery plan fell apart at short notice. What did you do?', subs: ['How did you decide what to fix first?', 'What would you do differently next time?'], think: 30, answer: 180, takes: 2 },
+  c2: { cat: 'Coordination', text: 'How do you keep carriers, warehouse staff and drivers working from the same schedule?', subs: ['Which tools or routines do you rely on?'], think: 30, answer: 120, takes: 2 },
+  c3: { cat: 'Continuous improvement', text: 'Describe a process you improved. How did you know it worked?', subs: [], think: 45, answer: 180, takes: 2 },
+  c4: { cat: 'Customer focus', text: "A customer calls, upset about a late delivery that wasn't your team's fault. Walk us through the call.", subs: [], think: 30, answer: 180, takes: 2 },
+  c7: { cat: 'Working with others', text: "Tell us about a time you disagreed with a manager's decision.", subs: ['How did you raise it?'], think: 30, answer: 120, takes: 2 },
+  c8: { cat: 'Prioritisation', text: 'You have three urgent requests and time for one. How do you choose?', subs: [], think: 30, answer: 120, takes: 2 },
+  c9: { cat: 'Learning', text: 'What is something about your work you learned the hard way?', subs: [], think: 30, answer: 120, takes: 2 },
+  t5: { cat: 'Operations core', text: "What do you check first when the day's dispatch plan lands on your desk?", subs: [], think: 30, answer: 120, takes: 2 },
+  t6: { cat: 'Yard safety', text: 'Walk us through how you would report a near-miss in the yard.', subs: [], think: 30, answer: 120, takes: 2 },
+  t7: { cat: 'Operations core', text: 'Which numbers would you look at to know a shift went well?', subs: [], think: 30, answer: 120, takes: 2 },
+  t8: { cat: 'Customer escalation', text: 'A key account threatens to move volume to a competitor. What do you do in the first hour?', subs: [], think: 45, answer: 180, takes: 2 }
+};
+const CATALOGUE = ['c1', 'c2', 'c3', 'c4', 'c7', 'c8', 'c9'];
+const TEMPLATES = [
+  { name: 'Operations core set', updated: 'Updated 12 Sep by Mara Visser · Admin', qs: ['t5', 't7'] },
+  { name: 'Yard safety', updated: 'Updated 2 Sep by Mara Visser · Admin', qs: ['t6'] },
+  { name: 'Customer escalation', updated: 'Updated 28 Aug by Ruben Kok · Admin', qs: ['t8'] }
+];
+const INTERVIEW = ['c1', 'c2', 'c3', 'c4', 't5', 'c7'];
+const PRACTICE = { text: 'Describe your ideal weekend in a sentence or two.', subs: [], think: 15, answer: 60, takes: 99 };
+const PEOPLE = [
+  { n: 'Amara Okafor', e: 'amara.okafor@mail.example', note: 'Applied 24 Sep' },
+  { n: 'Jonas Lindqvist', e: 'jonas.l@mail.example', note: 'Applied 23 Sep' },
+  { n: 'Priya Raman', e: 'priya.raman@mail.example', note: 'Referral' },
+  { n: 'Tomasz Wójcik', e: 'tomasz.w@mail.example', note: 'Applied 22 Sep' },
+  { n: 'Lucía Ferreira', e: 'lucia.ferreira@mail.example', note: 'Applied 21 Sep' },
+  { n: 'Daniel Mensah', e: 'd.mensah@oldhost.example', note: 'Applied 21 Sep' },
+  { n: 'Kofi Asante', e: 'kofi.asante@oldhost.example', note: 'Applied 20 Sep' },
+  { n: 'Elif Demir', e: 'elif.demir@oldhost.example', note: 'Applied 19 Sep' },
+  { n: 'Sanne de Vries', e: 'sanne.dv@mail.example', note: 'Applied 18 Sep' },
+  { n: 'Marco Bianchi', e: 'marco.b@mail.example', note: 'Applied 17 Sep' }
+];
+const FAILING = ['Daniel Mensah', 'Kofi Asante', 'Elif Demir'];
+const PROGRESS = { 'Amara Okafor': ['completed', '6 / 6', 'Today 09:12'], 'Jonas Lindqvist': ['started', '5 / 6', 'Today 08:40'], 'Priya Raman': ['started', '2 / 6', 'Yesterday'] };
+const SCALE = { 0: ['Not shown', 'Niet getoond', 'var(--s0)'], 1: ['Limited', 'Beperkt', 'var(--s1)'], 3: ['Moderate', 'Redelijk', 'var(--s3)'], 4: ['Strong', 'Sterk', 'var(--s4)'], 5: ['Standout', 'Uitzonderlijk', 'var(--s5)'] };
+const GATE = { 0: 0, 1: 0.25, 3: 0.75, 4: 1, 5: 1 };
+const CRIT = [['Relevance', 'Relevantie'], ['Specificity', 'Specificiteit'], ['Clarity', 'Helderheid'], ['Structure', 'Structuur'], ['Depth', 'Diepgang']];
+const NONE = ['Nothing to assess.', 'Niets te beoordelen.'];
+const R = {
+  c1: { dur: '2:41', s: [5, 4, 4, 4, 4],
+    t: "Last November, on a Friday before a sale weekend, our main carrier cancelled two vans at six in the morning. We had fourteen drops booked, three of them for a pharmacy chain with fixed delivery windows. First I called those three customers, because missing their window meant a full day's delay for them. Then I re-sequenced the remaining drops across our two backup vans and moved four non-urgent ones to Saturday, with the customers' agreement. By noon everything time-critical was delivered. Afterwards I sat down with the carrier to understand what happened, and we agreed they'd confirm backup capacity every Thursday. If I did it again, I'd have that Thursday check in place before peak weeks, not after.",
+    ev: [['Answers directly with a real disruption and her response to it.', 'Beantwoordt direct met een echte verstoring en haar aanpak.'], ['Names the time, the volume (14 drops) and which customers came first.', 'Noemt tijdstip, volume (14 leveringen) en welke klanten voorrang kregen.'], ['Easy to follow, with one small detour about the sale weekend.', 'Goed te volgen, met één kleine uitweiding over het uitverkoopweekend.'], ['Situation, actions in order, outcome and a lesson.', 'Situatie, acties op volgorde, resultaat en een les.'], ['Explains why the pharmacy drops came first; less on trade-offs.', 'Legt uit waarom de apotheek voorging; minder over afwegingen.']],
+    sum: ["Described a carrier cancelling two vans on a peak Friday. She called the three customers with fixed delivery windows first, re-sequenced the remaining drops across two backup vans, and moved four non-urgent drops to Saturday with agreement. Afterwards she agreed a weekly capacity check with the carrier, and said she would set that up before peak weeks next time.", "Beschreef hoe een vervoerder op een drukke vrijdag twee bussen annuleerde. Ze belde eerst de drie klanten met vaste levertijden, verdeelde de overige leveringen over twee reservebussen en verplaatste er vier in overleg naar zaterdag. Daarna sprak ze een wekelijkse capaciteitscheck af met de vervoerder, en zei dat ze die voortaan vóór drukke weken zou regelen."],
+    sig: [['Looking at screen', 'Most of the time', 'Meestal'], ['Speaking pace', 'Steady', 'Gelijkmatig'], ['Pause before answering', 'About 4 s', 'Ongeveer 4 s']] },
+  c2: { dur: '2:00', s: [1, 3, 5, 4, 3], flag: 'relevance',
+    t: "I actually started out in hospitality, managing front-of-house at a hotel in Utrecht, and what I loved was that no two days were the same. When I moved into logistics I found that same energy. I'm someone who thrives under pressure and really enjoys solving problems for people. My friends would say I'm the organised one, the person who plans the trips. I think that's what draws me to operations: the pace, the people, and seeing a plan come together at the end of the day.",
+    ev: [['Describes her background and motivation, not how she aligns carriers, warehouse and drivers.', 'Beschrijft haar achtergrond en motivatie, niet hoe ze vervoerders, magazijn en chauffeurs afstemt.'], ['Some concrete details (hotel, Utrecht), none about scheduling.', 'Enkele concrete details (hotel, Utrecht), geen over planning.'], ['Fluent, well paced and easy to follow.', 'Vloeiend, goed tempo en makkelijk te volgen.'], ['A clear arc from her past role to her current interest.', 'Een duidelijke lijn van haar vorige rol naar haar huidige interesse.'], ['Stays at the level of personality traits.', 'Blijft op het niveau van persoonlijkheidskenmerken.']],
+    sum: ["Spoke fluently about moving from hotel front-of-house into logistics and why she enjoys fast-paced work. She did not describe how she keeps carriers, warehouse staff or drivers on the same schedule, or which tools she uses.", "Vertelde vloeiend over haar overstap van de hotelreceptie naar logistiek en waarom ze van een hoog tempo houdt. Ze beschreef niet hoe ze vervoerders, magazijnmedewerkers en chauffeurs op één planning houdt, of welke hulpmiddelen ze gebruikt."],
+    sig: [['Looking at screen', 'Most of the time', 'Meestal'], ['Speaking pace', 'Fast', 'Snel'], ['Pause before answering', 'Under 2 s', 'Minder dan 2 s']] },
+  c3: { dur: '1:34', s: [4, 3, 4, 3, 3], raw: [4, 4, 4, 3, 4], flag: 'capped',
+    cap: ['No concrete example detected. Specificity and Depth capped at 3.', 'Geen concreet voorbeeld gevonden. Specificiteit en Diepgang begrensd op 3.'],
+    t: "In my last role I improved a lot of our processes. Basically I looked at where things were slowing down and made them more efficient. Communication is really key, so I made sure everyone was on the same page and we had regular check-ins. The team responded well and things ran a lot more smoothly afterwards. I always try to look for ways to do things better, because there's always room for improvement.",
+    ev: [['On topic: talks about improving a process.', 'Relevant: gaat over het verbeteren van een proces.'], ['No specific process, change or result is named.', 'Geen specifiek proces, verandering of resultaat genoemd.'], ['Clear sentences, easy to follow.', 'Heldere zinnen, makkelijk te volgen.'], ['General statements without a beginning, middle or end.', 'Algemene uitspraken zonder begin, midden of eind.'], ["Doesn't explain how she knew the change worked.", 'Legt niet uit hoe ze wist dat de verandering werkte.']],
+    sum: ["Said she improved processes by finding where work slowed down, holding regular check-ins and keeping the team aligned. She did not name a specific process, what changed, or how the improvement was measured.", "Zei dat ze processen verbeterde door knelpunten te zoeken, regelmatig af te stemmen en het team op één lijn te houden. Ze noemde geen specifiek proces, wat er veranderde of hoe de verbetering werd gemeten."],
+    sig: [['Looking at screen', 'Often away', 'Vaak weg'], ['Speaking pace', 'Steady', 'Gelijkmatig'], ['Pause before answering', 'About 6 s', 'Ongeveer 6 s']] },
+  c4: { dur: '2:52', s: [5, 5, 4, 5, 4],
+    t: "I'd let them finish first, even if it takes a while, because people want to be heard before they want a solution. Then I'd confirm the order number and what they were promised. Before giving a new time, I'd message the driver directly, so the ETA I share is real and not a guess. I'd say something like: I understand this has disrupted your afternoon, your delivery is twenty-five minutes out and I've just confirmed that with the driver. I wouldn't blame the carrier, even if it was their delay. To the customer, it's our delivery. Then I'd offer to call back once it's delivered, and log the delay so we can see if it's a pattern on that route.",
+    ev: [['Walks through the call as asked.', 'Loopt het gesprek door zoals gevraagd.'], ['Gives example wording and a verified ETA.', 'Geeft voorbeeldzinnen en een gecontroleerde aankomsttijd.'], ['Calm and ordered.', 'Rustig en geordend.'], ['A clear sequence from listening to follow-up.', 'Een duidelijke volgorde van luisteren tot opvolging.'], ['Explains why she would not blame the carrier.', 'Legt uit waarom ze de vervoerder niet de schuld zou geven.']],
+    sum: ["Walked through the call in order: let the customer finish, confirmed the order, checked a new ETA with the driver before sharing it, and offered a follow-up call. Took ownership of the delay on the company's behalf and suggested logging it to spot route patterns.", "Liep het gesprek op volgorde door: de klant laten uitpraten, de order bevestigen, een nieuwe aankomsttijd bij de chauffeur checken voordat ze die deelde, en een terugbelafspraak aanbieden. Nam namens het bedrijf verantwoordelijkheid en stelde voor de vertraging te registreren om patronen per route te zien."],
+    sig: [['Looking at screen', 'Most of the time', 'Meestal'], ['Speaking pace', 'Steady', 'Gelijkmatig'], ['Pause before answering', 'About 5 s', 'Ongeveer 5 s']] },
+  t5: { dur: '2:00', s: [0, 0, 0, 0, 0], flag: 'silence',
+    cap: ['No speech detected. All criteria set to 0.', 'Geen spraak gedetecteerd. Alle criteria op 0.'],
+    t: '[No speech detected in this recording]',
+    ev: [['No speech was detected in the recording.', 'Er is geen spraak gedetecteerd in de opname.'], NONE, NONE, NONE, NONE],
+    sum: ["The recording runs the full 2:00 and the candidate is on camera throughout, but no speech was detected. This may be a microphone problem. There is no content to evaluate.", "De opname duurt de volle 2:00 en de kandidaat is steeds in beeld, maar er is geen spraak gedetecteerd. Mogelijk een probleem met de microfoon. Er is geen inhoud om te beoordelen."],
+    sig: [['Face visible', 'Throughout', 'Doorlopend'], ['Speech', 'None detected', 'Niet gedetecteerd'], ['Lips moving', 'Yes, at times', 'Soms']] },
+  c7: { dur: '0:12', s: [0, 0, 0, 0, 0], flag: 'declined',
+    cap: ['Candidate declined to answer. All criteria set to 0.', 'Kandidaat weigerde te antwoorden. Alle criteria op 0.'],
+    t: "Sorry, I'd rather not get into that one. I'll move on.",
+    ev: [['The candidate declined the question.', 'De kandidaat sloeg de vraag af.'], NONE, NONE, NONE, NONE],
+    sum: ["The candidate said she would rather not discuss this question and ended the recording after 12 seconds.", "De kandidaat gaf aan deze vraag liever niet te bespreken en stopte de opname na 12 seconden."],
+    sig: [['Looking at screen', 'Yes', 'Ja'], ['Speaking pace', 'Too short to read', 'Te kort om te beoordelen'], ['Pause before answering', 'About 3 s', 'Ongeveer 3 s']] }
+};
+const FLAG = { relevance: ['Relevance gate applied', 'Relevantiedrempel toegepast'], capped: ['Capped', 'Begrensd'], silence: ['No speech', 'Geen spraak'], declined: ['Declined', 'Geweigerd'] };
+const LANG = {
+  en: { report: 'Report', meta: 'Operations Coordinator · Completed 4 Oct 09:12 · 11 min 59 s recorded', overall: 'Overall answer quality', overallSub: 'Average of 6 answers. 2 had nothing to score.', how: 'How this score was produced', export: 'Export PDF', question: 'Question', transcript: 'Transcript', transcriptNote: 'Shown in the language it was spoken.', aq: 'answer quality', relHint: 'Relevance limited this score', criteria: 'Criteria · scored independently', summary: 'Summary', summaryNote: 'Describes what the candidate said. Contains no scores and no recommendation.', signals: 'Behavioral signals', signalsSub: 'Supplementary context, not part of the score', signalsNote: 'These readings vary with lighting, camera, connection and culture. They are shown for context and never feed the answer-quality score.' },
+  nl: { report: 'Rapport', meta: 'Operations Coordinator · Afgerond 4 okt 09:12 · 11 min 59 s opgenomen', overall: 'Totale antwoordkwaliteit', overallSub: 'Gemiddelde van 6 antwoorden. 2 zonder te beoordelen inhoud.', how: 'Hoe deze score tot stand kwam', export: 'Exporteer PDF', question: 'Vraag', transcript: 'Transcript', transcriptNote: 'Weergegeven in de gesproken taal.', aq: 'antwoordkwaliteit', relHint: 'Relevantie beperkte deze score', criteria: 'Criteria · onafhankelijk gescoord', summary: 'Samenvatting', summaryNote: 'Beschrijft wat de kandidaat zei. Bevat geen scores en geen aanbeveling.', signals: 'Gedragssignalen', signalsSub: 'Aanvullende context, geen onderdeel van de score', signalsNote: 'Deze metingen variëren met licht, camera, verbinding en cultuur. Ze dienen als context en tellen nooit mee in de score.' }
+};
+const quality = s => Math.round(s.reduce((a, b) => a + b, 0) / 5 / 5 * 100 * GATE[s[0]]);
+const qColor = q => q === 0 ? 'var(--s0)' : q < 30 ? 'var(--s1)' : q < 60 ? 'var(--s3)' : q < 85 ? 'var(--s4)' : 'var(--s5)';
+const ini = n => n.split(' ').map(w => w[0]).slice(0, 2).join('');
+const pinStyle = (on) => on;
+
+class Component extends DCLogic {
+  state = { view: 'home', theme: 'light', role: 'recruiter', decisions: false, created: false, title: 'Operations Coordinator · Rotterdam hub',
+    tab: 'catalogue', selected: [], custom: {}, cqText: '', cqSubs: [], cqThink: 30, cqAnswer: 180, cqTakes: 2,
+    invStep: 1, invSrc: 'pool', picked: [0, 1, 2, 3, 4, 5, 6, 7], extra: [], mName: '', mEmail: '', uploaded: false,
+    send: 'idle', sendN: 0, days: false, reportReady: false, anStep: 0, filter: 'all',
+    consent: [false, false, false], cIdx: 0, practice: false, phase: 'think', remaining: 30, elapsed: 0, auto: false,
+    answers: [null, null, null, null, null, null], used: [0, 0, 0, 0, 0, 0], fromReview: false,
+    rq: 1, lang: 'en', how: false, toast: '' };
+  componentDidMount() { this.iv = setInterval(() => this.tick(), 1000); }
+  componentWillUnmount() { clearInterval(this.iv); clearTimeout(this.tt); clearTimeout(this.st); }
+  q(id) { return Q[id] || this.state.custom[id]; }
+  curQ() { return this.state.practice ? PRACTICE : Q[INTERVIEW[this.state.cIdx]]; }
+  tick() {
+    const s = this.state;
+    if (s.view === 'c-question') {
+      const q = this.curQ();
+      if (s.phase === 'think') { if (s.remaining <= 1) this.setState({ phase: 'rec', elapsed: 0 }); else this.setState({ remaining: s.remaining - 1 }); }
+      else if (s.phase === 'rec') { if (s.elapsed + 1 >= q.answer) this.submit(true); else this.setState({ elapsed: s.elapsed + 1 }); }
+    }
+    if (s.view === 'analyzing' && s.anStep < 5) this.setState({ anStep: s.anStep + 1 });
+  }
+  go(view, extra = {}) { this.setState({ view, how: false, ...extra }); window.scrollTo(0, 0); }
+  flash(t) { this.setState({ toast: t }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: '' }), 2600); }
+  startQ(i, practice) { const q = practice ? PRACTICE : Q[INTERVIEW[i]]; this.go('c-question', { cIdx: i, practice: !!practice, phase: 'think', remaining: q.think, elapsed: 0, auto: false }); }
+  submit(auto) {
+    const s = this.state;
+    if (s.practice) return this.setState({ phase: 'saved', auto });
+    const answers = [...s.answers]; answers[s.cIdx] = auto ? this.curQ().answer : Math.max(s.elapsed, 1);
+    this.setState({ phase: 'saved', auto, answers });
+  }
+  next() {
+    const s = this.state;
+    if (s.practice) return this.startQ(0);
+    if (s.fromReview || s.cIdx === INTERVIEW.length - 1) return this.go('c-review', { fromReview: false });
+    this.startQ(s.cIdx + 1);
+  }
+  invitees() { const s = this.state; return [...s.picked.map(i => PEOPLE[i]), ...s.extra]; }
+  doSend() {
+    const total = this.invitees().length; let n = 0;
+    this.setState({ send: 'sending', sendN: 0 });
+    const step = () => { n++; this.setState({ sendN: n });
+      if (n < total) this.st = setTimeout(step, 160);
+      else this.st = setTimeout(() => { const f = this.invitees().filter(p => FAILING.includes(p.n)).length; this.go('tracking', { send: f ? 'partial' : 'done0', created: true, invStep: 1 }); }, 450); };
+    this.st = setTimeout(step, 160);
+  }
+  addQ(id) { const s = this.state; if (s.selected.includes(id) || s.selected.length >= 10) return; this.setState({ selected: [...s.selected, id] }); }
+  setRole(role) { this.setState({ role }); }
+
+  renderVals() {
+    const s = this.state, L = LANG[s.lang], li = s.lang === 'en' ? 0 : 1;
+    const isViewer = s.role === 'viewer', isAdmin = s.role === 'admin', canEdit = !isViewer;
+    const v = s.view, isCandidate = v.startsWith('c-');
+    const dec = s.decisions;
+    const tabBtn = (active) => ({ weight: active ? 600 : 500, color: active ? 'var(--ink)' : 'var(--ink-3)', line: active ? 'var(--ink)' : 'transparent' });
+    const meta = q => `${fmt(q.think)} think · ${fmt(q.answer)} answer · ${q.takes} takes`;
+    const full = s.selected.length >= 10;
+
+    const catalogue = CATALOGUE.map(id => { const q = Q[id], added = s.selected.includes(id);
+      return { cat: q.cat, text: q.text, hasSubs: q.subs.length > 0, subsLine: q.subs.join(' · '), meta: meta(q), added, canAdd: canEdit && !added && !full, onAdd: () => this.addQ(id) }; });
+    const templates = TEMPLATES.map((t, i) => ({ name: t.name, updated: t.updated, showLock: !isAdmin, canManage: isAdmin, pin: dec && i === 0,
+      onEdit: () => this.flash('The template editor is outside this prototype'),
+      qs: t.qs.map(id => { const q = Q[id], added = s.selected.includes(id); return { text: q.text, meta: meta(q), added, canAdd: canEdit && !added && !full, onAdd: () => this.addQ(id) }; }) }));
+    const tabs = [['catalogue', 'System catalogue', CATALOGUE.length], ['templates', 'Company templates', TEMPLATES.length], ['custom', 'Custom question', '']].map(([k, label, count]) => ({ label, count, ...tabBtn(s.tab === k), pin: dec && k === 'templates', onClick: () => this.setState({ tab: k }) }));
+    const selList = s.selected.map((id, i) => { const q = this.q(id); return { n: String(i + 1).padStart(2, '0'), text: q.text, meta: meta(q), canRemove: canEdit, onRemove: () => this.setState({ selected: s.selected.filter(x => x !== id) }) }; });
+    const est = s.selected.length ? Math.round((180 + s.selected.reduce((a, id) => { const q = this.q(id); return a + q.think + q.answer; }, 0)) / 60) : 0;
+    const cqOk = canEdit && s.cqText.trim().length > 8 && !full;
+
+    const inv = this.invitees();
+    const failN = inv.filter(p => FAILING.includes(p.n)).length || 3;
+    const rowsAll = inv.map(p => {
+      const pr = s.days && PROGRESS[p.n];
+      const st = pr ? pr[0] : 'not';
+      const failed = FAILING.includes(p.n) && s.send === 'partial';
+      const retried = FAILING.includes(p.n) && (s.send === 'done' || s.send === 'retrying');
+      const isAmara = st === 'completed';
+      return { st, n: p.n, e: p.e, ini: ini(p.n), status: { not: 'Not started', started: 'Started', completed: 'Completed' }[st], dot: { not: 'var(--ink-3)', started: 'var(--accent)', completed: 'var(--s4)' }[st],
+        prog: pr ? pr[1] : '0 / 6', act: pr ? pr[2] : '—',
+        inv: failed ? 'Delivery failed' : s.send === 'retrying' && retried ? 'Resending…' : retried ? 'Sent 1 Oct · retry' : 'Sent 1 Oct', invColor: failed ? 'var(--s1)' : 'var(--ink-2)', invWeight: failed ? 600 : 400,
+        qAnalyzing: isAmara && !s.reportReady, qReady: isAmara && s.reportReady, qNone: !isAmara,
+        onOpen: () => s.reportReady ? this.go('report') : this.go('analyzing', { anStep: 0 }) };
+    });
+    const counts = { all: rowsAll.length, not: 0, started: 0, completed: 0 }; rowsAll.forEach(r => counts[r.st]++);
+    const filters = [['all', 'All', null], ['not', 'Not started', 'var(--ink-3)'], ['started', 'Started', 'var(--accent)'], ['completed', 'Completed', 'var(--s4)']].map(([k, label, dot]) => ({ label, dot, hasDot: !!dot, count: counts[k], bg: s.filter === k ? 'var(--surface)' : 'transparent', line: s.filter === k ? 'var(--ink)' : 'var(--line-2)', onClick: () => this.setState({ filter: k }) }));
+    const rows = rowsAll.filter(r => s.filter === 'all' || r.st === s.filter);
+
+    // report
+    const rid = INTERVIEW[s.rq - 1], rd = R[rid], rqQ = Q[rid], rqQual = quality(rd.s);
+    const qList = INTERVIEW.map((id, i) => { const d = R[id], ql = quality(d.s), act = s.rq === i + 1;
+      return { n: 'Q' + (i + 1), text: Q[id].text, quality: ql, w: ql + '%', color: qColor(ql), hasFlag: !!d.flag, flag: d.flag ? FLAG[d.flag][li] : '', bg: act ? 'var(--surface-2)' : 'transparent', edge: act ? 'var(--ink)' : 'transparent', pin: dec && id === 'c2', onClick: () => this.setState({ rq: i + 1 }) }; });
+    const crit = rd.s.map((sc, i) => { const capped = rd.raw && rd.raw[i] !== sc;
+      return { name: CRIT[i][li], score: sc, label: SCALE[sc][li], ev: rd.ev[i][li], capped, capNote: capped ? (li ? `Model gaf ${rd.raw[i]} · begrensd op ${sc}` : `Model scored ${rd.raw[i]} · capped to ${sc}`) : '',
+        cells: [1, 2, 3, 4, 5].map((c, ci) => ({ bg: c <= sc ? SCALE[sc][2] : 'var(--surface-2)', delay: ci * 60 + 'ms' })) }; });
+    const words = rd.t.startsWith('[') ? '0 words' : rd.t.split(/\s+/).length + ' words';
+    const mean = rd.s.reduce((a, b) => a + b, 0) / 5;
+    const rq = { n: s.rq, cat: rqQ.cat, text: rqQ.text, subs: rqQ.subs, dur: rd.dur, transcript: rd.t, tStyle: rd.t.startsWith('[') ? 'italic' : 'normal', words: rd.dur + ' · ' + words, quality: rqQual,
+      relHint: rd.flag === 'relevance', hasCap: !!rd.cap, capText: rd.cap ? rd.cap[li] : '', capPin: dec && rd.flag === 'capped', crit, summary: rd.sum[li], signals: rd.sig.map(x => ({ k: li ? ({ 'Looking at screen': 'Kijkt naar scherm', 'Speaking pace': 'Spreektempo', 'Pause before answering': 'Pauze voor antwoord', 'Face visible': 'Gezicht zichtbaar', 'Speech': 'Spraak', 'Lips moving': 'Lippen bewegen' }[x[0]]) : x[0], v: x[1 + li] })) };
+    const lab = (t) => t === 'LLM' ? { tagBg: 'var(--accent-soft)', tagFg: 'var(--accent-ink)' } : { tagBg: 'var(--surface-2)', tagFg: 'var(--ink-2)' };
+    const howSteps = [
+      { n: 1, title: 'Transcript', tag: 'Speech-to-text', desc: 'The recording is transcribed. Video is not used beyond this point.', val: rd.dur + ' recording → ' + words },
+      { n: 2, title: 'Caps checked', tag: 'LLM flags · code caps', desc: 'A model flags whether the answer is on topic, contains a concrete example, or is empty. Code turns flags into hard ceilings.', val: rd.cap ? rd.cap[0] : 'No caps triggered' },
+      { n: 3, title: 'Five criteria scored independently', tag: 'LLM', desc: 'One call per criterion, each against its own rubric on the 0 · 1 · 3 · 4 · 5 scale.', val: CRIT.map((c, i) => c[0].slice(0, 3) + ' ' + rd.s[i]).join('  ') },
+      { n: 4, title: 'Relevance gate', tag: 'Code', desc: 'Relevance sets a multiplier. A fluent answer to a different question cannot score well.', val: 'Relevance ' + rd.s[0] + ' → × ' + GATE[rd.s[0]] },
+      { n: 5, title: 'Answer quality', tag: 'Code', desc: 'Mean of the five criteria, scaled to 100, times the gate.', val: mean.toFixed(1) + ' ÷ 5 × 100 × ' + GATE[rd.s[0]] + ' = ' + rqQual }
+    ].map(x => ({ ...x, ...lab(x.tag) }));
+    const gateRows = [['0', '0'], ['1', '0.25'], ['3', '0.75'], ['4–5', '1']].map(([r, m]) => { const on = (r === '4–5' ? rd.s[0] >= 4 : String(rd.s[0]) === r); return { r, m, bg: on ? 'var(--accent-soft)' : 'transparent', line: on ? 'var(--accent)' : 'var(--line)' }; });
+
+    // analyzing
+    const AN = [['Transcribing 6 recordings', 'Speech-to-text'], ['Checking caps', 'LLM · Code'], ['Scoring five criteria per answer', 'LLM'], ['Applying relevance gate', 'Code'], ['Writing answer summaries', 'LLM']];
+    const anSteps = AN.map(([label, tag], i) => { const done = i < s.anStep, act = i === s.anStep;
+      return { label, tag, ...lab(tag === 'LLM' ? 'LLM' : 'x'), color: done || act ? 'var(--ink)' : 'var(--ink-3)', dotBg: done ? 'var(--ink)' : 'transparent', dotLine: done ? 'var(--ink)' : act ? 'var(--accent)' : 'var(--line-2)', anim: act ? 'pulse 1.4s ease-out infinite' : 'none' }; });
+
+    // candidate
+    const cq = this.curQ();
+    const takesLeft = s.practice ? 0 : cq.takes - 1 - s.used[s.cIdx];
+    const reviewRows = INTERVIEW.map((id, i) => { const left = Q[id].takes - 1 - s.used[i];
+      return { n: i + 1, text: Q[id].text, dur: s.answers[i] ? fmt(s.answers[i]) : 'not recorded', badge: left > 0 ? `${left} retake left` : 'No retakes left', badgeBg: left > 0 ? 'var(--accent-soft)' : 'var(--surface-2)', badgeFg: left > 0 ? 'var(--accent-ink)' : 'var(--ink-3)', canRetake: left > 0,
+        onRetake: () => { const used = [...s.used]; used[i]++; this.setState({ used, fromReview: true }); this.startQ(i); } }; });
+    const consentTexts = ['I agree to be recorded on video and audio for this interview.', 'I understand my answers are transcribed and summarised by software, and reviewed by people at Brightwater.', 'I have read the privacy notice. My recordings are deleted 6 months after the role is filled.'];
+
+    const jumpList = [['Build', 'builder'], ['Invite', 'invite'], ['Track', 'tracking'], ['Candidate', 'c-landing'], ['Report', 'report']];
+    const curGroup = isCandidate ? 'c-landing' : v === 'analyzing' ? 'tracking' : v;
+
+    return {
+      theme: s.theme, themeLabel: s.theme === 'light' ? 'Dark' : 'Light', toggleTheme: () => this.setState({ theme: s.theme === 'light' ? 'dark' : 'light' }),
+      showDecisions: dec, toggleDecisions: () => this.setState({ decisions: !dec }), swBg: dec ? 'var(--accent)' : 'var(--line-2)', swX: dec ? '14px' : '2px',
+      roles: ['admin', 'recruiter', 'viewer'].map(r => ({ label: r[0].toUpperCase() + r.slice(1), bg: s.role === r ? 'var(--surface)' : 'transparent', fg: s.role === r ? 'var(--ink)' : 'var(--ink-3)', shadow: s.role === r ? '0 1px 2px rgba(0,0,0,.08)' : 'none', onClick: () => this.setRole(r) })),
+      isViewer: isViewer && !isCandidate, isAdmin, canEdit, isCandidate, notCandidate: !isCandidate,
+      goHome: () => this.go('home'), title: s.title, onTitle: e => this.setState({ title: e.target.value }),
+      vHome: v === 'home', homeEmpty: !s.created, homeHasList: s.created, newInterview: () => this.go('builder', { created: true }),
+      openInterview: () => this.go(s.send === 'idle' ? 'builder' : 'tracking'), homeQ: s.send === 'idle' ? s.selected.length : 6, homeC: s.send === 'idle' ? 0 : inv.length,
+      homeMix: s.send === 'idle' ? '—' : `${counts.not} · ${counts.started} · ${counts.completed}`, homeStatus: s.send === 'idle' ? 'Draft' : 'Active', homeDot: s.send === 'idle' ? 'var(--ink-3)' : 'var(--s4)',
+      vBuilder: v === 'builder', tabs, tabCatalogue: s.tab === 'catalogue', tabTemplates: s.tab === 'templates', tabCustom: s.tab === 'custom', catalogue, templates,
+      tplIntro: isAdmin ? 'You manage these templates for everyone at Brightwater. Edits apply to new interviews only.' : 'Approved question sets for Brightwater. Use them as they are; admins maintain the wording.',
+      newTemplate: () => this.flash('The template editor is outside this prototype'),
+      cqText: s.cqText, onCqText: e => this.setState({ cqText: e.target.value }),
+      cqSubs: s.cqSubs.map((val, i) => ({ n: String.fromCharCode(97 + i), val, onChange: e => { const a = [...s.cqSubs]; a[i] = e.target.value; this.setState({ cqSubs: a }); }, onRemove: () => this.setState({ cqSubs: s.cqSubs.filter((_, j) => j !== i) }) })),
+      canAddSub: canEdit && s.cqSubs.length < 3, addSub: () => this.setState({ cqSubs: [...s.cqSubs, ''] }),
+      cqThink: String(s.cqThink), onCqThink: e => this.setState({ cqThink: +e.target.value }), cqAnswer: String(s.cqAnswer), onCqAnswer: e => this.setState({ cqAnswer: Math.min(900, +e.target.value) }),
+      cqTakes: s.cqTakes, takesDown: () => canEdit && this.setState({ cqTakes: Math.max(1, s.cqTakes - 1) }), takesUp: () => canEdit && this.setState({ cqTakes: Math.min(3, s.cqTakes + 1) }),
+      cqDisabled: !cqOk, cqOpacity: cqOk ? 1 : 0.4,
+      addCustom: () => { if (!cqOk) return; const id = 'x' + Date.now(); this.setState({ custom: { ...s.custom, [id]: { cat: 'Custom', text: s.cqText.trim(), subs: s.cqSubs.filter(Boolean), think: s.cqThink, answer: s.cqAnswer, takes: s.cqTakes } }, selected: [...s.selected, id], cqText: '', cqSubs: [] }); this.flash('Custom question added'); },
+      selCount: s.selected.length, estDur: est ? '~' + est + ' min' : '—', selEmpty: s.selected.length === 0, selList,
+      capSegs: Array.from({ length: 10 }, (_, i) => ({ bg: i < s.selected.length ? 'var(--ink)' : 'var(--surface-2)' })),
+      contDisabled: !s.selected.length || isViewer, contOpacity: s.selected.length && !isViewer ? 1 : 0.4, toInvite: () => this.go('invite', { invStep: 1 }),
+      vInvite: v === 'invite', inv1: s.invStep === 1, inv2: s.invStep === 2, inv3: s.invStep === 3,
+      invSteps: ['Add candidates', 'Review email', 'Send'].map((label, i) => { const n = i + 1, act = s.invStep === n, done = s.invStep > n;
+        return { n, label, weight: act ? 600 : 500, color: act || done ? 'var(--ink)' : 'var(--ink-3)', dotBg: act ? 'var(--ink)' : 'transparent', dotFg: act ? 'var(--bg)' : 'var(--ink-2)', dotLine: act ? 'var(--ink)' : 'var(--line-2)' }; }),
+      srcTabs: [['pool', 'Talent pool'], ['manual', 'Add manually'], ['upload', 'Upload list']].map(([k, label]) => ({ label, ...tabBtn(s.invSrc === k), onClick: () => this.setState({ invSrc: k }) })),
+      srcPool: s.invSrc === 'pool', srcManual: s.invSrc === 'manual', srcUpload: s.invSrc === 'upload',
+      poolRows: PEOPLE.map((p, i) => ({ ...p, ini: ini(p.n), checked: s.picked.includes(i), onToggle: () => canEdit && this.setState({ picked: s.picked.includes(i) ? s.picked.filter(x => x !== i) : [...s.picked, i] }) })),
+      mName: s.mName, mEmail: s.mEmail, onMName: e => this.setState({ mName: e.target.value }), onMEmail: e => this.setState({ mEmail: e.target.value }),
+      addManual: () => { if (!s.mName.trim() || !s.mEmail.includes('@')) return this.flash('Add a name and a valid email'); this.setState({ extra: [...s.extra, { n: s.mName.trim(), e: s.mEmail.trim() }], mName: '', mEmail: '' }); },
+      uploadTitle: s.uploaded ? 'candidates_oct.csv · 2 rows added' : 'Drop a CSV with name and email columns', uploadSub: s.uploaded ? 'Duplicates against existing candidates were skipped.' : 'Or click to choose a file (simulated)',
+      doUpload: () => { if (s.uploaded) return; this.setState({ uploaded: true, extra: [...s.extra, { n: 'Hannah Bauer', e: 'h.bauer@mail.example' }, { n: 'Yusuf Kaya', e: 'yusuf.kaya@mail.example' }] }); },
+      invCount: inv.length, invitees: inv, invNone: !inv.length || isViewer, invOpacity: inv.length && !isViewer ? 1 : 0.4,
+      toStep1: () => this.setState({ invStep: 1 }), toStep2: () => this.setState({ invStep: 2 }), toStep3: () => this.setState({ invStep: 3, send: s.send === 'sending' ? 'idle' : s.send }),
+      isSending: s.send === 'sending', notSending: s.send !== 'sending', sendPct: Math.round(s.sendN / Math.max(inv.length, 1) * 100) + '%', sendLine: `Creating sessions and sending · ${s.sendN} of ${inv.length}`,
+      sendHeadline: s.send === 'sending' ? 'Sending invitations…' : `Send ${inv.length} invitations`, sendBtn: `Send ${inv.length} invitations`, doSend: () => this.doSend(),
+      vTracking: v === 'tracking', notDays: !s.days, fastForward: () => { this.setState({ days: true }); this.flash('Three days later: candidates have started'); },
+      toInviteMore: () => this.go('invite', { invStep: 1 }),
+      bPartial: s.send === 'partial', bRetrying: s.send === 'retrying', bDone: s.send === 'done', failN,
+      doRetry: () => { this.setState({ send: 'retrying' }); this.st = setTimeout(() => this.setState({ send: 'done' }), 1400); },
+      filters, rows,
+      vAnalyzing: v === 'analyzing', anSteps, anDone: s.anStep >= 5, anTitle: s.anStep >= 5 ? 'Report ready' : 'Analyzing interview', openReport: () => this.go('report', { reportReady: true }),
+      vReport: v === 'report', L, toTracking: () => this.go('tracking'), qList, rq, howSteps, gateRows,
+      legend: [0, 1, 3, 4, 5].map(x => ({ v: x, label: SCALE[x][li], color: SCALE[x][2] })),
+      langs: [['en', 'EN'], ['nl', 'NL']].map(([k, label]) => ({ label, bg: s.lang === k ? 'var(--surface)' : 'transparent', fg: s.lang === k ? 'var(--ink)' : 'var(--ink-3)', onClick: () => this.setState({ lang: k }) })),
+      howOpen: s.how, toggleHow: () => this.setState({ how: !s.how }), doExport: () => this.flash(s.lang === 'en' ? 'Report exported as PDF (simulated)' : 'Rapport geëxporteerd als PDF (gesimuleerd)'),
+      cTopRight: v === 'c-question' && !s.practice ? 'Answers save as you go' : 'Operations Coordinator',
+      vCLanding: v === 'c-landing', vCConsent: v === 'c-consent', vCCheck: v === 'c-check', vCQuestion: v === 'c-question', vCReview: v === 'c-review', vCThanks: v === 'c-thanks',
+      toConsent: () => this.go('c-consent'), consentItems: consentTexts.map((text, i) => ({ text, checked: s.consent[i], onToggle: () => { const c = [...s.consent]; c[i] = !c[i]; this.setState({ consent: c }); } })),
+      consentBlocked: !s.consent.every(Boolean), consentOpacity: s.consent.every(Boolean) ? 1 : 0.4, toCheck: () => this.go('c-check'),
+      toPractice: () => this.startQ(0, true), startInterview: () => this.startQ(0),
+      cProgLabel: s.practice ? 'Practice · not saved' : `Question ${s.cIdx + 1} of ${INTERVIEW.length}`, cSegCount: s.practice ? 1 : INTERVIEW.length,
+      cSegs: s.practice ? [{ bg: 'var(--accent)' }] : INTERVIEW.map((_, i) => ({ bg: i < s.cIdx || s.answers[i] ? 'var(--ink)' : i === s.cIdx ? 'var(--accent)' : 'var(--surface-2)' })),
+      cQ: { text: cq.text, subs: cq.subs, thinkF: fmt(cq.think), answerF: fmt(cq.answer) }, cTakesLine: s.practice ? 'Unlimited practice' : `${takesLeft} retake${takesLeft === 1 ? '' : 's'} left`,
+      phThink: s.phase === 'think', phRec: s.phase === 'rec', phSaved: s.phase === 'saved', vCQuestionRec: v === 'c-question' && s.phase === 'rec',
+      remainingF: fmt(s.remaining), ringOffset: (502.65 * (1 - s.remaining / cq.think)).toFixed(1), startNow: () => this.setState({ phase: 'rec', elapsed: 0 }),
+      elapsedF: fmt(s.elapsed), recPct: (s.elapsed / cq.answer * 100).toFixed(1) + '%', finishNow: () => this.submit(false), jumpEnd: () => this.setState({ elapsed: Math.max(0, cq.answer - 5) }),
+      savedTitle: s.practice ? 'Practice done' : s.auto ? "Time's up. Answer saved." : 'Answer saved',
+      savedSub: s.practice ? "That's how every question works. The real interview starts with question 1." : s.auto ? 'Your answer reached the time limit and was submitted automatically.' : 'You can watch it back on the review screen before submitting.',
+      nextLabel: s.practice ? 'Start the interview' : (s.fromReview || s.cIdx === INTERVIEW.length - 1) ? 'Review answers' : 'Next question', nextQ: () => this.next(),
+      reviewRows, toThanks: () => this.go('c-thanks', { days: true }), backToRecruiter: () => this.go('tracking', { days: true, send: s.send === 'idle' ? 'done0' : s.send }),
+      hasToast: !!s.toast, toast: s.toast,
+      jumps: jumpList.map(([label, k]) => ({ label, bg: curGroup === k ? 'var(--surface-2)' : 'transparent', fg: curGroup === k ? 'var(--ink)' : 'var(--ink-3)',
+        onClick: () => {
+          if (k === 'builder') return this.go('builder', { created: true });
+          if (k === 'invite') return this.go('invite', { created: true, invStep: 1, send: s.send === 'sending' ? 'idle' : s.send });
+          if (k === 'tracking') return this.go('tracking', { created: true, send: s.send === 'idle' || s.send === 'sending' ? 'partial' : s.send });
+          if (k === 'c-landing') return this.go('c-landing', { consent: [false, false, false], answers: [null, null, null, null, null, null], used: [0, 0, 0, 0, 0, 0] });
+          return this.go('report', { created: true, days: true, reportReady: true, send: s.send === 'idle' || s.send === 'sending' ? 'done' : s.send });
+        } }))
+    };
+  }
+}
+</script>
+</body>
+</html>

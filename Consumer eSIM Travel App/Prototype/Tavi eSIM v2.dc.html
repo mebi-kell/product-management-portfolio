@@ -1,0 +1,1688 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--page:#E7E3DB;--bg:#F6F3EE;--surface:#FFFFFF;--surface2:#F0ECE5;--line:#E8E3DA;--ink:#17171B;--ink2:#5F5B55;--ink3:#7D786F;--accent:#FF5A1F;--accent-ink:#1A0D06;--accent-soft:#FFE8DC;--accent-text:#C23C08;--track:#EDE8E0;--st-ni-fg:#625E57;--st-ni-bg:#ECE8E1;--st-in-fg:#2F57C8;--st-in-bg:#E6ECFB;--st-use-fg:#16804C;--st-use-bg:#E0F2E7;--st-low-fg:#8A6400;--st-low-bg:#FFF1C2;--st-exp-fg:#C21F3A;--st-exp-bg:#FCE3E7;--shadow:0 1px 2px rgba(30,25,15,.04),0 12px 32px -14px rgba(30,25,15,.12);--shadow-s:0 1px 3px rgba(30,25,15,.08);--scrim:rgba(20,18,14,.34);--sheet:#FFFFFF;--frame:#111113}
+[data-theme="dark"]{--page:#0B0B0C;--bg:#121214;--surface:#1C1C1F;--surface2:#26262A;--line:#2C2C31;--ink:#F4F2ED;--ink2:#ABA79F;--ink3:#8A867F;--accent:#FF6A2E;--accent-ink:#1A0D06;--accent-soft:#3A1C10;--accent-text:#FF8F5E;--track:#2A2A2F;--st-ni-fg:#ABA79F;--st-ni-bg:#2A2A2E;--st-in-fg:#8FA8FF;--st-in-bg:#1C2547;--st-use-fg:#52CC8E;--st-use-bg:#14301F;--st-low-fg:#F5CB4A;--st-low-bg:#3A300E;--st-exp-fg:#F57A8E;--st-exp-bg:#3B1520;--shadow:0 0 0 1px rgba(255,255,255,.04);--shadow-s:0 0 0 1px rgba(255,255,255,.06);--scrim:rgba(0,0,0,.6);--sheet:#1E1E21;--frame:#2A2A2E}
+body{margin:0;background:#E7E3DB}
+*::-webkit-scrollbar{display:none}*{scrollbar-width:none}
+a{color:#C23C08}a:hover{color:#9A2E05}
+input::placeholder{color:var(--ink3)}
+@keyframes screenIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes sheetUp{from{transform:translateY(105%)}to{transform:none}}
+@keyframes dialogIn{from{opacity:0;transform:scale(1.08)}to{opacity:1;transform:none}}
+@keyframes chipPop{0%{transform:scale(1)}40%{transform:scale(1.14)}100%{transform:scale(1)}}
+@keyframes livePulse{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes breathe{0%,100%{transform:scale(.82);opacity:.75}50%{transform:scale(1);opacity:1}}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pop{0%{transform:scale(.5);opacity:0}60%{transform:scale(1.08);opacity:1}100%{transform:scale(1)}}
+@keyframes shimmer{0%,100%{opacity:.55}50%{opacity:1}}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,-12px) scale(.96)}to{opacity:1;transform:translate(-50%,0)}}
+@keyframes dots{0%,100%{opacity:.25}50%{opacity:1}}
+</style>
+<meta name="design_doc_mode" content="canvas">
+</helmet>
+<div data-theme="{{ theme }}" style="min-height:100vh; background:var(--page); display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-start; gap:40px; padding:40px 24px; box-sizing:border-box; font-family:'Onest', system-ui, sans-serif; color:var(--ink); transition:background .3s">
+
+<div style="width:414px; height:868px; padding:12px; box-sizing:border-box; border-radius:66px; background:var(--frame); box-shadow:0 30px 80px -30px rgba(20,15,5,.35); flex:none">
+<div style="position:relative; width:390px; height:844px; border-radius:54px; overflow:hidden; background:var(--bg); transition:background .3s">
+
+<!-- SPLASH -->
+<sc-if value="{{ s.splash }}" hint-placeholder-val="{{ true }}">
+<div onClick="{{ fromSplash }}" data-screen-label="Splash" style="position:absolute; inset:0; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; cursor:pointer; animation:fadeIn .6s ease">
+<div style="animation:pop .7s cubic-bezier(.2,.9,.3,1)">{{ logoBig }}</div>
+<div style="font-size:32px; font-weight:700; letter-spacing:-0.03em">Tavi</div>
+<div style="font-size:15px; color:var(--ink2)">eSIMs for the whole trip</div>
+<div style="position:absolute; bottom:54px; font-size:11px; font-weight:500; color:var(--ink2); border:1px dashed var(--ink3); border-radius:999px; padding:6px 12px; letter-spacing:.01em">Portfolio reconstruction · Synthetic data</div>
+</div>
+</sc-if>
+
+<!-- ONBOARDING -->
+<sc-if value="{{ s.onb }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Onboarding" style="position:absolute; inset:0; padding:54px 24px 40px; box-sizing:border-box; display:flex; flex-direction:column">
+<div style="display:flex; justify-content:flex-end; height:44px; align-items:center">
+<button onClick="{{ onb.skip }}" style="border:none; background:none; font:inherit; font-size:15px; font-weight:500; color:var(--ink2); cursor:pointer; padding:8px">Skip</button>
+</div>
+<div style="flex:1; display:flex; align-items:center; justify-content:center">
+<sc-if value="{{ onb.v1 }}" hint-placeholder-val="{{ false }}">
+<div style="position:relative; width:260px; height:250px; animation:screenIn .4s ease">
+<div style="position:absolute; left:34px; top:6px; width:200px; height:210px; border-radius:28px; background:var(--surface2); transform:rotate(-7deg)"></div>
+<div style="position:absolute; left:26px; top:22px; width:208px; border-radius:28px; background:var(--surface); box-shadow:var(--shadow); padding:22px; box-sizing:border-box; display:flex; flex-direction:column; gap:18px">
+<div style="display:flex; align-items:center; gap:10px"><span style="font-size:26px">🇲🇪</span><span style="font-size:16px; font-weight:600">Balkans</span></div>
+<div style="display:flex; align-items:baseline; gap:6px"><span style="font-size:56px; font-weight:700; letter-spacing:-0.04em; line-height:1">10</span><span style="font-size:18px; font-weight:600; color:var(--ink2)">GB</span></div>
+<div style="display:flex; justify-content:space-between; font-size:14px; color:var(--ink2)"><span>30 days</span><span style="color:var(--ink); font-weight:600">€26</span></div>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ onb.v2 }}" hint-placeholder-val="{{ false }}">
+<div style="width:280px; display:flex; flex-direction:column; gap:10px; animation:screenIn .4s ease">
+<sc-for list="{{ onb.people }}" as="pp" hint-placeholder-count="3">
+<div style="display:flex; align-items:center; gap:12px; background:var(--surface); border-radius:22px; padding:14px 16px; box-shadow:var(--shadow)">
+<div style="width:38px; height:38px; border-radius:19px; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-weight:600; font-size:15px">{{ pp.i }}</div>
+<div style="flex:1; font-size:16px; font-weight:600">{{ pp.name }}</div>
+{{ pp.chip }}
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ onb.v3 }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex; align-items:center; gap:14px; animation:screenIn .4s ease">
+<div style="width:92px; height:92px; border-radius:46px; background:var(--accent-soft); color:var(--accent-text); display:flex; align-items:center; justify-content:center">{{ icL.wifi }}</div>
+<div style="display:flex; gap:6px"><span style="width:6px; height:6px; border-radius:3px; background:var(--ink3)"></span><span style="width:6px; height:6px; border-radius:3px; background:var(--ink3)"></span><span style="width:6px; height:6px; border-radius:3px; background:var(--ink3)"></span></div>
+<div style="width:92px; height:92px; border-radius:46px; background:var(--surface); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; color:var(--ink)">{{ icL.plane }}</div>
+</div>
+</sc-if>
+</div>
+<div style="display:flex; flex-direction:column; gap:10px; margin-bottom:28px">
+<div style="font-size:32px; font-weight:700; letter-spacing:-0.03em; line-height:1.1; text-wrap:pretty">{{ onb.title }}</div>
+<div style="font-size:16px; color:var(--ink2)">{{ onb.sub }}</div>
+</div>
+<div style="display:flex; align-items:center; justify-content:space-between">
+<div style="display:flex; gap:6px">
+<sc-for list="{{ onb.dots }}" as="dt" hint-placeholder-count="3">
+<span style="height:6px; border-radius:3px; width:{{ dt.w }}px; background:{{ dt.bg }}; transition:all .3s"></span>
+</sc-for>
+</div>
+<button onClick="{{ onb.next }}" style="height:56px; padding:0 26px; border:none; border-radius:18px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:16px; font-weight:600; display:flex; align-items:center; gap:8px; cursor:pointer; transition:transform .12s" style-active="transform:scale(.96)">{{ onb.nextLabel }} {{ ic.arrowR }}</button>
+</div>
+</div>
+</sc-if>
+
+<!-- COMPAT -->
+<sc-if value="{{ s.compat }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Compatibility" style="position:absolute; inset:0; padding:54px 20px 40px; box-sizing:border-box; display:flex; flex-direction:column; gap:14px; animation:screenIn .32s cubic-bezier(.2,.8,.2,1)">
+<div style="height:44px; display:flex; align-items:center">
+<sc-if value="{{ compat.hasBack }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ back }}" style="width:40px; height:40px; border-radius:20px; border:none; background:var(--surface); color:var(--ink); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-s); cursor:pointer" style-active="transform:scale(.92)">{{ ic.chevL }}</button>
+</sc-if>
+</div>
+<div style="width:56px; height:56px; border-radius:18px; background:var(--surface); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center">{{ icL.phone }}</div>
+<div style="font-size:30px; font-weight:700; letter-spacing:-0.03em; line-height:1.1">Is this phone eSIM-ready?</div>
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); overflow:hidden; margin-top:6px">
+<sc-for list="{{ compat.checks }}" as="ck" hint-placeholder-count="2">
+<div onClick="{{ ck.onClick }}" style="display:flex; align-items:center; gap:14px; padding:18px; border-top:{{ ck.border }}; cursor:pointer">
+<div style="width:28px; height:28px; border-radius:9px; display:flex; align-items:center; justify-content:center; background:{{ ck.bg }}; color:var(--accent-ink); box-shadow:{{ ck.ring }}; transition:all .2s">{{ ck.icon }}</div>
+<div style="flex:1"><div style="font-size:16px; font-weight:600">{{ ck.label }}</div><div style="font-size:13px; color:var(--ink2); margin-top:2px">{{ ck.sub }}</div></div>
+</div>
+</sc-for>
+</div>
+<div style="background:var(--accent-soft); border-radius:26px; padding:18px; display:flex; align-items:center; gap:16px">
+<div style="flex:1"><div style="font-size:13px; font-weight:600; color:var(--accent-text)">Not sure? Dial</div><div style="font-family:'IBM Plex Mono', monospace; font-size:30px; font-weight:600; letter-spacing:.04em; margin-top:4px">*#06#</div><div style="font-size:14px; color:var(--ink2); margin-top:4px">An EID means yes.</div></div>
+<div style="font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink2); background:var(--surface); border-radius:12px; padding:10px; line-height:1.5">EID<br>8904 9032…</div>
+</div>
+<div style="flex:1"></div>
+<sc-if value="{{ compat.ready }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ compat.cont }}" style="height:56px; border:none; border-radius:18px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:16px; font-weight:600; cursor:pointer; transition:transform .12s; animation:fadeIn .2s" style-active="transform:scale(.97)">Ready to go</button>
+</sc-if>
+<sc-if value="{{ compat.notReady }}" hint-placeholder-val="{{ true }}">
+<button onClick="{{ compat.skip }}" style="height:56px; border:none; border-radius:18px; background:var(--surface2); color:var(--ink); font:inherit; font-size:16px; font-weight:600; cursor:pointer; transition:transform .12s" style-active="transform:scale(.97)">Check later</button>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- EXPLORE -->
+<sc-if value="{{ s.explore }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Explore" style="position:absolute; inset:0; overflow-y:auto; padding:54px 0 110px; box-sizing:border-box; animation:screenIn .32s cubic-bezier(.2,.8,.2,1)">
+<div style="padding:10px 20px 0; display:flex; flex-direction:column; gap:16px">
+<div style="display:flex; align-items:center; justify-content:space-between; height:40px">{{ logo }}<div style="font-size:13px; font-weight:500; color:var(--ink2)">Hi, Alex</div></div>
+<div style="font-size:36px; font-weight:700; letter-spacing:-0.035em; line-height:1">Where to?</div>
+<div style="display:flex; align-items:center; gap:10px; height:56px; padding:0 16px; background:var(--surface); border-radius:18px; box-shadow:var(--shadow); color:var(--ink2)">
+{{ ic.search }}
+<input value="{{ ex.query }}" onChange="{{ ex.onQuery }}" placeholder="Country or region" style="flex:1; min-width:0; border:none; outline:none; background:transparent; font:inherit; font-size:17px; font-weight:500; color:var(--ink)">
+<sc-if value="{{ ex.hasQuery }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ ex.clear }}" style="width:28px; height:28px; border-radius:14px; border:none; background:var(--surface2); color:var(--ink2); display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0">{{ icS.close }}</button>
+</sc-if>
+</div>
+</div>
+
+<sc-if value="{{ ex.showBrowse }}" hint-placeholder-val="{{ true }}">
+<div style="padding:20px 20px 0; display:flex; flex-direction:column; gap:14px">
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:4px; background:var(--surface2); border-radius:16px; padding:4px">
+<sc-for list="{{ ex.cats }}" as="ct" hint-placeholder-count="2">
+<button onClick="{{ ct.onClick }}" style="height:40px; border:none; border-radius:12px; font:inherit; font-size:14px; font-weight:600; cursor:pointer; background:{{ ct.bg }}; color:{{ ct.fg }}; box-shadow:{{ ct.sh }}; transition:all .2s; display:flex; align-items:center; justify-content:center; gap:6px">{{ ct.label }}<span style="font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink3)">{{ ct.n }}</span></button>
+</sc-for>
+</div>
+<sc-for list="{{ ex.browse }}" as="bg" hint-placeholder-count="3">
+<div style="display:flex; flex-direction:column; gap:8px">
+<div style="font-family:'IBM Plex Mono', monospace; font-size:12px; font-weight:600; color:var(--ink3); padding-left:6px">{{ bg.letter }}</div>
+<div style="background:var(--surface); border-radius:22px; box-shadow:var(--shadow); overflow:hidden">
+<sc-for list="{{ bg.items }}" as="pc" hint-placeholder-count="4">
+<div onClick="{{ pc.onClick }}" style="display:flex; align-items:center; gap:14px; padding:13px 18px; border-top:{{ pc.border }}; cursor:pointer" style-active="background:var(--surface2)">
+<span style="width:30px; display:flex; justify-content:center; font-size:24px; line-height:1; color:var(--accent-text); flex:none">{{ pc.badge }}</span>
+<div style="flex:1; min-width:0"><div style="font-size:16px; font-weight:500">{{ pc.name }}</div><sc-if value="{{ pc.hasSub }}" hint-placeholder-val="{{ false }}"><div style="font-size:12px; color:var(--ink2); margin-top:2px">{{ pc.sub }}</div></sc-if></div>
+<span style="font-size:13px; color:var(--ink2); white-space:nowrap">from {{ pc.from }}</span>
+<span style="color:var(--ink3)">{{ icS.chevR }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<sc-if value="{{ ex.showMatches }}" hint-placeholder-val="{{ false }}">
+<div style="padding:16px 20px 0">
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); overflow:hidden">
+<sc-for list="{{ ex.matches }}" as="mt" hint-placeholder-count="3">
+<div onClick="{{ mt.onClick }}" style="display:flex; align-items:center; gap:14px; padding:13px 18px; border-top:{{ mt.border }}; cursor:pointer" style-active="background:var(--surface2)">
+<span style="width:30px; display:flex; justify-content:center; font-size:24px; line-height:1; color:var(--accent-text); flex:none">{{ mt.badge }}</span>
+<div style="flex:1; min-width:0"><div style="font-size:16px; font-weight:500">{{ mt.name }}</div><div style="font-size:12px; color:var(--ink2); margin-top:2px">{{ mt.sub }}</div></div>
+<span style="color:var(--ink3)">{{ icS.chevR }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ ex.showNone }}" hint-placeholder-val="{{ false }}">
+<div style="padding:48px 20px; text-align:center; font-size:15px; color:var(--ink2)">No plans for that place yet.</div>
+</sc-if>
+
+<sc-if value="{{ ex.showLoading }}" hint-placeholder-val="{{ false }}">
+<div style="padding:24px 20px 0; display:flex; flex-direction:column; gap:12px">
+<div style="height:18px; width:140px; border-radius:9px; background:var(--surface2); animation:shimmer 1.3s ease-in-out infinite"></div>
+<div style="height:150px; border-radius:26px; background:var(--surface); box-shadow:var(--shadow); animation:shimmer 1.3s ease-in-out infinite"></div>
+<div style="height:150px; border-radius:26px; background:var(--surface); box-shadow:var(--shadow); animation:shimmer 1.3s ease-in-out infinite .15s"></div>
+<div style="height:150px; border-radius:26px; background:var(--surface); box-shadow:var(--shadow); animation:shimmer 1.3s ease-in-out infinite .3s"></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ ex.showResults }}" hint-placeholder-val="{{ false }}">
+<div style="padding:18px 20px 0; display:flex; flex-direction:column; gap:12px; animation:screenIn .35s ease">
+<div style="display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:4px; background:var(--surface2); border-radius:16px; padding:4px">
+<sc-for list="{{ ex.scopes }}" as="sc" hint-placeholder-count="4">
+<button onClick="{{ sc.onClick }}" style="height:38px; border:none; border-radius:12px; font:inherit; font-size:13px; font-weight:600; cursor:pointer; background:{{ sc.bg }}; color:{{ sc.fg }}; box-shadow:{{ sc.sh }}; transition:all .2s">{{ sc.label }}</button>
+</sc-for>
+</div>
+<div style="display:flex; gap:6px; overflow-x:auto; margin:0 -20px; padding:0 20px">
+<sc-for list="{{ ex.sizes }}" as="sz" hint-placeholder-count="6">
+<button onClick="{{ sz.onClick }}" style="flex:none; white-space:nowrap; height:34px; padding:0 14px; border-radius:999px; font:inherit; font-size:13px; font-weight:600; cursor:pointer; border:1px solid {{ sz.bd }}; background:{{ sz.bg }}; color:{{ sz.fg }}; transition:all .2s">{{ sz.label }}</button>
+</sc-for>
+</div>
+<div style="font-size:13px; font-weight:600; color:var(--ink2); padding:2px 4px 0">{{ ex.count }}</div>
+<sc-for list="{{ ex.pkgs }}" as="pg" hint-placeholder-count="3">
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); overflow:hidden">
+<div style="display:flex; align-items:center; gap:12px; padding:16px 18px 12px">
+<div style="width:42px; height:42px; border-radius:14px; background:var(--surface2); color:var(--accent-text); display:flex; align-items:center; justify-content:center; font-size:24px; flex:none">{{ pg.badge }}</div>
+<div style="flex:1; min-width:0"><div style="font-size:17px; font-weight:600">{{ pg.name }}</div><div style="font-size:12px; color:var(--ink2); margin-top:2px">{{ pg.cover }}</div></div>
+<span style="font-size:11px; font-weight:600; color:var(--ink2); background:var(--surface2); padding:4px 8px; border-radius:999px">{{ pg.kind }}</span>
+</div>
+<sc-for list="{{ pg.tiers }}" as="t" hint-placeholder-count="4">
+<div onClick="{{ t.open }}" style="display:grid; grid-template-columns:76px minmax(0,1fr) auto; align-items:center; gap:10px; padding:12px 18px; border-top:1px solid var(--line); cursor:pointer" style-active="background:var(--surface2)">
+<div style="font-size:22px; font-weight:700; letter-spacing:-0.03em; white-space:nowrap">{{ t.gb }}<span style="font-size:12px; font-weight:600; color:var(--ink2)"> GB</span></div>
+<div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap"><span style="font-size:13px; color:var(--ink2); white-space:nowrap">{{ t.days }} days</span><sc-if value="{{ t.best }}" hint-placeholder-val="{{ false }}"><span style="font-size:10px; font-weight:700; color:var(--accent-ink); background:var(--accent); padding:3px 7px; border-radius:999px; white-space:nowrap">Best €/GB</span></sc-if></div>
+<div style="text-align:right"><div style="font-size:17px; font-weight:700">{{ t.price }}</div><div style="font-size:11px; color:var(--ink2); margin-top:2px">{{ t.perGB }}/GB</div></div>
+</div>
+</sc-for>
+</div>
+</sc-for>
+<sc-if value="{{ ex.noTier }}" hint-placeholder-val="{{ false }}"><div style="padding:30px 0; text-align:center; font-size:15px; color:var(--ink2)">No plan with that much data.</div></sc-if>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- PACKAGE -->
+<sc-if value="{{ s.package }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Package detail" style="position:absolute; inset:0; overflow-y:auto; padding:54px 0 120px; box-sizing:border-box; animation:screenIn .32s cubic-bezier(.2,.8,.2,1)">
+<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 16px; height:52px; box-sizing:border-box">
+<button onClick="{{ back }}" style="width:40px; height:40px; border-radius:20px; border:none; background:var(--surface); color:var(--ink); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-s); cursor:pointer" style-active="transform:scale(.92)">{{ ic.chevL }}</button>
+<div style="font-size:16px; font-weight:600">Plan</div>
+<div style="width:40px"></div>
+</div>
+<div style="padding:8px 20px 0; display:flex; flex-direction:column; gap:12px">
+<div style="display:flex; flex-direction:column; align-items:center; gap:8px; padding:6px 0 10px">
+<div style="width:68px; height:68px; border-radius:22px; background:var(--surface); box-shadow:var(--shadow); color:var(--accent-text); display:flex; align-items:center; justify-content:center; font-size:38px">{{ pk.badgeL }}</div>
+<div style="font-size:30px; font-weight:700; letter-spacing:-0.03em">{{ pk.name }}</div>
+<div style="font-size:14px; color:var(--ink2)">{{ pk.cover }}</div>
+</div>
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); padding:20px; display:grid; grid-template-columns:1fr 1fr; row-gap:16px">
+<div><div style="display:flex; align-items:baseline; gap:4px"><span style="font-size:52px; font-weight:700; letter-spacing:-0.045em; line-height:1">{{ pk.gb }}</span><span style="font-size:17px; font-weight:600; color:var(--ink2)">GB</span></div><div style="font-size:13px; color:var(--ink2); margin-top:6px">Data</div></div>
+<div style="border-left:1px solid var(--line); padding-left:20px"><div style="display:flex; align-items:baseline; gap:4px"><span style="font-size:52px; font-weight:700; letter-spacing:-0.045em; line-height:1">{{ pk.days }}</span><span style="font-size:17px; font-weight:600; color:var(--ink2)">days</span></div><div style="font-size:13px; color:var(--ink2); margin-top:6px">Validity</div></div>
+<div style="grid-column:1 / -1; display:flex; justify-content:space-between; align-items:center; border-top:1px solid var(--line); padding-top:14px">
+<span style="font-size:24px; font-weight:700; letter-spacing:-0.02em">{{ pk.price }}</span>
+<span style="font-size:14px; font-weight:600; color:var(--ink2); white-space:nowrap">{{ pk.perGB }}/GB</span>
+</div>
+</div>
+<div style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:8px">
+<sc-for list="{{ pk.tiers }}" as="tt" hint-placeholder-count="5">
+<div onClick="{{ tt.onClick }}" style="border-radius:18px; padding:12px 0; text-align:center; cursor:pointer; background:{{ tt.bg }}; box-shadow:{{ tt.ring }}; transition:all .2s" style-active="transform:scale(.96)">
+<div style="font-size:18px; font-weight:700; letter-spacing:-0.02em">{{ tt.gb }} GB</div>
+<div style="font-size:12px; color:var(--ink2); margin-top:2px">{{ tt.days }}d · {{ tt.price }}</div>
+</div>
+</sc-for>
+</div>
+<div style="background:var(--accent-soft); border-radius:22px; padding:16px 18px; display:flex; align-items:center; gap:14px">
+<div style="color:var(--accent-text)">{{ ic.plane }}</div>
+<div><div style="font-size:15px; font-weight:600">Install before you fly</div><div style="font-size:13px; color:var(--ink2); margin-top:2px">Days start on first use abroad.</div></div>
+</div>
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); padding:18px 18px 6px">
+<div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px"><span style="font-size:16px; font-weight:600">Coverage</span><span style="font-size:13px; color:var(--ink2)">{{ pk.includes }}</span></div>
+<sc-if value="{{ pk.hasMap }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex; justify-content:center">{{ pk.map }}</div>
+<div style="display:flex; gap:16px; justify-content:center; margin:12px 0 8px; font-size:12px; color:var(--ink2)">
+<span style="display:flex; align-items:center; gap:6px"><span style="width:10px; height:10px; border-radius:3px; background:var(--accent)"></span>Covered</span>
+<span style="display:flex; align-items:center; gap:6px"><span style="width:10px; height:10px; border-radius:3px; background:var(--ink)"></span>Your trip</span>
+</div>
+</sc-if>
+<sc-for list="{{ pk.countries }}" as="cn" hint-placeholder-count="6">
+<div style="display:flex; align-items:center; gap:12px; padding:12px 0; border-top:1px solid var(--line)">
+<span style="font-size:22px; line-height:1">{{ cn.flag }}</span>
+<div style="flex:1; min-width:0"><div style="font-size:15px; font-weight:{{ cn.w }}">{{ cn.name }}</div><div style="font-size:12px; color:var(--ink2); margin-top:2px; display:flex; align-items:center; gap:6px">{{ icXS.signal }}{{ cn.nets }}</div></div>
+</div>
+</sc-for>
+<sc-if value="{{ pk.hasMore }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ pk.toggleAll }}" style="width:100%; border:none; border-top:1px solid var(--line); background:none; font:inherit; font-size:14px; font-weight:600; color:var(--accent-text); padding:14px 0; cursor:pointer">{{ pk.moreLabel }}</button>
+</sc-if>
+</div>
+</div>
+</div>
+<div style="position:absolute; left:0; right:0; bottom:0; padding:12px 20px 34px; background:var(--bg); z-index:5">
+<button onClick="{{ pk.choose }}" style="width:100%; height:56px; border:none; border-radius:18px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:16px; font-weight:600; cursor:pointer; transition:transform .12s" style-active="transform:scale(.97)">Continue · {{ pk.price }}</button>
+</div>
+</sc-if>
+
+<!-- CHECKOUT -->
+<sc-if value="{{ s.checkout }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Checkout" style="position:absolute; inset:0; overflow-y:auto; padding:54px 0 130px; box-sizing:border-box; animation:screenIn .32s cubic-bezier(.2,.8,.2,1)">
+<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 16px; height:52px; box-sizing:border-box">
+<button onClick="{{ back }}" style="width:40px; height:40px; border-radius:20px; border:none; background:var(--surface); color:var(--ink); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-s); cursor:pointer" style-active="transform:scale(.92)">{{ ic.chevL }}</button>
+<div style="font-size:16px; font-weight:600">Checkout</div>
+<div style="width:40px"></div>
+</div>
+<div style="padding:8px 20px 0; display:flex; flex-direction:column; gap:12px">
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); padding:16px 18px; display:flex; align-items:center; gap:12px">
+<div style="width:44px; height:44px; border-radius:14px; background:var(--surface2); color:var(--accent-text); display:flex; align-items:center; justify-content:center; font-size:24px">{{ co.badge }}</div>
+<div style="flex:1"><div style="font-size:16px; font-weight:600">{{ co.name }}</div><div style="font-size:13px; color:var(--ink2); margin-top:2px">{{ co.meta }}</div></div>
+<div style="font-size:17px; font-weight:600">{{ co.unit }}</div>
+</div>
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); padding:16px 18px; display:flex; align-items:center; justify-content:space-between">
+<div style="font-size:16px; font-weight:600">eSIMs</div>
+<div style="display:flex; align-items:center; gap:4px; background:var(--surface2); border-radius:16px; padding:4px">
+<button onClick="{{ co.dec }}" style="width:40px; height:40px; border-radius:12px; border:none; background:var(--surface); color:{{ co.decColor }}; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:var(--shadow-s); transition:transform .1s" style-active="transform:scale(.88)">{{ ic.minus }}</button>
+<div style="width:44px; text-align:center; font-size:24px; font-weight:700; font-variant-numeric:tabular-nums">{{ co.qty }}</div>
+<button onClick="{{ co.inc }}" style="width:40px; height:40px; border-radius:12px; border:none; background:var(--surface); color:{{ co.incColor }}; display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:var(--shadow-s); transition:transform .1s" style-active="transform:scale(.88)">{{ ic.plus }}</button>
+</div>
+</div>
+<div style="font-size:13px; font-weight:600; color:var(--ink2); padding:10px 4px 0">Who's it for?</div>
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); overflow:hidden">
+<sc-for list="{{ co.rows }}" as="or" hint-placeholder-count="1">
+<div onClick="{{ or.onClick }}" style="display:flex; align-items:center; gap:12px; padding:14px 18px; border-top:{{ or.border }}; cursor:pointer; animation:fadeIn .25s" style-active="background:var(--surface2)">
+<div style="font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink3); width:18px">{{ or.n }}</div>
+<div style="width:36px; height:36px; border-radius:18px; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600">{{ or.i }}</div>
+<div style="flex:1; font-size:16px; font-weight:500">{{ or.label }}</div>
+<span style="font-size:13px; color:var(--accent-text); font-weight:600">Change</span>
+</div>
+</sc-for>
+</div>
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); padding:16px 18px; display:flex; align-items:center; gap:12px; margin-top:8px">
+<div style="color:var(--ink2)">{{ ic.card }}</div>
+<div style="flex:1; font-size:15px; font-weight:500">Card <span style="font-family:'IBM Plex Mono', monospace">···· 4242</span></div>
+<span style="font-size:11px; font-weight:600; color:var(--ink2); background:var(--surface2); padding:4px 8px; border-radius:999px">Test</span>
+</div>
+<div style="display:flex; justify-content:space-between; align-items:baseline; padding:10px 4px 0">
+<span style="font-size:15px; color:var(--ink2)">Total</span>
+<span style="font-size:30px; font-weight:700; letter-spacing:-0.03em">{{ co.total }}</span>
+</div>
+</div>
+</div>
+<div style="position:absolute; left:0; right:0; bottom:0; padding:12px 20px 34px; background:var(--bg); z-index:5">
+<sc-if value="{{ co.canPay }}" hint-placeholder-val="{{ true }}">
+<button onClick="{{ co.pay }}" style="width:100%; height:56px; border:none; border-radius:18px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:16px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; transition:transform .12s" style-active="transform:scale(.97)">{{ icS.lock }} Pay {{ co.total }}</button>
+</sc-if>
+<sc-if value="{{ offline }}" hint-placeholder-val="{{ false }}">
+<button style="width:100%; height:56px; border:none; border-radius:18px; background:var(--surface2); color:var(--ink2); font:inherit; font-size:16px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:8px">{{ icS.wifiOff }} Connect to pay</button>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- PAY -->
+<sc-if value="{{ s.pay }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Payment" style="position:absolute; inset:0; padding:54px 24px 40px; box-sizing:border-box; display:flex; flex-direction:column">
+<div style="height:52px; display:flex; align-items:center">
+<sc-if value="{{ pay.canClose }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ pay.toCheckout }}" style="width:40px; height:40px; border-radius:20px; border:none; background:var(--surface); color:var(--ink); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-s); cursor:pointer" style-active="transform:scale(.92)">{{ ic.close }}</button>
+</sc-if>
+</div>
+
+<sc-if value="{{ pay.loading }}" hint-placeholder-val="{{ true }}">
+<div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:28px; animation:fadeIn .4s">
+<div style="position:relative; width:108px; height:108px">
+<div style="position:absolute; inset:0; border-radius:50%; background:var(--accent-soft); animation:breathe 2.6s ease-in-out infinite"></div>
+<div style="position:absolute; inset:32px; border-radius:50%; background:var(--accent); animation:breathe 2.6s ease-in-out infinite .35s"></div>
+</div>
+<div style="text-align:center"><div style="font-size:22px; font-weight:600; letter-spacing:-0.02em">{{ pay.loadLabel }}</div><div style="font-size:15px; color:var(--ink2); margin-top:6px">{{ pay.amount }} · Keep the app open</div></div>
+</div>
+</sc-if>
+
+<sc-if value="{{ pay.succeeded }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:22px">
+<div style="width:96px; height:96px; border-radius:48px; background:var(--st-use-bg); color:var(--st-use-fg); display:flex; align-items:center; justify-content:center; animation:pop .55s cubic-bezier(.2,.9,.3,1)">{{ icXL.check }}</div>
+<div style="text-align:center"><div style="font-size:26px; font-weight:700; letter-spacing:-0.03em">Payment confirmed</div><div style="font-size:15px; color:var(--ink2); margin-top:6px">{{ pay.amount }} · <span style="font-family:'IBM Plex Mono', monospace">{{ pay.order }}</span></div></div>
+<div style="display:flex; align-items:center; gap:8px; font-size:14px; color:var(--ink2)"><span style="width:14px; height:14px; border-radius:7px; border:2px solid var(--line); border-top-color:var(--accent); animation:spin .9s linear infinite"></span>Delivering eSIMs</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ pay.pending }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1; display:flex; flex-direction:column; justify-content:center; gap:14px; animation:screenIn .35s ease">
+<div style="background:var(--surface); border-radius:28px; box-shadow:var(--shadow); padding:26px 22px; display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center">
+<div style="width:72px; height:72px; border-radius:36px; background:var(--accent-soft); color:var(--accent-text); display:flex; align-items:center; justify-content:center">{{ icL.clock }}</div>
+<div style="font-size:24px; font-weight:700; letter-spacing:-0.03em; line-height:1.15">Payment received,<br>preparing your eSIMs</div>
+<div style="display:flex; gap:6px"><span style="width:8px; height:8px; border-radius:4px; background:var(--accent); animation:dots 1.2s infinite"></span><span style="width:8px; height:8px; border-radius:4px; background:var(--accent); animation:dots 1.2s infinite .2s"></span><span style="width:8px; height:8px; border-radius:4px; background:var(--accent); animation:dots 1.2s infinite .4s"></span></div>
+<div style="font-size:14px; color:var(--ink2)">Taking longer than usual. Paid once.</div>
+<div style="font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink2)">{{ pay.order }}</div>
+</div>
+<div style="flex:1"></div>
+<button onClick="{{ pay.checkAgain }}" style="height:56px; border:none; border-radius:18px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:16px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; transition:transform .12s" style-active="transform:scale(.97)">{{ ic.refresh }} Check again</button>
+<button onClick="{{ pay.notify }}" style="height:56px; border:none; border-radius:18px; background:var(--surface2); color:var(--ink); font:inherit; font-size:16px; font-weight:600; cursor:pointer; transition:transform .12s" style-active="transform:scale(.97)">Notify me when ready</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ pay.delivered }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1; display:flex; flex-direction:column; gap:14px; animation:screenIn .35s ease">
+<div style="display:flex; flex-direction:column; gap:6px; padding:10px 0 6px">
+<div style="width:56px; height:56px; border-radius:18px; background:var(--st-use-bg); color:var(--st-use-fg); display:flex; align-items:center; justify-content:center; animation:pop .5s ease">{{ icL.check }}</div>
+<div style="font-size:30px; font-weight:700; letter-spacing:-0.03em; margin-top:10px">eSIMs ready</div>
+<div style="font-size:15px; color:var(--ink2)">{{ pay.amount }} paid · <span style="font-family:'IBM Plex Mono', monospace">{{ pay.order }}</span></div>
+</div>
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); overflow:hidden">
+<sc-for list="{{ pay.list }}" as="dl" hint-placeholder-count="3">
+<div style="display:flex; align-items:center; gap:12px; padding:14px 18px; border-top:{{ dl.border }}">
+<div style="width:38px; height:38px; border-radius:19px; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600">{{ dl.i }}</div>
+<div style="flex:1"><div style="font-size:16px; font-weight:600">{{ dl.owner }}</div><div style="font-size:12px; color:var(--ink2); margin-top:2px">{{ dl.plan }}</div></div>
+{{ dl.chip }}
+</div>
+</sc-for>
+</div>
+<div style="flex:1"></div>
+<button onClick="{{ pay.installMine }}" style="height:56px; border:none; border-radius:18px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:16px; font-weight:600; cursor:pointer; transition:transform .12s" style-active="transform:scale(.97)">Install mine</button>
+<button onClick="{{ pay.goSims }}" style="height:56px; border:none; border-radius:18px; background:var(--surface2); color:var(--ink); font:inherit; font-size:16px; font-weight:600; cursor:pointer; transition:transform .12s" style-active="transform:scale(.97)">Go to My eSIMs</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ pay.failed }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1; display:flex; flex-direction:column; gap:14px; animation:screenIn .35s ease">
+<div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; text-align:center">
+<div style="width:88px; height:88px; border-radius:44px; background:var(--st-exp-bg); color:var(--st-exp-fg); display:flex; align-items:center; justify-content:center; animation:pop .5s ease">{{ icXL.close }}</div>
+<div style="font-size:26px; font-weight:700; letter-spacing:-0.03em">Payment failed</div>
+<div style="font-size:16px; color:var(--ink2)">You weren't charged.</div>
+<div style="display:flex; align-items:center; gap:8px; background:var(--surface); box-shadow:var(--shadow-s); border-radius:14px; padding:10px 14px; font-size:13px; color:var(--ink2)">{{ icS.info }} Same order. No double charge.</div>
+</div>
+<button onClick="{{ pay.retry }}" style="height:56px; border:none; border-radius:18px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:16px; font-weight:600; cursor:pointer; transition:transform .12s" style-active="transform:scale(.97)">Retry {{ pay.amount }}</button>
+<button onClick="{{ pay.toCheckout }}" style="height:56px; border:none; border-radius:18px; background:var(--surface2); color:var(--ink); font:inherit; font-size:16px; font-weight:600; cursor:pointer" style-active="transform:scale(.97)">Change card</button>
+</div>
+</sc-if>
+
+<sc-if value="{{ pay.cancelled }}" hint-placeholder-val="{{ false }}">
+<div style="flex:1; display:flex; flex-direction:column; gap:14px; animation:screenIn .35s ease">
+<div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:16px; text-align:center">
+<div style="width:88px; height:88px; border-radius:44px; background:var(--st-ni-bg); color:var(--st-ni-fg); display:flex; align-items:center; justify-content:center; animation:pop .5s ease">{{ icL.lock }}</div>
+<div style="font-size:26px; font-weight:700; letter-spacing:-0.03em">Verification cancelled</div>
+<div style="font-size:16px; color:var(--ink2)">No charge made.</div>
+</div>
+<button onClick="{{ pay.retry }}" style="height:56px; border:none; border-radius:18px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:16px; font-weight:600; cursor:pointer; transition:transform .12s" style-active="transform:scale(.97)">Verify again</button>
+<button onClick="{{ pay.toCheckout }}" style="height:56px; border:none; border-radius:18px; background:var(--surface2); color:var(--ink); font:inherit; font-size:16px; font-weight:600; cursor:pointer" style-active="transform:scale(.97)">Back to checkout</button>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- MY ESIMS -->
+<sc-if value="{{ s.sims }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="My eSIMs" style="position:absolute; inset:0; overflow-y:auto; padding:54px 0 110px; box-sizing:border-box; animation:screenIn .32s cubic-bezier(.2,.8,.2,1)">
+<div style="padding:10px 20px 0; display:flex; align-items:flex-end; justify-content:space-between; height:86px; box-sizing:border-box">
+<div style="font-size:36px; font-weight:700; letter-spacing:-0.035em; line-height:1">My eSIMs</div>
+<sc-if value="{{ sims.hasCount }}" hint-placeholder-val="{{ false }}"><div style="font-size:14px; font-weight:600; color:var(--ink2); padding-bottom:4px">{{ sims.count }}</div></sc-if>
+</div>
+<sc-if value="{{ sims.loading }}" hint-placeholder-val="{{ false }}">
+<div style="padding:24px 20px 0; display:flex; flex-direction:column; gap:12px">
+<div style="height:16px; width:120px; border-radius:8px; background:var(--surface2); animation:shimmer 1.3s ease-in-out infinite"></div>
+<div style="height:96px; border-radius:26px; background:var(--surface); box-shadow:var(--shadow); display:flex; align-items:center; gap:14px; padding:0 18px; animation:shimmer 1.3s ease-in-out infinite"><div style="width:40px; height:40px; border-radius:20px; background:var(--surface2)"></div><div style="flex:1; display:flex; flex-direction:column; gap:8px"><div style="height:12px; width:60%; border-radius:6px; background:var(--surface2)"></div><div style="height:10px; width:40%; border-radius:5px; background:var(--surface2)"></div></div><div style="width:52px; height:52px; border-radius:26px; border:5px solid var(--surface2); box-sizing:border-box"></div></div>
+<div style="height:96px; border-radius:26px; background:var(--surface); box-shadow:var(--shadow); animation:shimmer 1.3s ease-in-out infinite .15s"></div>
+<div style="height:16px; width:100px; border-radius:8px; background:var(--surface2); margin-top:12px; animation:shimmer 1.3s ease-in-out infinite .2s"></div>
+<div style="height:96px; border-radius:26px; background:var(--surface); box-shadow:var(--shadow); animation:shimmer 1.3s ease-in-out infinite .3s"></div>
+</div>
+</sc-if>
+<sc-if value="{{ sims.empty }}" hint-placeholder-val="{{ false }}">
+<div style="padding:120px 32px 0; display:flex; flex-direction:column; align-items:center; gap:18px; text-align:center; animation:fadeIn .4s">
+<div style="width:80px; height:80px; border-radius:26px; background:var(--surface); box-shadow:var(--shadow); color:var(--ink3); display:flex; align-items:center; justify-content:center">{{ icL.sim }}</div>
+<div style="font-size:16px; color:var(--ink2)">No eSIMs yet. Find your first plan.</div>
+<button onClick="{{ sims.findPlan }}" style="height:48px; padding:0 22px; border:none; border-radius:16px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:15px; font-weight:600; cursor:pointer" style-active="transform:scale(.96)">Explore plans</button>
+</div>
+</sc-if>
+<sc-if value="{{ sims.show }}" hint-placeholder-val="{{ false }}">
+<div style="padding:8px 20px 0; display:flex; flex-direction:column; gap:22px">
+<sc-for list="{{ sims.groups }}" as="g" hint-placeholder-count="3">
+<div style="display:flex; flex-direction:column; gap:10px">
+<div style="display:flex; align-items:center; gap:8px; padding:0 4px">
+<span style="font-size:18px">{{ g.flag }}</span>
+<span style="font-size:15px; font-weight:600">{{ g.name }}</span>
+<span style="font-size:13px; color:var(--ink2); white-space:nowrap; flex:none">· {{ g.when }}</span>
+</div>
+<sc-for list="{{ g.items }}" as="it" hint-placeholder-count="2">
+<div onClick="{{ it.onClick }}" style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); padding:16px 16px 16px 18px; display:flex; align-items:center; gap:14px; cursor:pointer; transition:transform .15s; opacity:{{ it.op }}" style-active="transform:scale(.98)">
+<div style="width:42px; height:42px; border-radius:21px; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:600; flex:none">{{ it.i }}</div>
+<div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:6px">
+<div style="font-size:17px; font-weight:600; letter-spacing:-0.01em">{{ it.owner }}</div>
+<div style="font-size:12px; color:var(--ink2)">{{ it.plan }}</div>
+<div style="display:flex; align-items:center; gap:8px; flex-wrap:wrap">{{ it.chip }}<span style="font-size:12px; color:var(--ink2)">{{ it.sub }}</span></div>
+</div>
+{{ it.ring }}
+</div>
+</sc-for>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- DETAIL -->
+<sc-if value="{{ s.detail }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="eSIM detail" style="position:absolute; inset:0; overflow-y:auto; padding:54px 0 130px; box-sizing:border-box; animation:screenIn .32s cubic-bezier(.2,.8,.2,1)">
+<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 16px; height:52px; box-sizing:border-box">
+<button onClick="{{ back }}" style="width:40px; height:40px; border-radius:20px; border:none; background:var(--surface); color:var(--ink); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-s); cursor:pointer" style-active="transform:scale(.92)">{{ ic.chevL }}</button>
+<div style="font-size:16px; font-weight:600">{{ d.owner }}</div>
+<div style="width:40px"></div>
+</div>
+<div style="padding:8px 20px 0; display:flex; flex-direction:column; gap:12px">
+<div style="background:var(--surface); border-radius:28px; box-shadow:var(--shadow); padding:20px; display:flex; flex-direction:column; align-items:center; gap:18px">
+<div style="width:100%; display:flex; align-items:center; justify-content:space-between">
+<div style="display:flex; align-items:center; gap:10px"><span style="font-size:26px; line-height:1">{{ d.flag }}</span><div><div style="font-size:16px; font-weight:600">{{ d.trip }}</div><div style="font-size:12px; color:var(--ink2); margin-top:2px">{{ d.plan }}</div></div></div>
+{{ d.chip }}
+</div>
+{{ d.ring }}
+<div style="width:100%; display:grid; grid-template-columns:1fr 1fr; text-align:center; border-top:1px solid var(--line); padding-top:14px">
+<div><div style="font-size:20px; font-weight:700">{{ d.used }} <span style="font-size:13px; font-weight:600; color:var(--ink2)">GB</span></div><div style="font-size:12px; color:var(--ink2); margin-top:2px">Used</div></div>
+<div style="border-left:1px solid var(--line)"><div style="font-size:20px; font-weight:700">{{ d.total }} <span style="font-size:13px; font-weight:600; color:var(--ink2)">GB</span></div><div style="font-size:12px; color:var(--ink2); margin-top:2px">Total</div></div>
+</div>
+</div>
+<sc-if value="{{ d.isLow }}" hint-placeholder-val="{{ false }}">
+<div style="background:var(--st-low-bg); color:var(--st-low-fg); border-radius:22px; padding:16px 18px; display:flex; align-items:center; gap:12px; animation:fadeIn .3s">
+{{ ic.alert }}<div style="flex:1"><div style="font-size:15px; font-weight:700">Running low</div><div style="font-size:13px; margin-top:2px">{{ d.remain }} GB left · {{ d.daysBig }} days to go</div></div>
+</div>
+</sc-if>
+<sc-if value="{{ d.isExpired }}" hint-placeholder-val="{{ false }}">
+<div style="background:var(--st-exp-bg); color:var(--st-exp-fg); border-radius:22px; padding:16px 18px; display:flex; align-items:center; gap:12px">
+{{ ic.clock }}<div style="flex:1"><div style="font-size:15px; font-weight:700">This eSIM has ended</div><div style="font-size:13px; margin-top:2px">It can't be reused or topped up.</div></div>
+</div>
+</sc-if>
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); padding:18px 20px">
+<div style="display:flex; align-items:flex-end; justify-content:space-between">
+<div><div style="font-size:13px; color:var(--ink2)">Validity</div><div style="display:flex; align-items:baseline; gap:6px; margin-top:4px"><span style="font-size:48px; font-weight:700; letter-spacing:-0.045em; line-height:1; font-variant-numeric:tabular-nums">{{ d.daysBig }}</span><span style="font-size:17px; font-weight:600; color:var(--ink2)">days</span></div></div>
+<div style="font-family:'IBM Plex Mono', monospace; font-size:14px; font-weight:500; color:var(--ink2); padding-bottom:6px">{{ d.daysSmall }}</div>
+</div>
+<div style="height:6px; border-radius:3px; background:var(--track); margin-top:14px; overflow:hidden"><div style="height:100%; width:{{ d.timePct }}%; background:{{ d.timeColor }}; border-radius:3px; transition:width 1s ease"></div></div>
+<div style="font-size:12px; color:var(--ink2); margin-top:8px">{{ d.ends }}</div>
+</div>
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); overflow:hidden">
+<div style="display:flex; align-items:center; gap:12px; padding:15px 18px"><span style="color:var(--ink2)">{{ ic.user }}</span><span style="flex:1; font-size:15px; color:var(--ink2)">Owner</span><span style="font-size:15px; font-weight:600">{{ d.owner }}</span></div>
+<div style="display:flex; align-items:center; gap:12px; padding:15px 18px; border-top:1px solid var(--line)"><span style="color:var(--ink2)">{{ ic.phone }}</span><span style="flex:1; font-size:15px; color:var(--ink2)">Phone</span><span style="font-size:15px; font-weight:600">{{ d.device }}</span></div>
+<sc-if value="{{ d.hasLast }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex; align-items:center; gap:12px; padding:15px 18px; border-top:1px solid var(--line)"><span style="color:var(--ink2)">{{ ic.clock }}</span><div style="flex:1"><div style="font-size:15px; color:var(--ink2)">Last used</div><div style="font-size:11px; color:var(--ink3); margin-top:2px">From provider</div></div><span style="font-size:15px; font-weight:600">{{ d.last }}</span></div>
+</sc-if>
+<div onClick="{{ d.openCoverage }}" style="display:flex; align-items:center; gap:12px; padding:15px 18px; border-top:1px solid var(--line); cursor:pointer"><span style="color:var(--ink2)">{{ ic.globe }}</span><span style="flex:1; font-size:15px; color:var(--ink2)">Coverage</span><span style="font-size:15px; font-weight:600">{{ d.coverage }}</span><span style="color:var(--ink3)">{{ icS.chevR }}</span></div>
+<div style="display:flex; align-items:center; gap:12px; padding:15px 18px; border-top:1px solid var(--line)"><span style="color:var(--ink2)">{{ ic.sim }}</span><span style="flex:1; font-size:15px; color:var(--ink2)">ICCID</span><span style="font-family:'IBM Plex Mono', monospace; font-size:12px">{{ d.iccid }}</span><button onClick="{{ d.copyIccid }}" style="border:none; background:none; color:var(--accent-text); padding:2px; cursor:pointer; display:flex">{{ icS.copy }}</button></div>
+</div>
+</div>
+</div>
+<div style="position:absolute; left:0; right:0; bottom:0; padding:12px 20px 34px; background:var(--bg); z-index:5">
+<sc-if value="{{ d.ctaPrimary }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ d.cta }}" style="width:100%; height:56px; border:none; border-radius:18px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:16px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; transition:transform .12s" style-active="transform:scale(.97)">{{ d.ctaIcon }} {{ d.ctaLabel }}</button>
+</sc-if>
+<sc-if value="{{ d.ctaSecondary }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ d.cta }}" style="width:100%; height:56px; border:none; border-radius:18px; background:var(--surface2); color:var(--ink); font:inherit; font-size:16px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; transition:transform .12s" style-active="transform:scale(.97)">{{ d.ctaIcon }} {{ d.ctaLabel }}</button>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- INSTALL -->
+<sc-if value="{{ s.install }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Install" style="position:absolute; inset:0; overflow-y:auto; padding:54px 0 130px; box-sizing:border-box; animation:screenIn .32s cubic-bezier(.2,.8,.2,1)">
+<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 16px; height:52px; box-sizing:border-box">
+<button onClick="{{ back }}" style="width:40px; height:40px; border-radius:20px; border:none; background:var(--surface); color:var(--ink); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-s); cursor:pointer" style-active="transform:scale(.92)">{{ ic.chevL }}</button>
+<div style="font-size:16px; font-weight:600">Install</div>
+<div style="width:40px"></div>
+</div>
+<div style="padding:8px 20px 0; display:flex; flex-direction:column; gap:12px">
+<div style="display:flex; align-items:center; gap:12px; padding:0 4px">
+<span style="font-size:24px">{{ ins.flag }}</span>
+<div style="flex:1"><div style="font-size:16px; font-weight:600">{{ ins.owner }}</div><div style="font-size:12px; color:var(--ink2); margin-top:2px">{{ ins.plan }}</div></div>
+{{ ins.chip }}
+</div>
+<div style="background:var(--accent-soft); color:var(--accent-text); border-radius:18px; padding:12px 16px; display:flex; align-items:center; gap:10px; font-size:14px; font-weight:600">{{ ic.wifi }} Use Wi-Fi to install</div>
+<div style="display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:4px; background:var(--surface2); border-radius:16px; padding:4px">
+<sc-for list="{{ ins.modes }}" as="md" hint-placeholder-count="3">
+<button onClick="{{ md.onClick }}" style="height:40px; border:none; border-radius:12px; font:inherit; font-size:13px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:6px; cursor:pointer; background:{{ md.bg }}; color:{{ md.fg }}; box-shadow:{{ md.sh }}; transition:all .2s">{{ md.icon }}{{ md.label }}</button>
+</sc-for>
+</div>
+<sc-if value="{{ ins.onetap }}" hint-placeholder-val="{{ true }}">
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); padding:28px 20px; display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center; animation:fadeIn .25s">
+<div style="width:72px; height:72px; border-radius:24px; background:var(--accent); color:var(--accent-ink); display:flex; align-items:center; justify-content:center">{{ icL.bolt }}</div>
+<div style="font-size:20px; font-weight:700; letter-spacing:-0.02em">Install on this iPhone</div>
+<div style="font-size:14px; color:var(--ink2)">About a minute. Stay on Wi-Fi.</div>
+</div>
+</sc-if>
+<sc-if value="{{ ins.qr }}" hint-placeholder-val="{{ false }}">
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); padding:22px 20px; display:flex; flex-direction:column; align-items:center; gap:14px; animation:fadeIn .25s">
+<div style="background:#FFFFFF; padding:14px; border-radius:20px; box-shadow:0 0 0 1px var(--line)">{{ ins.qrEl }}</div>
+<div style="font-size:15px; font-weight:600">Scan from a second screen</div>
+<div style="font-size:13px; color:var(--ink2)">Settings › Cellular › Add eSIM › QR</div>
+</div>
+</sc-if>
+<sc-if value="{{ ins.manual }}" hint-placeholder-val="{{ false }}">
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); overflow:hidden; animation:fadeIn .25s">
+<div style="padding:16px 18px">
+<div style="font-size:12px; color:var(--ink2)">SM-DP+ address</div>
+<div style="display:flex; align-items:center; gap:10px; margin-top:6px"><div style="flex:1; font-family:'IBM Plex Mono', monospace; font-size:16px; font-weight:500">smdp.example</div><button onClick="{{ ins.copyAddr }}" style="height:34px; padding:0 12px; border:none; border-radius:11px; background:var(--accent-soft); color:var(--accent-text); font:inherit; font-size:13px; font-weight:600; display:flex; align-items:center; gap:6px; cursor:pointer" style-active="transform:scale(.94)">{{ icS.copy }} Copy</button></div>
+</div>
+<div style="padding:16px 18px; border-top:1px solid var(--line)">
+<div style="font-size:12px; color:var(--ink2)">Activation code</div>
+<div style="display:flex; align-items:center; gap:10px; margin-top:6px"><div style="flex:1; font-family:'IBM Plex Mono', monospace; font-size:16px; font-weight:500">{{ ins.code }}</div><button onClick="{{ ins.copyCode }}" style="height:34px; padding:0 12px; border:none; border-radius:11px; background:var(--accent-soft); color:var(--accent-text); font:inherit; font-size:13px; font-weight:600; display:flex; align-items:center; gap:6px; cursor:pointer" style-active="transform:scale(.94)">{{ icS.copy }} Copy</button></div>
+</div>
+<div style="padding:12px 18px; border-top:1px solid var(--line); background:var(--bg); font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink2); word-break:break-all">{{ ins.lpa }}</div>
+<div style="padding:12px 18px; border-top:1px solid var(--line); font-size:13px; color:var(--ink2)">Settings › Cellular › Add eSIM › Enter manually</div>
+</div>
+</sc-if>
+<div style="border:1.5px solid var(--st-low-bg); background:var(--surface); border-radius:20px; padding:14px 16px; display:flex; align-items:center; gap:12px">
+<span style="color:var(--st-low-fg)">{{ ic.alert }}</span>
+<div><div style="font-size:15px; font-weight:700">Install once. Don't delete it.</div><div style="font-size:13px; color:var(--ink2); margin-top:2px">Deleted eSIMs can't be restored.</div></div>
+</div>
+</div>
+</div>
+<div style="position:absolute; left:0; right:0; bottom:0; padding:12px 20px 34px; background:var(--bg); z-index:5">
+<sc-if value="{{ ins.idle }}" hint-placeholder-val="{{ true }}">
+<button onClick="{{ ins.go }}" style="width:100%; height:56px; border:none; border-radius:18px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:16px; font-weight:600; cursor:pointer; transition:transform .12s" style-active="transform:scale(.97)">{{ ins.goLabel }}</button>
+</sc-if>
+<sc-if value="{{ ins.busy }}" hint-placeholder-val="{{ false }}">
+<button style="width:100%; height:56px; border:none; border-radius:18px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:16px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:10px; opacity:.85"><span style="width:16px; height:16px; border-radius:8px; border:2px solid rgba(0,0,0,.18); border-top-color:var(--accent-ink); animation:spin .8s linear infinite"></span>Installing</button>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- INSTALL RESULT -->
+<sc-if value="{{ s.result }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Install result" style="position:absolute; inset:0; overflow-y:auto; padding:54px 20px 40px; box-sizing:border-box; display:flex; flex-direction:column; gap:14px">
+<div style="height:52px; display:flex; align-items:center">
+<button onClick="{{ res.close }}" style="width:40px; height:40px; border-radius:20px; border:none; background:var(--surface); color:var(--ink); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-s); cursor:pointer" style-active="transform:scale(.92)">{{ ic.close }}</button>
+</div>
+<div style="background:var(--surface); border-radius:30px; box-shadow:var(--shadow); padding:26px 22px 20px; display:flex; flex-direction:column; gap:18px; animation:screenIn .4s cubic-bezier(.2,.8,.2,1)">
+<div style="display:flex; align-items:center; gap:14px">
+<div style="width:60px; height:60px; border-radius:30px; background:{{ res.iconBg }}; color:{{ res.iconFg }}; display:flex; align-items:center; justify-content:center; flex:none; animation:pop .5s ease">{{ res.icon }}</div>
+<div><div style="font-size:24px; font-weight:700; letter-spacing:-0.03em; line-height:1.1">{{ res.title }}</div><div style="font-size:13px; color:var(--ink2); margin-top:4px">{{ res.sub }}</div></div>
+</div>
+<sc-if value="{{ res.ok }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex; flex-direction:column; gap:12px">
+<div style="font-size:13px; font-weight:600; color:var(--ink2); display:flex; align-items:center; gap:6px">{{ icS.plane }} On arrival</div>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:10px">
+<div style="background:var(--bg); border-radius:20px; padding:12px; display:flex; flex-direction:column; gap:10px">
+<div style="background:var(--surface); border-radius:12px; padding:8px 10px; box-shadow:var(--shadow-s); display:flex; flex-direction:column; gap:6px">
+<div style="font-size:10px; color:var(--ink2)">Cellular Data</div>
+<div style="display:flex; align-items:center; justify-content:space-between; font-size:12px; font-weight:600"><span>Tavi</span><span style="color:var(--accent-text)">{{ icXS.check }}</span></div>
+<div style="height:1px; background:var(--line)"></div>
+<div style="font-size:12px; color:var(--ink3)">Home</div>
+</div>
+<div style="display:flex; gap:6px; align-items:flex-start"><span style="font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--accent-text); font-weight:600">1</span><span style="font-size:13px; font-weight:600; line-height:1.25">Set this line for data</span></div>
+</div>
+<div style="background:var(--bg); border-radius:20px; padding:12px; display:flex; flex-direction:column; gap:10px">
+<div style="background:var(--surface); border-radius:12px; padding:8px 10px; box-shadow:var(--shadow-s); display:flex; flex-direction:column; gap:6px">
+<div style="font-size:10px; color:var(--ink2)">Tavi</div>
+<div style="display:flex; align-items:center; justify-content:space-between; font-size:12px; font-weight:600"><span>Data Roaming</span><span style="width:26px; height:16px; border-radius:8px; background:var(--st-use-fg); position:relative; display:block"><span style="position:absolute; right:2px; top:2px; width:12px; height:12px; border-radius:6px; background:#fff"></span></span></div>
+<div style="height:1px; background:var(--line)"></div>
+<div style="font-size:12px; color:var(--ink3)">Voice &amp; Data</div>
+</div>
+<div style="display:flex; gap:6px; align-items:flex-start"><span style="font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--accent-text); font-weight:600">2</span><span style="font-size:13px; font-weight:600; line-height:1.25">Turn on roaming</span></div>
+</div>
+</div>
+<div style="font-size:12px; color:var(--ink2); display:flex; align-items:center; gap:6px">{{ icXS.info }} Settings › Cellular. We can't switch it for you.</div>
+</div>
+</sc-if>
+<sc-if value="{{ res.err }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex; flex-direction:column; background:var(--bg); border-radius:20px; overflow:hidden">
+<div style="display:flex; gap:12px; padding:14px 16px"><span style="color:var(--ink2)">{{ icS.info }}</span><div><div style="font-size:11px; font-weight:600; color:var(--ink2); text-transform:uppercase; letter-spacing:.06em">What it means</div><div style="font-size:15px; font-weight:500; margin-top:3px">{{ res.means }}</div></div></div>
+<div style="display:flex; gap:12px; padding:14px 16px; border-top:1px solid var(--line)"><span style="color:var(--accent-text)">{{ icS.arrowR }}</span><div><div style="font-size:11px; font-weight:600; color:var(--ink2); text-transform:uppercase; letter-spacing:.06em">What to do</div><div style="font-size:15px; font-weight:500; margin-top:3px">{{ res.next }}</div></div></div>
+</div>
+</sc-if>
+<button onClick="{{ res.primary }}" style="height:54px; border:none; border-radius:18px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:16px; font-weight:600; cursor:pointer; transition:transform .12s" style-active="transform:scale(.97)">{{ res.primaryLabel }}</button>
+<sc-if value="{{ res.hasSecondary }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ res.secondary }}" style="height:50px; margin-top:-8px; border:none; border-radius:18px; background:var(--surface2); color:var(--ink); font:inherit; font-size:15px; font-weight:600; cursor:pointer" style-active="transform:scale(.97)">{{ res.secondaryLabel }}</button>
+</sc-if>
+<div style="text-align:center; font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink3)">Ref #{{ res.ref }}</div>
+</div>
+</div>
+</sc-if>
+
+<!-- SHARE -->
+<sc-if value="{{ s.share }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Share eSIM" style="position:absolute; inset:0; overflow-y:auto; padding:54px 0 130px; box-sizing:border-box; animation:screenIn .32s cubic-bezier(.2,.8,.2,1)">
+<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 16px; height:52px; box-sizing:border-box">
+<button onClick="{{ back }}" style="width:40px; height:40px; border-radius:20px; border:none; background:var(--surface); color:var(--ink); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-s); cursor:pointer" style-active="transform:scale(.92)">{{ ic.chevL }}</button>
+<div style="font-size:16px; font-weight:600">Share</div>
+<div style="width:40px"></div>
+</div>
+<div style="padding:8px 20px 0; display:flex; flex-direction:column; gap:12px">
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); padding:16px 18px; display:flex; align-items:center; gap:12px">
+<div style="width:42px; height:42px; border-radius:21px; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-size:15px; font-weight:600">{{ sh.i }}</div>
+<div style="flex:1; min-width:0"><div style="font-size:17px; font-weight:600">{{ sh.owner }}</div><div style="font-size:12px; color:var(--ink2); margin-top:2px">{{ sh.flag }} {{ sh.plan }}</div></div>
+{{ sh.chip }}
+</div>
+<sc-if value="{{ sh.notSent }}" hint-placeholder-val="{{ true }}">
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); padding:22px; display:flex; flex-direction:column; align-items:center; gap:12px; animation:fadeIn .3s">
+<div style="background:#FFFFFF; padding:14px; border-radius:20px; box-shadow:0 0 0 1px var(--line)">{{ sh.qr }}</div>
+<div style="font-size:15px; font-weight:600">Scan on {{ sh.owner }}</div>
+</div>
+</sc-if>
+<sc-if value="{{ sh.sent }}" hint-placeholder-val="{{ false }}">
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); padding:20px; display:flex; flex-direction:column; gap:0; animation:fadeIn .3s">
+<sc-for list="{{ sh.steps }}" as="st" hint-placeholder-count="3">
+<div style="display:flex; gap:14px">
+<div style="display:flex; flex-direction:column; align-items:center">
+<div style="width:28px; height:28px; border-radius:14px; background:{{ st.bg }}; color:{{ st.fg }}; display:flex; align-items:center; justify-content:center; transition:all .4s">{{ st.icon }}</div>
+<div style="width:2px; flex:1; min-height:18px; background:{{ st.line }}; transition:background .4s"></div>
+</div>
+<div style="padding:4px 0 18px"><div style="font-size:15px; font-weight:600; color:{{ st.tc }}">{{ st.label }}</div><div style="font-size:12px; color:var(--ink2); margin-top:2px">{{ st.sub }}</div></div>
+</div>
+</sc-for>
+<div style="font-size:12px; color:var(--ink2); display:flex; align-items:center; gap:6px; border-top:1px solid var(--line); padding-top:12px">{{ icXS.info }} Status from provider, not this phone</div>
+</div>
+</sc-if>
+<div style="border:1.5px solid var(--st-low-bg); background:var(--surface); border-radius:20px; padding:14px 16px; display:flex; align-items:center; gap:12px">
+<span style="color:var(--st-low-fg)">{{ ic.alert }}</span>
+<div><div style="font-size:15px; font-weight:700">Single use</div><div style="font-size:13px; color:var(--ink2); margin-top:2px">Works on one phone, once.</div></div>
+</div>
+</div>
+</div>
+<div style="position:absolute; left:0; right:0; bottom:0; padding:12px 20px 34px; background:var(--bg); z-index:5">
+<sc-if value="{{ sh.notSent }}" hint-placeholder-val="{{ true }}">
+<button onClick="{{ sh.open }}" style="width:100%; height:56px; border:none; border-radius:18px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:16px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; transition:transform .12s" style-active="transform:scale(.97)">{{ ic.share }} Send install details</button>
+</sc-if>
+<sc-if value="{{ sh.sent }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ sh.done }}" style="width:100%; height:56px; border:none; border-radius:18px; background:var(--surface2); color:var(--ink); font:inherit; font-size:16px; font-weight:600; cursor:pointer; transition:transform .12s" style-active="transform:scale(.97)">Done</button>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- ACCOUNT -->
+<sc-if value="{{ s.account }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Account" style="position:absolute; inset:0; overflow-y:auto; padding:54px 0 110px; box-sizing:border-box; animation:screenIn .32s cubic-bezier(.2,.8,.2,1)">
+<div style="padding:10px 20px 0; height:86px; box-sizing:border-box; display:flex; align-items:flex-end"><div style="font-size:36px; font-weight:700; letter-spacing:-0.035em; line-height:1">Account</div></div>
+<div style="padding:20px 20px 0; display:flex; flex-direction:column; gap:12px">
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); padding:18px; display:flex; align-items:center; gap:14px">
+<div style="width:52px; height:52px; border-radius:26px; background:var(--accent); color:var(--accent-ink); display:flex; align-items:center; justify-content:center; font-size:18px; font-weight:700">AM</div>
+<div><div style="font-size:17px; font-weight:600">Alex Moreno</div><div style="font-size:13px; color:var(--ink2); margin-top:2px">alex@example.com</div></div>
+</div>
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); overflow:hidden">
+<div style="display:flex; align-items:center; gap:12px; padding:15px 18px"><span style="color:var(--ink2)">{{ ic.card }}</span><span style="flex:1; font-size:15px">Payment</span><span style="font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--ink2)">···· 4242</span></div>
+<div style="display:flex; align-items:center; gap:12px; padding:11px 18px; border-top:1px solid var(--line)"><span style="color:var(--ink2)">{{ ic.moon }}</span><span style="flex:1; font-size:15px">Appearance</span>
+<div style="display:flex; gap:2px; background:var(--surface2); border-radius:11px; padding:3px">
+<sc-for list="{{ acc.themes }}" as="th" hint-placeholder-count="2">
+<button onClick="{{ th.onClick }}" style="border:none; font:inherit; font-size:12px; font-weight:600; padding:6px 12px; border-radius:8px; cursor:pointer; background:{{ th.bg }}; color:{{ th.fg }}; box-shadow:{{ th.sh }}; transition:all .2s">{{ th.label }}</button>
+</sc-for>
+</div>
+</div>
+<div onClick="{{ acc.compat }}" style="display:flex; align-items:center; gap:12px; padding:15px 18px; border-top:1px solid var(--line); cursor:pointer"><span style="color:var(--ink2)">{{ ic.phone }}</span><span style="flex:1; font-size:15px">Phone check</span><span style="color:var(--ink3)">{{ icS.chevR }}</span></div>
+<div onClick="{{ acc.help }}" style="display:flex; align-items:center; gap:12px; padding:15px 18px; border-top:1px solid var(--line); cursor:pointer"><span style="color:var(--ink2)">{{ ic.help }}</span><span style="flex:1; font-size:15px">Help</span><span style="color:var(--ink3)">{{ icS.chevR }}</span></div>
+<div onClick="{{ acc.about }}" style="display:flex; align-items:center; gap:12px; padding:15px 18px; border-top:1px solid var(--line); cursor:pointer"><span style="color:var(--ink2)">{{ ic.info }}</span><span style="flex:1; font-size:15px">About</span><span style="color:var(--ink3)">{{ icS.chevR }}</span></div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<!-- ABOUT -->
+<sc-if value="{{ s.about }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="About" style="position:absolute; inset:0; padding:54px 20px 110px; box-sizing:border-box; display:flex; flex-direction:column; animation:screenIn .32s cubic-bezier(.2,.8,.2,1)">
+<div style="height:52px; display:flex; align-items:center">
+<button onClick="{{ back }}" style="width:40px; height:40px; border-radius:20px; border:none; background:var(--surface); color:var(--ink); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-s); cursor:pointer" style-active="transform:scale(.92)">{{ ic.chevL }}</button>
+</div>
+<div style="flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; text-align:center">
+{{ logoBig }}
+<div style="font-size:28px; font-weight:700; letter-spacing:-0.03em">Tavi</div>
+<div style="font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink2)">v1.0 (2026.10)</div>
+<div style="font-size:14px; color:var(--ink2)">Prototype. Not a real service.</div>
+<div style="margin-top:10px; font-size:11px; font-weight:500; color:var(--ink2); border:1px dashed var(--ink3); border-radius:999px; padding:6px 12px">Portfolio reconstruction · Synthetic data</div>
+</div>
+</div>
+</sc-if>
+
+<!-- HELP -->
+<sc-if value="{{ s.help }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Help" style="position:absolute; inset:0; overflow-y:auto; padding:54px 0 110px; box-sizing:border-box; animation:screenIn .32s cubic-bezier(.2,.8,.2,1)">
+<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 16px; height:52px; box-sizing:border-box; flex:none">
+<button onClick="{{ back }}" style="width:40px; height:40px; border-radius:20px; border:none; background:var(--surface); color:var(--ink); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-s); cursor:pointer" style-active="transform:scale(.92)">{{ ic.chevL }}</button>
+<div style="font-size:16px; font-weight:600">Help</div>
+<div style="width:40px"></div>
+</div>
+<div style="padding:8px 20px 0; display:flex; flex-direction:column; gap:12px">
+<div onClick="{{ help.chat }}" style="background:var(--accent); color:var(--accent-ink); border-radius:28px; padding:20px; display:flex; flex-direction:column; gap:18px; cursor:pointer; transition:transform .15s" style-active="transform:scale(.98)">
+<div style="display:flex; align-items:center; justify-content:space-between"><div style="width:48px; height:48px; border-radius:16px; background:rgba(0,0,0,.1); display:flex; align-items:center; justify-content:center">{{ icL.sparkle }}</div><span style="font-size:12px; font-weight:700; background:rgba(0,0,0,.1); padding:5px 10px; border-radius:999px">AI · Instant</span></div>
+<div style="display:flex; align-items:flex-end; justify-content:space-between; gap:10px"><div><div style="font-size:24px; font-weight:700; letter-spacing:-0.03em">Ask the assistant</div><div style="font-size:14px; font-weight:500; margin-top:4px">Installs, data, sharing, payments</div></div>{{ ic.arrowR }}</div>
+</div>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:12px">
+<div onClick="{{ help.call }}" style="background:var(--surface); border-radius:24px; box-shadow:var(--shadow); padding:18px; display:flex; flex-direction:column; gap:14px; cursor:pointer; transition:transform .15s" style-active="transform:scale(.97)">
+<div style="width:42px; height:42px; border-radius:14px; background:var(--st-use-bg); color:var(--st-use-fg); display:flex; align-items:center; justify-content:center">{{ ic.call }}</div>
+<div><div style="font-size:16px; font-weight:600">Call us</div><div style="font-size:12px; color:var(--ink2); margin-top:3px; display:flex; align-items:center; gap:6px"><span style="width:6px; height:6px; border-radius:3px; background:var(--st-use-fg); animation:livePulse 2s infinite"></span>24/7 · ~2 min wait</div></div>
+</div>
+<div onClick="{{ help.ticket }}" style="background:var(--surface); border-radius:24px; box-shadow:var(--shadow); padding:18px; display:flex; flex-direction:column; gap:14px; cursor:pointer; transition:transform .15s" style-active="transform:scale(.97)">
+<div style="width:42px; height:42px; border-radius:14px; background:var(--surface2); color:var(--ink); display:flex; align-items:center; justify-content:center">{{ ic.ticket }}</div>
+<div><div style="font-size:16px; font-weight:600">New ticket</div><div style="font-size:12px; color:var(--ink2); margin-top:3px">Reply within 2 h</div></div>
+</div>
+</div>
+<div style="font-size:13px; font-weight:600; color:var(--ink2); padding:10px 4px 0">Your tickets</div>
+<div style="background:var(--surface); border-radius:26px; box-shadow:var(--shadow); overflow:hidden">
+<sc-for list="{{ help.tickets }}" as="tk" hint-placeholder-count="1">
+<div onClick="{{ tk.onClick }}" style="display:flex; align-items:center; gap:12px; padding:14px 18px; border-top:{{ tk.border }}; cursor:pointer; animation:fadeIn .3s" style-active="background:var(--surface2)">
+<div style="flex:1; min-width:0"><div style="font-size:15px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">{{ tk.subject }}</div><div style="font-size:12px; color:var(--ink2); margin-top:3px"><span style="font-family:'IBM Plex Mono', monospace">{{ tk.id }}</span> · {{ tk.when }}</div></div>
+<span style="font-size:11px; font-weight:600; padding:5px 9px; border-radius:999px; background:{{ tk.pbg }}; color:{{ tk.pfg }}; white-space:nowrap; transition:all .4s">{{ tk.status }}</span>
+<span style="color:var(--ink3)">{{ icS.chevR }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+<!-- CHAT -->
+<sc-if value="{{ s.chat }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="AI assistant" style="position:absolute; inset:0; padding-top:54px; box-sizing:border-box; display:flex; flex-direction:column; animation:screenIn .32s cubic-bezier(.2,.8,.2,1)">
+<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 16px; height:52px; box-sizing:border-box; flex:none">
+<button onClick="{{ back }}" style="width:40px; height:40px; border-radius:20px; border:none; background:var(--surface); color:var(--ink); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-s); cursor:pointer" style-active="transform:scale(.92)">{{ ic.chevL }}</button>
+<div style="display:flex; flex-direction:column; align-items:center"><div style="font-size:16px; font-weight:600; display:flex; align-items:center; gap:6px"><span style="color:var(--accent-text)">{{ icS.sparkle }}</span>Assistant</div><div style="font-size:11px; color:var(--ink2)">AI · may make mistakes</div></div>
+<button onClick="{{ chat.toCall }}" style="width:40px; height:40px; border-radius:20px; border:none; background:var(--surface); color:var(--st-use-fg); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-s); cursor:pointer" style-active="transform:scale(.92)">{{ ic.call }}</button>
+</div>
+<div ref="{{ chat.ref }}" style="flex:1; overflow-y:auto; padding:12px 16px 16px; display:flex; flex-direction:column; gap:12px">
+<sc-for list="{{ chat.msgs }}" as="m" hint-placeholder-count="1">
+<div style="align-self:{{ m.align }}; max-width:82%; display:flex; flex-direction:column; gap:4px; animation:screenIn .25s ease">
+<div style="background:{{ m.bg }}; color:{{ m.fg }}; border-radius:{{ m.rad }}; box-shadow:{{ m.sh }}; padding:11px 14px; font-size:15px; line-height:1.4; text-wrap:pretty; white-space:pre-wrap">{{ m.text }}</div>
+<div style="font-size:11px; color:var(--ink3); align-self:{{ m.align }}; padding:0 6px">{{ m.who }}</div>
+</div>
+</sc-for>
+<sc-if value="{{ chat.busy }}" hint-placeholder-val="{{ false }}">
+<div style="align-self:flex-start; background:var(--surface); box-shadow:var(--shadow-s); border-radius:20px 20px 20px 6px; padding:14px 16px; display:flex; gap:5px"><span style="width:7px; height:7px; border-radius:4px; background:var(--ink3); animation:dots 1.2s infinite"></span><span style="width:7px; height:7px; border-radius:4px; background:var(--ink3); animation:dots 1.2s infinite .2s"></span><span style="width:7px; height:7px; border-radius:4px; background:var(--ink3); animation:dots 1.2s infinite .4s"></span></div>
+</sc-if>
+<sc-if value="{{ chat.showSuggest }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex; flex-wrap:wrap; gap:8px; margin-top:4px">
+<sc-for list="{{ chat.suggest }}" as="sg" hint-placeholder-count="4">
+<button onClick="{{ sg.onClick }}" style="height:36px; padding:0 14px; border-radius:999px; border:1px solid var(--line); background:var(--surface); color:var(--ink); font:inherit; font-size:13px; font-weight:600; cursor:pointer" style-active="transform:scale(.95)">{{ sg.label }}</button>
+</sc-for>
+</div>
+</sc-if>
+</div>
+<div style="flex:none; padding:8px 16px 34px; background:var(--bg); border-top:1px solid var(--line); display:flex; flex-direction:column; gap:8px">
+<div style="display:flex; gap:8px">
+<button onClick="{{ chat.toTicket }}" style="height:30px; padding:0 12px; border:none; border-radius:999px; background:var(--surface2); color:var(--ink); font:inherit; font-size:12px; font-weight:600; display:flex; align-items:center; gap:6px; cursor:pointer">{{ icXS.ticket }} Create ticket</button>
+<button onClick="{{ chat.toCall }}" style="height:30px; padding:0 12px; border:none; border-radius:999px; background:var(--surface2); color:var(--ink); font:inherit; font-size:12px; font-weight:600; display:flex; align-items:center; gap:6px; cursor:pointer">{{ icXS.call }} Call 24/7</button>
+</div>
+<div style="display:flex; align-items:center; gap:8px; background:var(--surface); border-radius:22px; padding:6px 6px 6px 16px; box-shadow:var(--shadow-s)">
+<input value="{{ chat.input }}" onChange="{{ chat.onInput }}" onKeyDown="{{ chat.onKey }}" placeholder="Ask about your eSIM" style="flex:1; min-width:0; border:none; outline:none; background:transparent; font:inherit; font-size:16px; color:var(--ink)">
+<button onClick="{{ chat.send }}" style="width:40px; height:40px; border-radius:20px; border:none; background:{{ chat.sendBg }}; color:{{ chat.sendFg }}; display:flex; align-items:center; justify-content:center; cursor:pointer; transition:all .2s; flex:none" style-active="transform:scale(.9)">{{ ic.send }}</button>
+</div>
+</div>
+</div>
+</sc-if>
+
+<!-- NEW TICKET -->
+<sc-if value="{{ s.ticket }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="New ticket" style="position:absolute; inset:0; overflow-y:auto; padding:54px 0 130px; box-sizing:border-box; animation:screenIn .32s cubic-bezier(.2,.8,.2,1)">
+<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 16px; height:52px; box-sizing:border-box; flex:none">
+<button onClick="{{ back }}" style="width:40px; height:40px; border-radius:20px; border:none; background:var(--surface); color:var(--ink); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-s); cursor:pointer" style-active="transform:scale(.92)">{{ ic.chevL }}</button>
+<div style="font-size:16px; font-weight:600">New ticket</div>
+<div style="width:40px"></div>
+</div>
+<sc-if value="{{ tk.form }}" hint-placeholder-val="{{ true }}">
+<div style="padding:8px 20px 0; display:flex; flex-direction:column; gap:10px">
+<div style="font-size:13px; font-weight:600; color:var(--ink2); padding:4px 4px 0">Topic</div>
+<div style="display:flex; flex-wrap:wrap; gap:8px">
+<sc-for list="{{ tk.topics }}" as="tp" hint-placeholder-count="5">
+<button onClick="{{ tp.onClick }}" style="height:38px; padding:0 16px; border-radius:999px; border:none; box-shadow:var(--shadow-s); background:{{ tp.bg }}; color:{{ tp.fg }}; font:inherit; font-size:14px; font-weight:600; cursor:pointer; transition:all .15s" style-active="transform:scale(.95)">{{ tp.label }}</button>
+</sc-for>
+</div>
+<div style="font-size:13px; font-weight:600; color:var(--ink2); padding:12px 4px 0">Which eSIM?</div>
+<div style="display:flex; flex-wrap:wrap; gap:8px">
+<sc-for list="{{ tk.sims }}" as="ts" hint-placeholder-count="4">
+<button onClick="{{ ts.onClick }}" style="height:38px; padding:0 14px; border-radius:999px; border:none; box-shadow:var(--shadow-s); background:{{ ts.bg }}; color:{{ ts.fg }}; font:inherit; font-size:13px; font-weight:600; cursor:pointer; transition:all .15s; white-space:nowrap" style-active="transform:scale(.95)">{{ ts.label }}</button>
+</sc-for>
+</div>
+<div style="font-size:13px; font-weight:600; color:var(--ink2); padding:12px 4px 0">What's wrong?</div>
+<textarea value="{{ tk.text }}" onChange="{{ tk.onText }}" placeholder="A few words is enough" rows="5" style="width:100%; box-sizing:border-box; border:none; outline:none; resize:none; background:var(--surface); box-shadow:var(--shadow); border-radius:22px; padding:16px 18px; font:inherit; font-size:16px; line-height:1.4; color:var(--ink)"></textarea>
+<div style="font-size:12px; color:var(--ink2); display:flex; align-items:center; gap:6px; padding:0 4px">{{ icXS.info }} We'll attach your ICCID and app logs.</div>
+</div>
+</sc-if>
+<sc-if value="{{ tk.sent }}" hint-placeholder-val="{{ false }}">
+<div style="padding:60px 24px 0; display:flex; flex-direction:column; align-items:center; gap:14px; text-align:center">
+<div style="width:84px; height:84px; border-radius:42px; background:var(--st-use-bg); color:var(--st-use-fg); display:flex; align-items:center; justify-content:center; animation:pop .5s ease">{{ icXL.check }}</div>
+<div style="font-size:26px; font-weight:700; letter-spacing:-0.03em">Ticket created</div>
+<div style="font-family:'IBM Plex Mono', monospace; font-size:15px; font-weight:600; background:var(--surface); box-shadow:var(--shadow-s); padding:8px 14px; border-radius:12px">#{{ tk.sentId }}</div>
+<div style="font-size:15px; color:var(--ink2)">Reply within 2 hours, here and by email.</div>
+</div>
+</sc-if>
+</div>
+<div style="position:absolute; left:0; right:0; bottom:0; padding:12px 20px 34px; background:var(--bg); z-index:5; display:flex; flex-direction:column; gap:8px">
+<sc-if value="{{ tk.canSubmit }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ tk.submit }}" style="width:100%; height:56px; border:none; border-radius:18px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:16px; font-weight:600; cursor:pointer; transition:transform .12s" style-active="transform:scale(.97)">Send ticket</button>
+</sc-if>
+<sc-if value="{{ tk.cantSubmit }}" hint-placeholder-val="{{ true }}">
+<button style="width:100%; height:56px; border:none; border-radius:18px; background:var(--surface2); color:var(--ink3); font:inherit; font-size:16px; font-weight:600">Send ticket</button>
+</sc-if>
+<sc-if value="{{ tk.sent }}" hint-placeholder-val="{{ false }}">
+<button onClick="{{ tk.view }}" style="width:100%; height:56px; border:none; border-radius:18px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:16px; font-weight:600; cursor:pointer" style-active="transform:scale(.97)">View ticket</button>
+<button onClick="{{ back }}" style="width:100%; height:52px; border:none; border-radius:18px; background:var(--surface2); color:var(--ink); font:inherit; font-size:16px; font-weight:600; cursor:pointer" style-active="transform:scale(.97)">Back to Help</button>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- TICKET DETAIL -->
+<sc-if value="{{ s.ticketDetail }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Ticket" style="position:absolute; inset:0; padding-top:54px; box-sizing:border-box; display:flex; flex-direction:column; animation:screenIn .32s cubic-bezier(.2,.8,.2,1)">
+<div style="display:flex; align-items:center; justify-content:space-between; padding:6px 16px; height:52px; box-sizing:border-box; flex:none">
+<button onClick="{{ back }}" style="width:40px; height:40px; border-radius:20px; border:none; background:var(--surface); color:var(--ink); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow-s); cursor:pointer" style-active="transform:scale(.92)">{{ ic.chevL }}</button>
+<div style="font-family:'IBM Plex Mono', monospace; font-size:15px; font-weight:600">#{{ td.id }}</div>
+<div style="width:40px"></div>
+</div>
+<div style="flex:1; overflow-y:auto; padding:8px 16px 16px; display:flex; flex-direction:column; gap:12px">
+<div style="background:var(--surface); border-radius:24px; box-shadow:var(--shadow); padding:16px 18px; display:flex; flex-direction:column; gap:8px">
+<div style="display:flex; align-items:flex-start; justify-content:space-between; gap:10px"><div style="font-size:17px; font-weight:600; line-height:1.3">{{ td.subject }}</div><span style="font-size:11px; font-weight:600; padding:5px 9px; border-radius:999px; background:{{ td.pbg }}; color:{{ td.pfg }}; white-space:nowrap; transition:all .4s">{{ td.status }}</span></div>
+<div style="font-size:12px; color:var(--ink2)">{{ td.meta }}</div>
+</div>
+<sc-for list="{{ td.msgs }}" as="tm" hint-placeholder-count="2">
+<div style="align-self:{{ tm.align }}; max-width:82%; display:flex; flex-direction:column; gap:4px; animation:screenIn .25s ease">
+<div style="background:{{ tm.bg }}; color:{{ tm.fg }}; border-radius:{{ tm.rad }}; box-shadow:{{ tm.sh }}; padding:11px 14px; font-size:15px; line-height:1.4; text-wrap:pretty; white-space:pre-wrap">{{ tm.text }}</div>
+<div style="font-size:11px; color:var(--ink3); align-self:{{ tm.align }}; padding:0 6px">{{ tm.who }}</div>
+</div>
+</sc-for>
+<sc-if value="{{ td.closed }}" hint-placeholder-val="{{ false }}"><div style="text-align:center; font-size:12px; color:var(--ink2); padding:6px 0">Resolved. Reply to reopen.</div></sc-if>
+</div>
+<div style="flex:none; padding:8px 16px 34px; background:var(--bg); border-top:1px solid var(--line)">
+<div style="display:flex; align-items:center; gap:8px; background:var(--surface); border-radius:22px; padding:6px 6px 6px 16px; box-shadow:var(--shadow-s)">
+<input value="{{ td.reply }}" onChange="{{ td.onReply }}" onKeyDown="{{ td.onKey }}" placeholder="Reply" style="flex:1; min-width:0; border:none; outline:none; background:transparent; font:inherit; font-size:16px; color:var(--ink)">
+<button onClick="{{ td.send }}" style="width:40px; height:40px; border-radius:20px; border:none; background:{{ td.sendBg }}; color:{{ td.sendFg }}; display:flex; align-items:center; justify-content:center; cursor:pointer; flex:none" style-active="transform:scale(.9)">{{ ic.send }}</button>
+</div>
+</div>
+</div>
+</sc-if>
+
+<!-- OFFLINE BANNER -->
+<sc-if value="{{ offlineBanner }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute; top:58px; left:50%; transform:translateX(-50%); z-index:30; display:flex; align-items:center; gap:8px; background:var(--ink); color:var(--bg); border-radius:999px; padding:8px 14px; font-size:13px; font-weight:600; white-space:nowrap; animation:fadeIn .3s">{{ icS.wifiOff }} Offline · Saved data</div>
+</sc-if>
+
+<!-- STATUS BAR -->
+<div style="position:absolute; top:0; left:0; right:0; height:54px; display:flex; align-items:center; justify-content:space-between; padding:8px 30px 0 44px; box-sizing:border-box; z-index:40; pointer-events:none; color:var(--ink); background:var(--bg); transition:background .3s">
+<div style="font-size:16px; font-weight:600; letter-spacing:-0.01em">9:41</div>
+<div style="display:flex; gap:6px; align-items:center">{{ sb }}</div>
+</div>
+<div style="position:absolute; top:11px; left:50%; transform:translateX(-50%); width:122px; height:35px; border-radius:20px; background:#000; z-index:61"></div>
+
+<!-- TAB BAR -->
+<sc-if value="{{ showTabs }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute; left:0; right:0; bottom:0; height:84px; padding-bottom:26px; box-sizing:border-box; background:var(--bg); border-top:1px solid var(--line); display:grid; grid-template-columns:repeat(3,1fr); z-index:20; transition:background .3s">
+<sc-for list="{{ tabs }}" as="tb" hint-placeholder-count="3">
+<button onClick="{{ tb.onClick }}" style="border:none; background:none; font:inherit; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; color:{{ tb.color }}; cursor:pointer; transition:color .2s" style-active="transform:scale(.92)">{{ tb.icon }}<span style="font-size:11px; font-weight:600">{{ tb.label }}</span></button>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- SCRIM -->
+<sc-if value="{{ sheet.any }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeSheet }}" style="position:absolute; inset:0; background:var(--scrim); z-index:50; animation:fadeIn .25s"></div>
+</sc-if>
+
+<!-- OWNER SHEET -->
+<sc-if value="{{ sheet.owner }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute; left:8px; right:8px; bottom:8px; background:var(--sheet); border-radius:38px; padding:8px 20px 26px; z-index:51; animation:sheetUp .36s cubic-bezier(.2,.9,.25,1)">
+<div style="width:36px; height:5px; border-radius:3px; background:var(--line); margin:0 auto 14px"></div>
+<div style="font-size:18px; font-weight:700; margin-bottom:10px">Who's it for?</div>
+<sc-for list="{{ ownerOpts }}" as="oo" hint-placeholder-count="6">
+<div onClick="{{ oo.onClick }}" style="display:flex; align-items:center; gap:12px; padding:12px 0; border-top:{{ oo.border }}; cursor:pointer">
+<div style="width:36px; height:36px; border-radius:18px; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-size:14px; font-weight:600">{{ oo.i }}</div>
+<div style="flex:1; font-size:16px; font-weight:500">{{ oo.label }}</div>
+<span style="color:var(--accent-text); opacity:{{ oo.op }}">{{ ic.check }}</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+
+<!-- 3DS SHEET -->
+<sc-if value="{{ sheet.threeDS }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="3-D Secure" style="position:absolute; left:8px; right:8px; bottom:8px; background:var(--sheet); border-radius:38px; padding:8px 22px 24px; z-index:51; animation:sheetUp .4s cubic-bezier(.2,.9,.25,1)">
+<div style="width:36px; height:5px; border-radius:3px; background:var(--line); margin:0 auto 16px"></div>
+<div style="display:flex; align-items:center; justify-content:space-between">
+<div style="display:flex; align-items:center; gap:10px"><div style="width:36px; height:36px; border-radius:11px; background:var(--surface2); font-family:'IBM Plex Mono', monospace; font-size:12px; font-weight:600; display:flex; align-items:center; justify-content:center">TB</div><div><div style="font-size:15px; font-weight:600">Test Bank</div><div style="font-size:12px; color:var(--ink2)">3-D Secure</div></div></div>
+<div style="color:var(--ink2)">{{ ic.lock }}</div>
+</div>
+<div style="font-size:24px; font-weight:700; letter-spacing:-0.03em; margin-top:20px">Verify payment</div>
+<div style="font-size:15px; color:var(--ink2); margin-top:4px">Tavi · {{ pay.amount }}</div>
+<div style="font-size:13px; color:var(--ink2); margin-top:18px">Code sent to ··· 21</div>
+<div style="display:grid; grid-template-columns:repeat(6,1fr); gap:8px; margin-top:8px">
+<sc-for list="{{ three.digits }}" as="dg" hint-placeholder-count="6">
+<div style="height:52px; border-radius:14px; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-family:'IBM Plex Mono', monospace; font-size:22px; font-weight:600">{{ dg }}</div>
+</sc-for>
+</div>
+<button onClick="{{ three.approve }}" style="width:100%; height:56px; margin-top:20px; border:none; border-radius:18px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:16px; font-weight:600; cursor:pointer; transition:transform .12s" style-active="transform:scale(.97)">Confirm</button>
+<button onClick="{{ three.cancel }}" style="width:100%; height:48px; margin-top:6px; border:none; border-radius:18px; background:none; color:var(--ink2); font:inherit; font-size:15px; font-weight:600; cursor:pointer">Cancel</button>
+</div>
+</sc-if>
+
+<!-- iOS INSTALL DIALOG -->
+<sc-if value="{{ sheet.ios }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute; left:50%; top:50%; width:280px; margin-left:-140px; margin-top:-90px; background:var(--sheet); border-radius:22px; z-index:51; overflow:hidden; text-align:center; animation:dialogIn .25s ease">
+<div style="padding:20px 18px 16px"><div style="font-size:17px; font-weight:700">Activate eSIM</div><div style="font-size:13px; color:var(--ink2); margin-top:6px">{{ ins.plan }} · from Tavi</div><div style="font-size:11px; color:var(--ink3); margin-top:6px">System dialog (simulated)</div></div>
+<div style="display:grid; grid-template-columns:1fr 1fr; border-top:1px solid var(--line)">
+<button onClick="{{ closeSheet }}" style="height:46px; border:none; background:none; font:inherit; font-size:16px; color:var(--accent-text); cursor:pointer">Cancel</button>
+<button onClick="{{ ins.confirm }}" style="height:46px; border:none; border-left:1px solid var(--line); background:none; font:inherit; font-size:16px; font-weight:700; color:var(--accent-text); cursor:pointer">Continue</button>
+</div>
+</div>
+</sc-if>
+
+<!-- SHARE SHEET -->
+<sc-if value="{{ sheet.share }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute; left:0; right:0; bottom:0; background:var(--sheet); border-radius:30px 30px 0 0; padding:8px 0 34px; z-index:51; animation:sheetUp .36s cubic-bezier(.2,.9,.25,1)">
+<div style="width:36px; height:5px; border-radius:3px; background:var(--line); margin:0 auto 14px"></div>
+<div style="display:flex; align-items:center; gap:12px; padding:0 20px 16px; border-bottom:1px solid var(--line)">
+{{ logo }}
+<div style="flex:1; min-width:0"><div style="font-size:15px; font-weight:600">Install details · {{ sh.owner }}</div><div style="font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink2); margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis">tavi.example/i/{{ sh.code }}</div></div>
+<button onClick="{{ closeSheet }}" style="width:30px; height:30px; border-radius:15px; border:none; background:var(--surface2); color:var(--ink2); display:flex; align-items:center; justify-content:center; cursor:pointer; padding:0">{{ icS.close }}</button>
+</div>
+<div style="display:flex; gap:18px; padding:18px 20px 6px">
+<sc-for list="{{ shareTargets.people }}" as="sp" hint-placeholder-count="3">
+<div onClick="{{ sp.onClick }}" style="display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer" style-active="transform:scale(.94)">
+<div style="width:60px; height:60px; border-radius:30px; background:var(--surface2); display:flex; align-items:center; justify-content:center; font-size:20px; font-weight:600">{{ sp.i }}</div>
+<span style="font-size:12px">{{ sp.label }}</span>
+</div>
+</sc-for>
+</div>
+<div style="display:flex; gap:18px; padding:14px 20px 0">
+<sc-for list="{{ shareTargets.apps }}" as="sa" hint-placeholder-count="4">
+<div onClick="{{ sa.onClick }}" style="display:flex; flex-direction:column; align-items:center; gap:6px; cursor:pointer; width:60px" style-active="transform:scale(.94)">
+<div style="width:60px; height:60px; border-radius:16px; background:var(--surface2); color:var(--ink); display:flex; align-items:center; justify-content:center">{{ sa.icon }}</div>
+<span style="font-size:12px">{{ sa.label }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<!-- TOPUP SHEET -->
+<sc-if value="{{ sheet.topup }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Buy more data" style="position:absolute; left:8px; right:8px; bottom:8px; background:var(--sheet); border-radius:38px; padding:8px 20px 24px; z-index:51; animation:sheetUp .36s cubic-bezier(.2,.9,.25,1)">
+<div style="width:36px; height:5px; border-radius:3px; background:var(--line); margin:0 auto 14px"></div>
+<div style="font-size:20px; font-weight:700; letter-spacing:-0.02em">Buy more data</div>
+<div style="font-size:13px; color:var(--ink2); margin-top:4px">{{ top.who }} · Same eSIM, no reinstall</div>
+<sc-if value="{{ top.picking }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-top:16px">
+<sc-for list="{{ top.opts }}" as="to" hint-placeholder-count="3">
+<div onClick="{{ to.onClick }}" style="border-radius:20px; padding:16px 0; text-align:center; cursor:pointer; background:{{ to.bg }}; box-shadow:{{ to.ring }}; transition:all .2s" style-active="transform:scale(.96)">
+<div style="font-size:28px; font-weight:700; letter-spacing:-0.03em">{{ to.gb }}<span style="font-size:13px"> GB</span></div>
+<div style="font-size:14px; color:var(--ink2); margin-top:4px">{{ to.price }}</div>
+</div>
+</sc-for>
+</div>
+<button onClick="{{ top.pay }}" style="width:100%; height:56px; margin-top:18px; border:none; border-radius:18px; background:var(--accent); color:var(--accent-ink); font:inherit; font-size:16px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer; transition:transform .12s" style-active="transform:scale(.97)">{{ icS.lock }} Pay {{ top.price }}</button>
+</sc-if>
+<sc-if value="{{ top.busy }}" hint-placeholder-val="{{ false }}">
+<div style="height:150px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:14px">
+<div style="position:relative; width:56px; height:56px"><div style="position:absolute; inset:0; border-radius:50%; background:var(--accent-soft); animation:breathe 2.4s infinite"></div><div style="position:absolute; inset:18px; border-radius:50%; background:var(--accent); animation:breathe 2.4s infinite .3s"></div></div>
+<div style="font-size:15px; font-weight:600">Processing {{ top.price }}</div>
+</div>
+</sc-if>
+<sc-if value="{{ top.done }}" hint-placeholder-val="{{ false }}">
+<div style="height:150px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px">
+<div style="width:56px; height:56px; border-radius:28px; background:var(--st-use-bg); color:var(--st-use-fg); display:flex; align-items:center; justify-content:center; animation:pop .5s ease">{{ icL.check }}</div>
+<div style="font-size:16px; font-weight:600">{{ top.pickGb }} GB added</div>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- CALL SHEET -->
+<sc-if value="{{ sheet.call }}" hint-placeholder-val="{{ false }}">
+<div data-screen-label="Call support" style="position:absolute; left:8px; right:8px; bottom:8px; background:var(--sheet); border-radius:38px; padding:8px 22px 24px; z-index:51; animation:sheetUp .36s cubic-bezier(.2,.9,.25,1)">
+<div style="width:36px; height:5px; border-radius:3px; background:var(--line); margin:0 auto 16px"></div>
+<sc-if value="{{ cl.idle }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex; align-items:center; gap:8px; font-size:13px; font-weight:600; color:var(--st-use-fg)"><span style="width:7px; height:7px; border-radius:4px; background:var(--st-use-fg); animation:livePulse 2s infinite"></span>Open 24/7 · ~2 min wait</div>
+<div style="font-size:24px; font-weight:700; letter-spacing:-0.03em; margin-top:10px">Call support</div>
+<div style="font-family:'IBM Plex Mono', monospace; font-size:20px; font-weight:500; margin-top:8px">+00 800 8284 0000</div>
+<div style="font-size:13px; color:var(--ink2); margin-top:6px">Free over Wi-Fi calling. Any language.</div>
+<button onClick="{{ cl.start }}" style="width:100%; height:56px; margin-top:20px; border:none; border-radius:18px; background:var(--st-use-fg); color:#fff; font:inherit; font-size:16px; font-weight:600; display:flex; align-items:center; justify-content:center; gap:8px; cursor:pointer" style-active="transform:scale(.97)">{{ ic.call }} Call now</button>
+<button onClick="{{ cl.callback }}" style="width:100%; height:52px; margin-top:8px; border:none; border-radius:18px; background:var(--surface2); color:var(--ink); font:inherit; font-size:16px; font-weight:600; cursor:pointer" style-active="transform:scale(.97)">Call me back</button>
+</sc-if>
+<sc-if value="{{ cl.live }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex; flex-direction:column; align-items:center; gap:14px; padding:14px 0 6px">
+<div style="position:relative; width:96px; height:96px"><div style="position:absolute; inset:0; border-radius:50%; background:var(--st-use-bg); animation:breathe 2.2s infinite"></div><div style="position:absolute; inset:24px; border-radius:50%; background:var(--st-use-fg); color:#fff; display:flex; align-items:center; justify-content:center">{{ ic.call }}</div></div>
+<div style="font-size:20px; font-weight:700">{{ cl.label }}</div>
+<div style="font-family:'IBM Plex Mono', monospace; font-size:16px; color:var(--ink2)">{{ cl.time }}</div>
+<div style="font-size:11px; color:var(--ink3)">Simulated call</div>
+</div>
+<button onClick="{{ cl.end }}" style="width:100%; height:56px; margin-top:14px; border:none; border-radius:18px; background:var(--st-exp-fg); color:#fff; font:inherit; font-size:16px; font-weight:600; cursor:pointer" style-active="transform:scale(.97)">End call</button>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- TOAST -->
+<sc-if value="{{ toast.show }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute; top:58px; left:50%; z-index:70; display:flex; align-items:center; gap:8px; background:var(--ink); color:var(--bg); border-radius:999px; padding:10px 16px; font-size:14px; font-weight:600; white-space:nowrap; animation:toastIn .3s cubic-bezier(.2,.9,.3,1.2); transform:translateX(-50%)">{{ icS.check }} {{ toast.text }}</div>
+</sc-if>
+
+<div style="position:absolute; bottom:8px; left:50%; transform:translateX(-50%); width:134px; height:5px; border-radius:3px; background:var(--ink); z-index:80; opacity:.9"></div>
+</div>
+</div>
+
+<!-- DEMO PANEL -->
+<sc-if value="{{ showPanel }}" hint-placeholder-val="{{ true }}">
+<div style="width:320px; max-width:100%; display:flex; flex-direction:column; gap:14px; flex:none">
+<div style="display:flex; align-items:center; gap:10px">{{ logo }}<div><div style="font-size:15px; font-weight:700">Tavi · prototype</div><div style="font-size:12px; color:var(--ink2)">Portfolio reconstruction · Synthetic data</div></div></div>
+<div style="background:var(--surface); border-radius:22px; box-shadow:var(--shadow); padding:16px; display:flex; flex-direction:column; gap:14px">
+<div style="font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink2)">Scenarios</div>
+<sc-for list="{{ panel.groups }}" as="pg" hint-placeholder-count="3">
+<div style="display:flex; flex-direction:column; gap:6px">
+<div style="font-size:12px; font-weight:600; color:var(--ink2)">{{ pg.title }}</div>
+<div style="display:flex; flex-wrap:wrap; gap:6px">
+<sc-for list="{{ pg.opts }}" as="po" hint-placeholder-count="4">
+<button onClick="{{ po.onClick }}" style="border:none; font:inherit; font-size:12px; font-weight:600; padding:7px 11px; border-radius:10px; cursor:pointer; background:{{ po.bg }}; color:{{ po.fg }}; transition:all .15s" style-active="transform:scale(.95)">{{ po.label }}</button>
+</sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+<div style="background:var(--surface); border-radius:22px; box-shadow:var(--shadow); padding:16px; display:flex; flex-direction:column; gap:10px">
+<div style="font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink2)">Jump to</div>
+<div style="display:grid; grid-template-columns:1fr 1fr; gap:6px">
+<sc-for list="{{ panel.jumps }}" as="pj" hint-placeholder-count="10">
+<button onClick="{{ pj.onClick }}" style="border:none; font:inherit; font-size:12px; font-weight:500; text-align:left; padding:9px 11px; border-radius:10px; cursor:pointer; background:var(--surface2); color:var(--ink); display:flex; gap:6px" style-active="transform:scale(.96)"><span style="font-family:'IBM Plex Mono', monospace; color:var(--ink3)">{{ pj.n }}</span>{{ pj.label }}</button>
+</sc-for>
+</div>
+</div>
+<div style="background:var(--surface); border-radius:22px; box-shadow:var(--shadow); padding:16px; display:flex; flex-direction:column; gap:8px">
+<div style="display:flex; align-items:center; justify-content:space-between"><div style="font-size:12px; font-weight:700; letter-spacing:.06em; text-transform:uppercase; color:var(--ink2)">Android differs</div><div style="font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink3)">{{ panel.where }}</div></div>
+<div style="font-size:13px; line-height:1.5; color:var(--ink); text-wrap:pretty">{{ panel.android }}</div>
+</div>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;dark&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;demoPanel&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;},&quot;start&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;splash&quot;,&quot;onb&quot;,&quot;explore&quot;,&quot;results&quot;,&quot;sims&quot;,&quot;install&quot;,&quot;share&quot;,&quot;low&quot;,&quot;expired&quot;],&quot;default&quot;:&quot;splash&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+const h = React.createElement;
+const ISO = 'AF AL DZ AD AO AG AR AM AU AT AZ BS BH BD BB BY BE BZ BJ BT BO BA BW BR BN BG BF BI KH CM CA CV CF TD CL CN CO KM CG CD CR CI HR CY CZ DK DJ DM DO EC EG SV GQ ER EE SZ ET FJ FI FR GA GM GE DE GH GR GD GT GN GW GY HT HN HK HU IS IN ID IQ IE IL IT JM JP JO KZ KE KI XK KW KG LA LV LB LS LR LY LI LT LU MO MG MW MY MV ML MT MH MR MU MX FM MD MC MN ME MA MZ MM NA NR NP NL NZ NI NE NG MK NO OM PK PW PS PA PG PY PE PH PL PT PR QA RO RW KN LC VC WS SM ST SA SN RS SC SL SG SK SI SB SO ZA KR SS ES LK SD SR SE CH TW TJ TZ TH TL TG TO TT TN TR TM TV UG UA AE GB US UY UZ VU VA VE VN YE ZM ZW'.split(' ');
+const DN = (() => { try { return new Intl.DisplayNames(['en'], {type:'region'}); } catch (e) { return null; } })();
+const flagOf = c => String.fromCodePoint(...[...c].map(ch => 0x1F1E6 + ch.charCodeAt(0) - 65));
+const FIX = {HK:'Hong Kong', MO:'Macao', MM:'Myanmar', CD:'DR Congo', CG:'Congo', PS:'Palestine', BA:'Bosnia & Herzegovina', CI:"Côte d'Ivoire", XK:'Kosovo'};
+const C = {}; ISO.forEach(k => { C[k] = [FIX[k] || (DN && DN.of(k)) || k, flagOf(k)]; });
+const ORDER = Object.keys(C).sort((a, b) => C[a][0].localeCompare(C[b][0]));
+const EU_T = {IS:[0,0],NO:[4,0],SE:[5,0],FI:[6,0],IE:[0,1],GB:[1,1],DK:[4,1],EE:[6,1],NL:[2,2],DE:[3,2],PL:[4,2],LT:[5,2],LV:[6,2],BE:[2,3],CZ:[3,3],SK:[4,3],UA:[5,3],FR:[1,4],LU:[2,4],AT:[3,4],HU:[4,4],RO:[5,4],MD:[6,4],PT:[0,5],ES:[1,5],CH:[2,5],SI:[3,5],HR:[4,5],RS:[5,5],BG:[6,5],IT:[2,6],BA:[4,6],ME:[5,6],XK:[6,6],MK:[7,6],MT:[2,7],AL:[5,7],GR:[6,7],TR:[7,7],CY:[8,7]};
+const AS_T = {KR:[1,0],JP:[2,0],HK:[0,1],TW:[1,1],TH:[0,2],VN:[1,2],PH:[2,2],MY:[0,3],SG:[1,3],ID:[2,3]};
+const BALK = ['AL','BA','BG','HR','XK','ME','MK','RS','SI'];
+const EU = Object.keys(EU_T).filter(k => !['UA','MD','TR','XK'].includes(k));
+const NETS = ['Adrion','Bokanet','Velon','Lumet','Kestrel','Halden','Corvo','Tessa','Mirel','Orvo'];
+const netsOf = c => { const a = c.charCodeAt(0) * 3 + c.charCodeAt(1); return NETS[a % 10] + ' 5G · ' + NETS[(a + 4) % 10] + ' 4G'; };
+const REGIONS = {
+  europe:{name:'Europe', cc:EU, t:[[1,7,5],[3,30,10],[5,30,14],[10,30,22],[20,30,32],[50,90,59]]},
+  balkans:{name:'Balkans', cc:BALK, t:[[1,7,5],[3,30,11],[5,30,16],[10,30,26],[20,30,39]]},
+  asia:{name:'Asia', cc:['JP','KR','TW','HK','MO','TH','VN','PH','MY','SG','ID','KH','LA','IN','LK'], t:[[1,7,6],[3,30,13],[5,30,19],[10,30,30],[20,30,45]]},
+  mena:{name:'Middle East & N. Africa', cc:['AE','SA','QA','KW','BH','OM','JO','IL','EG','MA','TN'], t:[[1,7,8],[3,30,18],[5,30,26],[10,30,42]]},
+  northam:{name:'North America', cc:['US','CA','MX'], t:[[1,7,6],[3,30,13],[5,30,19],[10,30,29],[20,30,44]]},
+  latam:{name:'Latin America', cc:['AR','BO','BR','CL','CO','CR','EC','SV','GT','HN','NI','PA','PY','PE','UY','DO'], t:[[1,7,8],[3,30,19],[5,30,28],[10,30,45]]},
+  carib:{name:'Caribbean', cc:['JM','BB','BS','TT','PR','LC','KN','AG','GD','VC','DM'], t:[[1,7,9],[3,30,22],[5,30,32]]},
+  africa:{name:'Africa', cc:['ZA','KE','NG','GH','TZ','UG','RW','MA','EG','TN','SN','CI','CM','ZM','ZW','BW','NA','MU','MZ','ET'], t:[[1,7,11],[3,30,26],[5,30,38]]},
+  oceania:{name:'Oceania', cc:['AU','NZ','FJ'], t:[[1,7,6],[3,30,14],[5,30,20],[10,30,31]]}
+};
+REGIONS.global = {name:'Global', cc:[...new Set(Object.values(REGIONS).flatMap(r => r.cc))], t:[[1,7,9],[3,30,22],[5,30,32],[10,60,52],[20,90,85]], global:true};
+const REG_ORDER = Object.keys(REGIONS).sort((a, b) => a === 'global' ? -1 : b === 'global' ? 1 : REGIONS[a].name.localeCompare(REGIONS[b].name));
+const LOCAL = [[1,7,4.5],[3,30,9],[5,30,13],[10,30,21],[20,30,33]];
+const multOf = c => c === 'ME' ? 1 : 0.8 + ((c.charCodeAt(0) + c.charCodeAt(1)) % 7) * 0.12;
+const r50 = n => Math.round(n * 2) / 2;
+function pkgGet(pid) {
+  const R = REGIONS[pid];
+  if (R) return {id:pid, name:R.name, region:true, global:!!R.global, cc:R.cc, tiers:R.t.map(([gb, days, price]) => ({gb, days, price}))};
+  const m = multOf(pid);
+  return {id:pid, name:C[pid][0], flag:C[pid][1], cc:[pid], tiers:LOCAL.map(([gb, days, price]) => ({gb, days, price:r50(price * m)}))};
+}
+function planGet(id) {
+  const [pid, g] = id.split(':'); const k = pkgGet(pid); const t = k.tiers.find(x => x.gb === +g) || k.tiers[Math.min(2, k.tiers.length - 1)];
+  return {...k, pkg:pid, id:pid + ':' + t.gb, gb:t.gb, days:t.days, price:t.price};
+}
+const pkgsFor = c => [pkgGet(c), ...Object.keys(REGIONS).filter(k => !REGIONS[k].global && REGIONS[k].cc.includes(c)).map(pkgGet).sort((a, b) => a.cc.length - b.cc.length), ...(REGIONS.global.cc.includes(c) ? [pkgGet('global')] : [])];
+const mapOK = cc => { const e = cc.filter(k => EU_T[k]).length, a = cc.filter(k => AS_T[k]).length; const hit = Math.max(e, a); return hit > 0 && hit >= cc.length * 0.6; };
+const eur = n => '€' + (Number.isInteger(n) ? n : n.toFixed(2));
+const eur2 = n => '€' + n.toFixed(2);
+const pgb = p => '€' + (p.price / p.gb).toFixed(2);
+const ST = {notinstalled:{l:'Not installed',k:'ni'}, installed:{l:'Installed',k:'in'}, inuse:{l:'In use',k:'use'}, low:{l:'Running low',k:'low'}, expired:{l:'Expired',k:'exp'}};
+const CODES = ['K2-7Q4M-X9PA-31ZD','K2-8RTN-2LWC-55HB','K2-3VJD-QK7E-90FA','K2-6PZS-M1YT-48GC','K2-9HXB-E4NU-12KD'];
+const OWNERS = ['Me',"Sara's phone",'Dad','Mum','Partner','Work phone'];
+const ini = o => o === 'Me' ? 'Me' : o[0];
+
+const PATHS = {
+  search:['M11 4a7 7 0 1 0 0 14 7 7 0 0 0 0-14z','M20 20l-4-4'],
+  globe:['M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z','M3 12h18','M12 3c2.5 2.6 3.8 5.6 3.8 9s-1.3 6.4-3.8 9c-2.5-2.6-3.8-5.6-3.8-9S9.5 5.6 12 3z'],
+  sim:['M8 3h6.5L19 7.5V19a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z','M9.5 11h5a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-5a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1z'],
+  user:['M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8z','M4.5 20.5c1.2-3.7 4.1-5.5 7.5-5.5s6.3 1.8 7.5 5.5'],
+  chevR:['M9.5 6l6 6-6 6'], chevL:['M14.5 6l-6 6 6 6'], close:['M6.5 6.5l11 11M17.5 6.5l-11 11'], check:['M5 12.5l4.5 4.5L19 7.5'], plus:['M12 5v14M5 12h14'], minus:['M5 12h14'],
+  copy:['M9 8h10a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z','M16 8V5a1 1 0 0 0-1-1H5a1 1 0 0 0-1 1v10a1 1 0 0 0 1 1h3'],
+  share:['M12 3.5v11','M8 7.5l4-4 4 4','M7 10.5H6a1 1 0 0 0-1 1V20a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-8.5a1 1 0 0 0-1-1h-1'],
+  qr:['M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4z','M14 14h2.5v2.5H14zM18 18h2v2h-2zM14 19.5h1M19.5 14v1'],
+  wifi:['M2.5 9a14 14 0 0 1 19 0','M5.5 12.5a9.5 9.5 0 0 1 13 0','M8.8 16a5 5 0 0 1 6.4 0','M12 19.5h.01'],
+  wifiOff:['M2.5 9a14 14 0 0 1 19 0','M5.5 12.5a9.5 9.5 0 0 1 13 0','M8.8 16a5 5 0 0 1 6.4 0','M12 19.5h.01','M3 3l18 18'],
+  alert:['M10.3 4.3L2.6 18a2 2 0 0 0 1.7 3h15.4a2 2 0 0 0 1.7-3L13.7 4.3a2 2 0 0 0-3.4 0z','M12 9.5v4','M12 17h.01'],
+  card:['M4 5.5h16a1 1 0 0 1 1 1v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-11a1 1 0 0 1 1-1z','M3 10h18','M7 15h3'],
+  lock:['M7 11h10a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1z','M8.5 11V8a3.5 3.5 0 0 1 7 0v3'],
+  plane:['M21 15.5v-2l-8-5V3.5a1.5 1.5 0 0 0-3 0v5l-8 5v2l8-2.5V19l-2 1.5V22l3.5-1 3.5 1v-1.5L13 19v-5.5z'],
+  clock:['M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z','M12 7.5V12l3 2'],
+  bolt:['M13 3L5 14h6l-1 7 8-11h-6l1-7z'],
+  keys:['M4 6.5h16a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-9a1 1 0 0 1 1-1z','M7 10.5h.01M11 10.5h.01M15 10.5h.01M8 14h8'],
+  phone:['M8 2.5h8a2 2 0 0 1 2 2v15a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2v-15a2 2 0 0 1 2-2z','M11 18.5h2'],
+  moon:['M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z'],
+  help:['M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z','M9.5 9.5a2.5 2.5 0 1 1 3.4 2.3c-.6.3-.9.8-.9 1.4v.5','M12 16.8h.01'],
+  info:['M12 3a9 9 0 1 0 0 18 9 9 0 0 0 0-18z','M12 11v5','M12 7.8h.01'],
+  refresh:['M19.5 12a7.5 7.5 0 1 1-2.2-5.3','M19.5 4.5v4h-4'],
+  msg:['M6 4.5h12a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H10l-5 4v-14a2 2 0 0 1 1-2z'],
+  mail:['M4 6h16a1 1 0 0 1 1 1v10a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1z','M3.5 7l8.5 6 8.5-6'],
+  link:['M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1','M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1'],
+  more:['M6 12h.01M12 12h.01M18 12h.01'],
+  signal:['M5 19v-3M10 19v-6M15 19V9M20 19V5'],
+  arrowR:['M5 12h14M13 6l6 6-6 6'],
+  sparkle:['M12 3.5l1.9 5.1 5.1 1.9-5.1 1.9L12 17.5l-1.9-5.1L5 10.5l5.1-1.9z','M18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z'],
+  ticket:['M4 6.5h16a1 1 0 0 1 1 1V10a2 2 0 0 0 0 4v2.5a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V14a2 2 0 0 0 0-4V7.5a1 1 0 0 1 1-1z','M14 7v2M14 11v2M14 15v2'],
+  send:['M5 12h11','M12 6l6 6-6 6'],
+  call:['M6.5 3.5h3l1.5 4.5-2 1.3a11 11 0 0 0 5.7 5.7l1.3-2 4.5 1.5v3a2 2 0 0 1-2 2A16 16 0 0 1 4.5 5.5a2 2 0 0 1 2-2z']
+};
+const mk = (size, sw) => { const o = {}; Object.keys(PATHS).forEach(k => { o[k] = h('svg', {width:size, height:size, viewBox:'0 0 24 24', fill:'none', stroke:'currentColor', strokeWidth: k === 'more' ? 3.2 : sw, strokeLinecap:'round', strokeLinejoin:'round', style:{display:'block', flex:'none'}}, PATHS[k].map((d, i) => h('path', {d, key:i}))); }); return o; };
+const IC = mk(20, 1.8), ICS = mk(16, 2), ICXS = mk(13, 2.2), ICL = mk(30, 1.8), ICXL = mk(42, 2.2);
+
+function Logo({size}) {
+  return h('svg', {width:size, height:size, viewBox:'0 0 32 32', style:{display:'block'}},
+    h('rect', {width:32, height:32, rx:10, fill:'var(--accent)'}),
+    h('path', {d:'M7 22.5a9 9 0 0 1 18 0z', fill:'var(--accent-ink)'}),
+    h('circle', {cx:23.2, cy:9.6, r:2.7, fill:'var(--accent-ink)'}));
+}
+function Chip({status, large}) {
+  const [pop, setPop] = React.useState(false); const prev = React.useRef(status);
+  React.useEffect(() => { if (prev.current !== status) { prev.current = status; setPop(true); const t = setTimeout(() => setPop(false), 500); return () => clearTimeout(t); } }, [status]);
+  const m = ST[status];
+  return h('span', {style:{display:'inline-flex', alignItems:'center', gap:6, height: large ? 28 : 24, padding:'0 10px 0 9px', borderRadius:999, background:`var(--st-${m.k}-bg)`, color:`var(--st-${m.k}-fg)`, fontSize: large ? 13 : 12, fontWeight:600, whiteSpace:'nowrap', transition:'background-color .45s ease, color .45s ease', animation: pop ? 'chipPop .5s cubic-bezier(.3,1.6,.5,1)' : 'none', flex:'none'}},
+    h('span', {style:{width:6, height:6, borderRadius:3, background:'currentColor', animation: status === 'inuse' ? 'livePulse 2s ease-in-out infinite' : 'none'}}), m.l);
+}
+function Ring({pct, size, sw, color, label, unit, sub, fs}) {
+  const [v, setV] = React.useState(0);
+  React.useEffect(() => { const t = setTimeout(() => setV(pct), 80); return () => clearTimeout(t); }, [pct]);
+  const r = (size - sw) / 2, c = 2 * Math.PI * r;
+  return h('div', {style:{position:'relative', width:size, height:size, flex:'none'}},
+    h('svg', {width:size, height:size, style:{transform:'rotate(-90deg)', display:'block'}},
+      h('circle', {cx:size/2, cy:size/2, r, fill:'none', stroke:'var(--track)', strokeWidth:sw}),
+      h('circle', {cx:size/2, cy:size/2, r, fill:'none', stroke:color, strokeWidth:sw, strokeLinecap:'round', strokeDasharray:c, strokeDashoffset:c * (1 - v), strokeOpacity: v < 0.005 ? 0 : 1, style:{transition:'stroke-dashoffset 1.2s cubic-bezier(.2,.8,.2,1), stroke .45s'}})),
+    h('div', {style:{position:'absolute', inset:0, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center'}},
+      h('div', {style:{display:'flex', alignItems:'baseline', gap:3}},
+        h('span', {style:{fontSize:fs, fontWeight:700, letterSpacing:'-0.04em', lineHeight:1, color:'var(--ink)', fontVariantNumeric:'tabular-nums'}}, label),
+        unit && h('span', {style:{fontSize: Math.max(11, fs * 0.32), fontWeight:600, color:'var(--ink2)'}}, unit)),
+      sub && h('div', {style:{fontSize:13, color:'var(--ink2)', marginTop:6}}, sub)));
+}
+function TileMap({cc, focus}) {
+  if (!mapOK(cc)) return null;
+  const L = cc.filter(k => AS_T[k]).length > cc.filter(k => EU_T[k]).length ? AS_T : EU_T; const keys = Object.keys(L); const s = 34, t = 30;
+  const W = (Math.max(...keys.map(k => L[k][0])) + 1) * s - 4, H = (Math.max(...keys.map(k => L[k][1])) + 1) * s - 4;
+  return h('svg', {viewBox:`0 0 ${W} ${H}`, width: Math.min(W, 310), style:{display:'block', maxWidth:'100%'}}, keys.map(k => {
+    const [x, y] = L[k]; const on = cc.includes(k), f = k === focus;
+    return h('g', {key:k},
+      h('rect', {x:x*s, y:y*s, width:t, height:t, rx:8, fill: f ? 'var(--ink)' : on ? 'var(--accent)' : 'var(--surface2)'}),
+      h('text', {x:x*s + t/2, y:y*s + t/2 + 3.5, textAnchor:'middle', style:{fontFamily:'IBM Plex Mono, monospace', fontSize:9.5, fontWeight:600, fill: f ? 'var(--bg)' : on ? 'var(--accent-ink)' : 'var(--ink3)'}}, k));
+  }));
+}
+function QR({seed, size}) {
+  const n = 25; let x = seed * 7919 + 13; const rnd = () => { x = (x * 9301 + 49297) % 233280; return x / 233280; };
+  const fz = (r, c) => (r < 8 && c < 8) || (r < 8 && c >= n - 8) || (r >= n - 8 && c < 8);
+  let d = '';
+  for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (!fz(r, c) && rnd() > 0.5) d += `M${c} ${r}h1v1h-1z`;
+  const fin = (r, c) => `M${c} ${r}h7v7h-7zM${c+1} ${r+1}v5h5v-5zM${c+2} ${r+2}h3v3h-3z`;
+  d += fin(0, 0) + fin(0, n - 7) + fin(n - 7, 0);
+  return h('svg', {width:size, height:size, viewBox:`0 0 ${n} ${n}`, shapeRendering:'crispEdges', style:{display:'block'}}, h('path', {d, fill:'#111113', fillRule:'evenodd'}));
+}
+function StatusIcons() {
+  return h('div', {style:{display:'flex', gap:6, alignItems:'center'}},
+    h('svg', {width:18, height:12, viewBox:'0 0 18 12'}, [0,1,2,3].map(i => h('rect', {key:i, x:i*4.6, y:9 - i*3, width:3.2, height:3 + i*3, rx:1, fill:'currentColor'}))),
+    h('svg', {width:16, height:12, viewBox:'0 0 16 12'}, h('path', {d:'M8 11.5l2.2-2.6a3.2 3.2 0 0 0-4.4 0zM3.3 6.6a6.8 6.8 0 0 1 9.4 0l1.3-1.5a8.8 8.8 0 0 0-12 0zM.6 3.5a10.8 10.8 0 0 1 14.8 0L16.6 2a12.8 12.8 0 0 0-17.2 0z', fill:'currentColor'})),
+    h('svg', {width:27, height:13, viewBox:'0 0 27 13'}, h('rect', {x:.5, y:.5, width:22, height:12, rx:3.5, fill:'none', stroke:'currentColor', strokeOpacity:.4}), h('rect', {x:2, y:2, width:17, height:9, rx:2, fill:'currentColor'}), h('path', {d:'M24.5 4.5v4c.8-.3 1.5-1.1 1.5-2s-.7-1.7-1.5-2z', fill:'currentColor', fillOpacity:.4})));
+}
+
+const SEED_SIMS = [
+  {id:'pt-me', trip:'pt', owner:'Me', planId:'PT:10', cc:'PT', status:'inuse', gb:10, used:3.2, days:30, left:8.6, iccid:'8935 1010 0000 2231 457', code:'K2-4LMA-T7QE-22PB', device:'self', last:'Now'},
+  {id:'pt-sara', trip:'pt', owner:"Sara's phone", planId:'PT:5', cc:'PT', status:'low', gb:5, used:4.4, days:30, left:3.4, iccid:'8935 1010 0000 2231 465', code:'K2-5NXC-R2HD-71QA', device:'other', last:'12 min ago'},
+  {id:'it-me', trip:'it', owner:'Me', planId:'IT:5', cc:'IT', status:'notinstalled', gb:5, used:0, days:30, left:30, iccid:'8939 0120 0000 7781 203', code:'K2-2WEB-P8KS-63MT', device:'self'},
+  {id:'jp-me', trip:'jp', owner:'Me', planId:'JP:5', cc:'JP', status:'expired', gb:5, used:4.1, days:30, left:0, iccid:'8981 0300 0000 1190 338', code:'K2-1JTP-Z5VY-04NR', device:'self', ended:'Mar 24'}
+];
+const SEED_TRIPS = {pt:{name:'Portugal', cc:'PT', when:'Now'}, it:{name:'Italy', cc:'IT', when:'Nov 20'}, jp:{name:'Japan', cc:'JP', when:'Past'}};
+const SYS = "You are the in-app support assistant for Tavi, a fictional travel eSIM app (prototype, synthetic data). Reply in at most 2 short sentences, plain text, no markdown or lists. Be concrete and friendly. The app can never switch the phone's data line or roaming itself: guide to Settings > Cellular (iPhone) or Settings > Network & internet > SIMs (Android). Never tell users to delete an eSIM. Each install code works once, on one phone. Payments are charged once per order. If you can't solve it, suggest 'Create ticket' or 'Call 24/7' (both in Help). The user's eSIMs: ";
+const fallback = t => { t = t.toLowerCase();
+  if (/data|internet|connect|signal|roam/.test(t)) return "Turn on Data Roaming for the Tavi line in Settings › Cellular, then pick Tavi as Cellular Data. Still stuck? I can open a ticket.";
+  if (/install|qr|code|activat/.test(t)) return "Join Wi-Fi, open the eSIM in My eSIMs and tap Install. Install once, and don't delete it afterwards.";
+  if (/refund|pay|charge|card/.test(t)) return "Each order is charged once, even if you retry. For a refund, create a ticket and we'll reply within 2 hours.";
+  if (/share|family|dad|sara/.test(t)) return "Open the eSIM and tap Share install details. Each code works on one phone, once.";
+  return "I can help with installs, data, sharing and payments. For anything else, create a ticket or call us 24/7."; };
+const ANDROID = {
+  compat:'EID: Settings › About phone › SIM status (varies by maker). *#06# works on most. Carrier lock: Settings › Network › SIMs.',
+  install:'One-tap: Android 10+ shows a "Download SIM?" system prompt. QR: Settings › Network & internet › SIMs › Add eSIM › scan (not the camera app on some models). Manual: same screen › "Need help?" › Enter it manually. Samsung: Connections › SIM manager.',
+  result:'On arrival: Settings › Network & internet › SIMs › pick the Tavi eSIM › Mobile data ON + Roaming ON. Samsung: SIM manager › Mobile data › Tavi.',
+  share:'Recipient on Android opens the link → system "Download SIM" prompt, or scans from SIM settings. Status still comes from the provider.',
+  detail:'No difference. Line switching always happens in system Settings, never in-app.'
+};
+
+class Component extends DCLogic {
+  state = {
+    route:'splash', hist:[], dark:null, offline:false, empty:false,
+    payScenario:'3ds', installScenario:'ok',
+    onb:0, compat:{esim:false, unlock:false}, compatFrom:'onb',
+    query:'', sort:'gpb', scope:'all', size:0, cat:'countries', focus:'ME', planId:'balkans:10', loadingResults:false, showAll:false,
+    qty:1, owners:['Me'], ownerIdx:null,
+    pay:'processing', attempt:0, order:'TV-3K9Q',
+    sims:SEED_SIMS, trips:SEED_TRIPS, tripOrder:['pt','it','jp'], simId:null, loadingSims:false,
+    installMode:'onetap', installing:false, result:'ok',
+    sheet:null, topPick:3, topState:'pick', toast:null,
+    chat:[{role:'assistant', text:'Hi Alex. Ask me anything about your eSIMs.'}], chatInput:'', chatBusy:false,
+    tickets:[{id:'T-2041', subject:'No data after landing in Lisbon', topic:'Data', sim:'🇵🇹 Me', status:'Resolved', when:'Sep 29', msgs:[{from:'me', text:'No data after landing in Lisbon.'},{from:'agent', text:'Hi Alex, Mira here. Turn on Data Roaming for the Tavi line in Settings › Cellular. Does that fix it?'},{from:'me', text:'Yes, working now. Thanks!'}]}],
+    tForm:{topic:'Install', sim:null, text:''}, ticketSent:null, ticketId:null, tReply:'', call:'idle', callSec:0
+  };
+  seq = 0;
+  chatRef = React.createRef();
+  componentDidUpdate(pp, ps) { if (ps.chat !== this.state.chat || ps.chatBusy !== this.state.chatBusy) { const el = this.chatRef.current; if (el) el.scrollTop = el.scrollHeight; } }
+  async sendChat(text) {
+    const t = (text ?? this.state.chatInput).trim(); if (!t || this.state.chatBusy) return;
+    const chat = [...this.state.chat, {role:'user', text:t}];
+    this.setState({chat, chatInput:'', chatBusy:true});
+    let reply = '';
+    try {
+      const sims = this.state.sims.map(x => `${x.owner}: ${planGet(x.planId).name} ${x.gb} GB, ${ST[x.status].l}, ${Math.max(0, x.gb - x.used).toFixed(1)} GB left`).join('; ');
+      const msgs = chat.slice(chat.findIndex(m => m.role === 'user')).map(m => ({role:m.role, content:m.text}));
+      reply = await window.claude.complete({system:SYS + sims, messages:msgs, max_tokens:220});
+    } catch (e) { reply = ''; }
+    if (!reply || !reply.trim()) { await new Promise(r => setTimeout(r, 700)); reply = fallback(t); }
+    this.setState(st => ({chat:[...st.chat, {role:'assistant', text:reply.trim()}], chatBusy:false}));
+  }
+  submitTicket() {
+    const f = this.state.tForm; if (!f.text.trim()) return;
+    const id = 'T-' + (2057 + this.state.tickets.length); const sm = this.state.sims.find(x => x.id === f.sim);
+    const txt = f.text.trim();
+    const tk = {id, subject: txt.length > 40 ? txt.slice(0, 40) + '…' : txt, topic:f.topic, sim: sm ? C[sm.cc][1] + ' ' + sm.owner : null, status:'Open', when:'Today', msgs:[{from:'me', text:txt}]};
+    this.setState(st => ({tickets:[tk, ...st.tickets], ticketSent:id, tForm:{topic:'Install', sim:null, text:''}}));
+    this.after(6000, () => this.setState(st => ({tickets: st.tickets.map(x => x.id === id ? {...x, status:'In progress', msgs:[...x.msgs, {from:'agent', text:'Hi Alex, Mira here. I\'m on it and will update you shortly.'}]} : x)})));
+  }
+  replyTicket() {
+    const t = this.state.tReply.trim(); if (!t) return; const id = this.state.ticketId;
+    this.setState(st => ({tReply:'', tickets: st.tickets.map(x => x.id === id ? {...x, status: x.status === 'Resolved' ? 'Open' : x.status, msgs:[...x.msgs, {from:'me', text:t}]} : x)}));
+  }
+  startCall() { this.setState({call:'calling', callSec:0}); clearInterval(this.ci); this.ci = setInterval(() => this.setState(st => ({callSec:st.callSec + 1, call: st.callSec + 1 >= 4 ? 'connected' : 'calling'})), 1000); }
+  endCall() { clearInterval(this.ci); this.setState({call:'idle', sheet:null}); this.toast('Call ended'); }
+  componentDidMount() {
+    this.timers = []; this.t0 = Date.now();
+    const st = this.props.start;
+    if (st && st !== 'splash') this.jump(st);
+    else this.after(1900, () => { if (this.state.route === 'splash') this.setState({route:'onb'}); });
+    this.tick = setInterval(() => this.forceUpdate(), 30000);
+  }
+  componentWillUnmount() { (this.timers || []).forEach(clearTimeout); clearInterval(this.tick); clearInterval(this.ci); }
+  after(ms, fn) { const t = setTimeout(fn, ms); this.timers.push(t); }
+  nav(route, extra) { this.setState(st => ({hist:[...st.hist, st.route], route, sheet:null, ...(extra || {})})); }
+  back() { this.setState(st => { const hist = [...st.hist]; const route = hist.pop() || 'explore'; return {hist, route, sheet:null}; }); }
+  tab(k) {
+    this.setState({route:k, hist:[], sheet:null});
+    if (k === 'sims') { this.setState({loadingSims:true}); this.after(750, () => this.setState({loadingSims:false})); }
+  }
+  toast(text) { this.setState({toast:text}); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({toast:null}), 1700); }
+  upd(id, patch) { this.setState(st => ({sims: st.sims.map(x => x.id === id ? {...x, ...(typeof patch === 'function' ? patch(x) : patch)} : x)})); }
+  sim() { return this.state.sims.find(x => x.id === this.state.simId) || this.state.sims[0]; }
+
+  setQuery(q) {
+    const was = this.exact(this.state.query), now = this.exact(q);
+    this.setState({query:q, showAll:false});
+    if (now && now !== was) { this.setState({loadingResults:true, focus:now}); clearTimeout(this.lr); this.lr = setTimeout(() => this.setState({loadingResults:false}), 650); }
+  }
+  exact(q) { const t = (q || '').trim().toLowerCase(); if (!t) return null; const k = Object.keys(C).find(k => C[k][0].toLowerCase() === t); return k || null; }
+
+  deliver(silent) {
+    const S0 = this.state; const p = planGet(S0.planId); const S = {...S0, focus: S0.focus && p.cc.includes(S0.focus) ? S0.focus : p.cc[0]}; const trip = 'trip-' + S.focus; const n = ++this.seq;
+    const fresh = S.owners.slice(0, S.qty).map((o, i) => ({id:`n${n}-${i}`, trip, owner:o, planId:p.id, cc:S.focus, status:'notinstalled', gb:p.gb, used:0, days:p.days, left:p.days, iccid:`8938 2100 0000 44${71 + i} 0${2 + i}${n}`, code:CODES[i % 5], device: o === 'Me' ? 'self' : 'other'}));
+    this.setState(st => ({
+      sims:[...fresh, ...st.sims],
+      trips:{...st.trips, [trip]:{name:C[S.focus][0], cc:S.focus, when:'Oct 14'}},
+      tripOrder: st.tripOrder.includes(trip) ? st.tripOrder : [st.tripOrder[0], trip, ...st.tripOrder.slice(1)],
+      empty:false, lastOrder:fresh.map(f => f.id)
+    }));
+    if (silent) this.toast('Your eSIMs are ready');
+  }
+  ensureOrder() {
+    if (this.state.sims.some(x => x.trip === 'trip-ME')) return;
+    this.setState({focus:'ME', planId:'balkans:10', qty:3, owners:['Me',"Sara's phone",'Dad']});
+    this.seq++; const p = planGet('balkans:10'); const trip = 'trip-ME';
+    const fresh = ['Me',"Sara's phone",'Dad'].map((o, i) => ({id:`n0-${i}`, trip, owner:o, planId:p.id, cc:'ME', status:'notinstalled', gb:p.gb, used:0, days:p.days, left:p.days, iccid:`8938 2100 0000 44${71 + i} 0${2 + i}0`, code:CODES[i], device: o === 'Me' ? 'self' : 'other'}));
+    this.setState(st => ({sims:[...fresh, ...st.sims], trips:{...st.trips, [trip]:{name:'Montenegro', cc:'ME', when:'Oct 14'}}, tripOrder:[st.tripOrder[0], trip, ...st.tripOrder.slice(1)], lastOrder:fresh.map(f => f.id)}));
+    return fresh;
+  }
+
+  startPay() { this.setState({attempt:0}); this.nav('pay'); this.runPay(); }
+  runPay() {
+    this.setState({pay:'processing', sheet:null});
+    this.after(1900, () => {
+      const sc = this.state.payScenario, a = this.state.attempt;
+      if (sc === 'fail' && a === 0) return this.setState({pay:'failed'});
+      if (sc === '3ds' || sc === 'delay') return this.setState({sheet:'3ds'});
+      this.confirmPay();
+    });
+  }
+  approve() { this.setState({sheet:null, pay:'confirming'}); this.after(1500, () => this.confirmPay()); }
+  cancel3ds() { this.setState({sheet:null, pay:'cancelled'}); }
+  confirmPay() {
+    this.setState({pay:'succeeded'});
+    this.after(1700, () => {
+      if (this.state.payScenario === 'delay') this.setState({pay:'pending'});
+      else { this.deliver(false); this.setState({pay:'delivered'}); }
+    });
+  }
+
+  runInstall() {
+    this.setState({sheet:null, installing:true});
+    this.after(1900, () => {
+      const sc = this.state.offline ? 'nonet' : this.state.installScenario;
+      if (sc === 'ok') this.upd(this.state.simId, x => x.status === 'notinstalled' ? {status:'installed'} : {});
+      this.setState({installing:false});
+      this.nav('result', {result:sc});
+    });
+  }
+  sendShare(to) {
+    const id = this.state.simId;
+    this.setState({sheet:null}); this.upd(id, {shared:'sent', sentTo:to});
+    this.toast('Sent to ' + to);
+    this.after(3800, () => { this.upd(id, {status:'installed', installedAt:'just now'}); this.toast(this.state.sims.find(x => x.id === id).owner + ' installed'); });
+    this.after(8500, () => this.upd(id, {status:'inuse', used:0.2, left:this.state.sims.find(x => x.id === id).days - 0.1, last:'12 min ago', started:true}));
+  }
+  topPay() {
+    this.setState({topState:'busy'});
+    this.after(1500, () => {
+      const g = this.state.topPick;
+      this.upd(this.state.simId, x => ({gb: x.gb + g, status:'inuse'}));
+      this.setState({topState:'done'}); this.after(1300, () => this.setState({sheet:null}));
+    });
+  }
+
+  jump(k) {
+    const go = (route, extra) => this.setState({route, hist: route === 'explore' || route === 'sims' || route === 'onb' ? [] : ['explore'], sheet:null, ...(extra || {})});
+    if (k === 'onb') go('onb', {onb:0});
+    else if (k === 'explore') go('explore', {query:''});
+    else if (k === 'results') { go('explore'); this.setQuery('Montenegro'); }
+    else if (k === 'checkout') this.setState({route:'checkout', hist:['explore','package'], focus:'ME', planId:'balkans:10', qty:3, owners:['Me',"Sara's phone",'Dad'], sheet:null});
+    else if (k === 'sims' || k === 'myesims') this.tab('sims');
+    else if (k === 'install') { const f = this.ensureOrder(); this.setState(st => { const s = st.sims.find(x => x.trip === 'trip-ME' && x.owner === 'Me'); return {route:'install', hist:['sims'], simId:s.id, installMode:'onetap', sheet:null}; }); }
+    else if (k === 'share') { this.ensureOrder(); this.setState(st => { const s = st.sims.find(x => x.trip === 'trip-ME' && x.owner === 'Dad') || st.sims.find(x => x.device === 'other' && x.status === 'notinstalled'); return {route:'share', hist:['sims'], simId:s ? s.id : st.simId, sheet:null}; }); }
+    else if (k === 'low') this.setState({route:'detail', hist:['sims'], simId:'pt-sara', sheet:null});
+    else if (k === 'expired') this.setState({route:'detail', hist:['sims'], simId:'jp-me', sheet:null});
+    else if (k === 'about') this.setState({route:'about', hist:['account'], sheet:null});
+    else if (k === 'help') this.setState({route:'help', hist:['account'], sheet:null});
+    else if (k === 'compat') this.setState({route:'compat', hist:['account'], compatFrom:'account', sheet:null});
+  }
+
+  renderVals() {
+    const S = this.state, r = S.route;
+    const dark = S.dark ?? !!this.props.dark;
+    const s = {}; ['splash','onb','compat','explore','package','checkout','pay','sims','detail','install','result','share','account','about','help','chat','ticket','ticketDetail'].forEach(k => s[k] = r === k);
+    const tabOf = {explore:'explore', package:'explore', sims:'sims', detail:'sims', account:'account', about:'account', help:'account'}[r];
+    const seg = on => ({bg: on ? 'var(--surface)' : 'transparent', fg: on ? 'var(--ink)' : 'var(--ink2)', sh: on ? 'var(--shadow-s)' : 'none'});
+    const bt = i => i ? '1px solid var(--line)' : 'none';
+
+    // onboarding
+    const ONB = [['Data abroad, in minutes','Buy before you leave.'],['One order. The whole group.','Label each eSIM by owner.'],['Install before you fly','On Wi-Fi, at home.']];
+    const onb = {
+      v1:S.onb === 0, v2:S.onb === 1, v3:S.onb === 2, title:ONB[S.onb][0], sub:ONB[S.onb][1],
+      nextLabel: S.onb === 2 ? 'Start' : 'Next',
+      dots:[0,1,2].map(i => ({w: i === S.onb ? 22 : 6, bg: i === S.onb ? 'var(--ink)' : 'var(--line)'})),
+      people:[['Me','inuse'],["Sara's phone",'installed'],['Dad','notinstalled']].map(([n, st]) => ({name:n, i:ini(n), chip:h(Chip, {status:st})})),
+      next:() => S.onb < 2 ? this.setState({onb:S.onb + 1}) : this.setState({route:'compat', compatFrom:'onb', hist:[]}),
+      skip:() => this.setState({route:'compat', compatFrom:'onb', hist:[]})
+    };
+    const cp = S.compat;
+    const compat = {
+      hasBack: S.compatFrom === 'account', ready: cp.esim && cp.unlock, notReady: !(cp.esim && cp.unlock),
+      checks:[['esim','eSIM-capable','Most phones from 2019 on'],['unlock','Carrier-unlocked','Not tied to one network']].map(([k, l, sub], i) => ({label:l, sub, border:bt(i), bg: cp[k] ? 'var(--accent)' : 'transparent', ring: cp[k] ? 'none' : 'inset 0 0 0 2px var(--line)', icon: cp[k] ? ICS.check : null, onClick:() => this.setState({compat:{...cp, [k]:!cp[k]}})})),
+      cont:() => S.compatFrom === 'account' ? (this.back(), this.toast('Phone is eSIM-ready')) : this.tab('explore'),
+      skip:() => S.compatFrom === 'account' ? this.back() : this.tab('explore')
+    };
+
+    // explore
+    const q = S.query.trim().toLowerCase(); const ex0 = this.exact(S.query);
+    const openRegion = k => { const t = REGIONS[k].t; this.setState({focus:null}); this.nav('package', {planId:k + ':' + t[Math.min(3, t.length - 1)][0], showAll:false}); };
+    const cRow = (k, i) => ({badge:C[k][1], name:C[k][0], sub:'Country', hasSub:false, from:eur(pkgGet(k).tiers[0].price), border:bt(i), onClick:() => this.setQuery(C[k][0])});
+    const rRow = (k, i) => ({badge:IC.globe, name:REGIONS[k].name, sub:REGIONS[k].cc.length + ' countries', hasSub:true, from:eur(REGIONS[k].t[0][2]), border:bt(i), onClick:() => openRegion(k)});
+    const letters = {}; ORDER.forEach(k => { const L = C[k][0].normalize('NFD')[0].toUpperCase(); (letters[L] = letters[L] || []).push(k); });
+    const browse = S.cat === 'countries' ? Object.keys(letters).sort().map(L => ({letter:L, items:letters[L].map(cRow)})) : [{letter:REG_ORDER.length + ' regions', items:REG_ORDER.map(rRow)}];
+    const mC = q && !ex0 ? ORDER.filter(k => C[k][0].toLowerCase().includes(q)) : [];
+    const mR = q && !ex0 ? REG_ORDER.filter(k => REGIONS[k].name.toLowerCase().includes(q)) : [];
+    const matches = [...mR.map(k => ({...rRow(k, 0)})), ...mC.map(k => ({...cRow(k, 0), sub:'Country'}))].slice(0, 8).map((m, i) => ({...m, border:bt(i)}));
+    const scopeOk = k => S.scope === 'all' || (S.scope === 'local' && !k.region) || (S.scope === 'regional' && k.region && !k.global) || (S.scope === 'global' && k.global);
+    const sizeOk = t => !S.size || (S.size === 20 ? t.gb >= 20 : t.gb === S.size);
+    const kinds = ex0 ? pkgsFor(ex0).filter(scopeOk).map(k => ({k, tiers:k.tiers.filter(sizeOk)})).filter(x => x.tiers.length) : [];
+    const allT = kinds.flatMap(x => x.tiers); const minG = allT.length ? Math.min(...allT.map(t => t.price / t.gb)) : 0;
+    const ex = {
+      query:S.query, onQuery:e => this.setQuery(e.target.value), clear:() => this.setQuery(''), hasQuery:!!S.query,
+      showBrowse:!q, browse,
+      cats:[['countries','Countries',ORDER.length],['regions','Regions',REG_ORDER.length]].map(([k, l, n]) => ({label:l, n, ...seg(S.cat === k), onClick:() => this.setState({cat:k})})),
+      showMatches:matches.length > 0, matches, showNone:!!q && !ex0 && !matches.length,
+      showLoading:!!ex0 && S.loadingResults, showResults:!!ex0 && !S.loadingResults,
+      count: ex0 ? `${C[ex0][1]} ${C[ex0][0]} · ${allT.length} plans in ${kinds.length} packages` : '',
+      scopes:[['all','All'],['local','Local'],['regional','Regional'],['global','Global']].map(([k, l]) => ({label:l, ...seg(S.scope === k), onClick:() => this.setState({scope:k})})),
+      sizes:[[0,'Any data'],[1,'1 GB'],[3,'3 GB'],[5,'5 GB'],[10,'10 GB'],[20,'20 GB+']].map(([v, l]) => ({label:l, bg:S.size === v ? 'var(--ink)' : 'transparent', fg:S.size === v ? 'var(--bg)' : 'var(--ink)', bd:S.size === v ? 'var(--ink)' : 'var(--line)', onClick:() => this.setState({size:v})})),
+      pkgs: kinds.map(({k, tiers}) => ({badge:k.region ? IC.globe : k.flag, name:k.name, cover:k.region ? k.cc.length + ' countries' : 'Single country', kind:k.global ? 'Global' : k.region ? 'Regional' : 'Local',
+        tiers: tiers.map(t => ({gb:t.gb, days:t.days, price:eur(t.price), perGB:'€' + (t.price / t.gb).toFixed(2), best:Math.abs(t.price / t.gb - minG) < 1e-9, open:() => this.nav('package', {planId:k.id + ':' + t.gb, showAll:false})}))})),
+      noTier:!!ex0 && !kinds.length
+    };
+
+    // package
+    const P = planGet(S.planId);
+    const ccs = [...P.cc].sort((a, b) => (b === S.focus) - (a === S.focus) || C[a][0].localeCompare(C[b][0]));
+    const shown = S.showAll ? ccs : ccs.slice(0, 6);
+    const pk = {
+      name:P.name, badgeL:P.region ? ICL.globe : P.flag, cover:P.region ? P.cc.length + ' countries' : 'Single country',
+      gb:P.gb, days:P.days, price:eur(P.price), perGB:pgb(P),
+      tiers:pkgGet(P.pkg).tiers.map(t => ({gb:t.gb, days:t.days, price:eur(t.price), bg:t.gb === P.gb ? 'var(--accent-soft)' : 'var(--surface)', ring:t.gb === P.gb ? 'inset 0 0 0 2px var(--accent)' : 'var(--shadow-s)', onClick:() => this.setState({planId:P.pkg + ':' + t.gb})})),
+      includes:S.focus && P.cc.includes(S.focus) ? 'Includes ' + C[S.focus][1] : P.cc.length + ' countries',
+      hasMap:mapOK(P.cc), map:h(TileMap, {cc:P.cc, focus:S.focus}),
+      countries:shown.map(k => ({flag:C[k][1], name:C[k][0], nets:netsOf(k), w:k === S.focus ? 700 : 500})),
+      hasMore:ccs.length > 6, moreLabel:S.showAll ? 'Show less' : 'Show all ' + ccs.length,
+      toggleAll:() => this.setState({showAll:!S.showAll}),
+      choose:() => this.nav('checkout', {qty:1, owners:['Me']})
+    };
+
+    // checkout
+    const co = {
+      badge: P.region ? IC.globe : P.flag, name:P.name, meta:`${P.gb} GB · ${P.days} days`, unit:eur(P.price), qty:S.qty,
+      decColor: S.qty > 1 ? 'var(--ink)' : 'var(--ink3)', incColor: S.qty < 5 ? 'var(--ink)' : 'var(--ink3)',
+      dec:() => S.qty > 1 && this.setState({qty:S.qty - 1, owners:S.owners.slice(0, S.qty - 1)}),
+      inc:() => { if (S.qty >= 5) return; const nxt = OWNERS.find(o => !S.owners.includes(o)) || 'Guest'; this.setState({qty:S.qty + 1, owners:[...S.owners, nxt]}); },
+      rows: S.owners.slice(0, S.qty).map((o, i) => ({n:String(i + 1).padStart(2, '0'), label:o, i:ini(o), border:bt(i), onClick:() => this.setState({sheet:'owner', ownerIdx:i})})),
+      total:eur2(P.price * S.qty), canPay: !S.offline, pay:() => this.startPay()
+    };
+
+    // pay
+    const newSims = (S.lastOrder || []).map(id => S.sims.find(x => x.id === id)).filter(Boolean);
+    const pay = {
+      loading: S.pay === 'processing' || S.pay === 'confirming', loadLabel: S.pay === 'confirming' ? 'Confirming with bank' : 'Processing payment',
+      succeeded: S.pay === 'succeeded', pending: S.pay === 'pending', delivered: S.pay === 'delivered', failed: S.pay === 'failed', cancelled: S.pay === 'cancelled',
+      canClose: ['failed','cancelled'].includes(S.pay), amount:eur2(P.price * S.qty), order:S.order,
+      toCheckout:() => this.back(), retry:() => { this.setState({attempt:S.attempt + 1}); this.runPay(); },
+      checkAgain:() => { this.deliver(false); this.setState({pay:'delivered'}); },
+      notify:() => { this.tab('sims'); this.toast("We'll notify you"); this.after(4200, () => this.deliver(true)); },
+      list: newSims.map((x, i) => ({owner:x.owner, i:ini(x.owner), plan:`${planGet(x.planId).name} · ${x.gb} GB`, chip:h(Chip, {status:x.status}), border:bt(i)})),
+      installMine:() => { const m = newSims.find(x => x.owner === 'Me') || newSims[0]; this.setState({route:'install', hist:['sims'], simId:m.id, installMode:'onetap'}); },
+      goSims:() => this.tab('sims')
+    };
+    const three = {digits:['4','8','2','9','1','6'], approve:() => this.approve(), cancel:() => this.cancel3ds()};
+
+    // sims list
+    const ringOf = (x, size, sw, fs, sub) => {
+      const rem = Math.max(0, x.gb - x.used); const pct = x.status === 'expired' ? 0 : rem / x.gb;
+      const col = {notinstalled:'var(--st-ni-fg)', installed:'var(--st-in-fg)', inuse:'var(--st-use-fg)', low:'var(--st-low-fg)', expired:'var(--st-exp-fg)'}[x.status];
+      return h(Ring, {pct, size, sw, color:col, label: x.status === 'expired' ? '0' : (+rem.toFixed(1)).toString(), unit: size > 100 ? 'GB' : null, sub, fs});
+    };
+    const subOf = x => ({notinstalled: x.shared === 'sent' ? 'Sent · awaiting install' : `${x.days} days`, installed:'Ready for trip', inuse: x.device === 'other' ? 'Last used ' + (x.last || 'now') : `${Math.floor(x.left)} days left`, low:`${(x.gb - x.used).toFixed(1)} GB left`, expired:'Ended ' + (x.ended || '')}[x.status]);
+    const groups = S.tripOrder.map(k => {
+      const t = S.trips[k]; const items = S.sims.filter(x => x.trip === k); if (!t || !items.length) return null;
+      return {flag:C[t.cc][1], name:t.name, when:t.when, items: items.map(x => ({owner:x.owner, i:ini(x.owner), plan:`${planGet(x.planId).name} · ${x.gb} GB`, chip:h(Chip, {status:x.status}), sub:subOf(x), ring:ringOf(x, 54, 5, 14), op: x.status === 'expired' ? 0.72 : 1, onClick:() => this.nav('detail', {simId:x.id})}))};
+    }).filter(Boolean);
+    const sims = {
+      loading:S.loadingSims, empty: !S.loadingSims && (S.empty || !groups.length), show: !S.loadingSims && !S.empty && groups.length > 0,
+      groups, hasCount: !S.empty && !S.loadingSims, count: S.sims.length + ' eSIMs', findPlan:() => this.tab('explore')
+    };
+
+    // detail
+    const X = this.sim(); const XP = planGet(X.planId);
+    const rem = Math.max(0, X.gb - X.used); const live = X.status === 'inuse' || X.status === 'low';
+    let daysBig = String(X.days), daysSmall = 'Not started', ends = 'Starts on first use abroad', timePct = 0;
+    if (live) { const ms = X.left * 864e5 - (Date.now() - this.t0); const dd = Math.floor(ms / 864e5), hh = Math.floor(ms % 864e5 / 36e5), mm = Math.floor(ms % 36e5 / 6e4); daysBig = String(dd); daysSmall = `${hh}h ${String(mm).padStart(2, '0')}m`; ends = 'Ends ' + new Date(this.t0 + X.left * 864e5).toLocaleDateString('en-GB', {day:'numeric', month:'short'}); timePct = Math.round((1 - X.left / X.days) * 100); }
+    if (X.status === 'expired') { daysBig = '0'; daysSmall = 'Ended'; ends = 'Ended ' + X.ended; timePct = 100; }
+    let cta = null, ctaLabel = '', ctaIcon = null, prim = true;
+    if (X.status === 'notinstalled' && X.device === 'self') { ctaLabel = 'Install'; ctaIcon = ICS.bolt; cta = () => this.nav('install', {installMode:'onetap'}); }
+    else if (X.status === 'notinstalled') { ctaLabel = X.shared === 'sent' ? 'View share status' : 'Share install details'; ctaIcon = ICS.share; cta = () => this.nav('share'); }
+    else if (X.status === 'installed') { ctaLabel = 'On-arrival steps'; ctaIcon = ICS.plane; prim = false; cta = () => this.nav('result', {result:'ok'}); }
+    else if (X.status === 'inuse') { ctaLabel = 'Buy more data'; ctaIcon = ICS.plus; prim = false; cta = () => this.setState({sheet:'topup', topState:'pick', topPick:3}); }
+    else if (X.status === 'low') { ctaLabel = 'Buy more data'; ctaIcon = ICS.plus; cta = () => this.setState({sheet:'topup', topState:'pick', topPick:3}); }
+    else if (X.status === 'expired') { ctaLabel = 'Buy again'; ctaIcon = ICS.refresh; cta = () => this.nav('package', {planId:X.planId, focus:X.cc, showAll:false}); }
+    const d = {
+      owner:X.owner, flag:C[X.cc][1], trip:(S.trips[X.trip] || {}).name, plan:`${XP.name} · ${X.gb} GB`, chip:h(Chip, {status:X.status, large:true}),
+      ring:ringOf(X, 200, 14, 52, X.status === 'expired' ? 'No data left' : X.status === 'notinstalled' || X.status === 'installed' ? 'Ready to use' : 'left'),
+      used:(+X.used.toFixed(1)).toString(), total:X.gb, remain:rem.toFixed(1), isLow:X.status === 'low', isExpired:X.status === 'expired',
+      daysBig, daysSmall, ends, timePct, timeColor: X.status === 'low' ? 'var(--st-low-fg)' : X.status === 'expired' ? 'var(--st-exp-fg)' : 'var(--ink)',
+      device: X.device === 'self' ? 'This iPhone' : X.owner, hasLast: X.device === 'other' && (X.status === 'inuse' || X.status === 'low'), last:X.last,
+      coverage: XP.region ? `${XP.cc.length} countries` : C[XP.cc[0]][0], openCoverage:() => this.nav('package', {planId:X.planId, focus:X.cc, showAll:false}),
+      iccid:X.iccid, copyIccid:() => this.toast('ICCID copied'),
+      ctaPrimary: !!cta && prim, ctaSecondary: !!cta && !prim, cta, ctaLabel, ctaIcon
+    };
+
+    // install
+    const lpa = `LPA:1$smdp.example$${X.code}`;
+    const ins = {
+      flag:C[X.cc][1], owner:X.owner, plan:`${XP.name} · ${X.gb} GB`, chip:h(Chip, {status:X.status}),
+      onetap:S.installMode === 'onetap', qr:S.installMode === 'qr', manual:S.installMode === 'manual',
+      modes:[['onetap','One-tap',ICS.bolt],['qr','QR code',ICS.qr],['manual','Manual',ICS.keys]].map(([k, l, icn]) => ({label:l, icon:icn, ...seg(S.installMode === k), onClick:() => this.setState({installMode:k})})),
+      qrEl:h(QR, {seed:X.code.length + X.code.charCodeAt(3), size:184}), code:X.code, lpa,
+      copyAddr:() => this.toast('Address copied'), copyCode:() => this.toast('Code copied'),
+      idle:!S.installing, busy:S.installing,
+      goLabel:{onetap:'Install eSIM', qr:"I've scanned it", manual:"I've entered it"}[S.installMode],
+      go:() => S.installMode === 'onetap' ? this.setState({sheet:'ios'}) : this.runInstall(),
+      confirm:() => this.runInstall()
+    };
+
+    // result
+    const RES = {
+      ok:{title:'Installed', sub:`${X.owner} · ${XP.name} ${X.gb} GB`, ref:'A7F0', icon:ICL.check, bg:'var(--st-use-bg)', fg:'var(--st-use-fg)', pl:'Done', p:() => this.tab('sims'), sl:'Open Settings', s2:() => this.toast('Opening Settings')},
+      nonet:{title:'No internet', sub:'Download stopped', means:"The eSIM couldn't download.", next:'Join Wi-Fi, then try again.', ref:'A7F2', icon:ICL.wifiOff, pl:'Try again', p:() => this.back()},
+      used:{title:'Code already used', sub:'Install blocked', means:'It was installed on another phone.', next:'Check that phone, or contact us.', ref:'B3K9', icon:ICL.close, pl:'Contact support', p:() => this.nav('chat')},
+      incompat:{title:'Phone not compatible', sub:'Install blocked', means:'Locked, or no eSIM support.', next:'Dial *#06# to check for an EID.', ref:'C1M4', icon:ICL.phone, pl:'Check phone', p:() => this.nav('compat', {compatFrom:'account'}), sl:'Request refund', s2:() => this.toast('Refund requested')}
+    }[S.result];
+    const res = {
+      ok:S.result === 'ok', err:S.result !== 'ok', title:RES.title, sub:RES.sub, means:RES.means, next:RES.next, ref:RES.ref, icon:RES.icon,
+      iconBg: RES.bg || 'var(--st-exp-bg)', iconFg: RES.fg || 'var(--st-exp-fg)',
+      primary:RES.p, primaryLabel:RES.pl, hasSecondary: !!RES.sl, secondary:RES.s2, secondaryLabel:RES.sl,
+      close:() => S.result === 'ok' ? this.tab('sims') : this.back()
+    };
+
+    // share
+    const stIdx = {notinstalled:0, installed:1, inuse:2, low:2}[X.status] ?? 0;
+    const stepDef = [['Sent', 'To ' + (X.sentTo || X.owner)], ['Installed', stIdx >= 1 ? 'On ' + X.owner + "'s phone" : 'Waiting…'], ['In use', stIdx >= 2 ? 'Last used ' + (X.last || 'now') : 'After arrival']];
+    const sh = {
+      owner:X.owner, i:ini(X.owner), flag:C[X.cc][1], plan:`${XP.name} · ${X.gb} GB`, chip:h(Chip, {status:X.status}), code:X.code,
+      qr:h(QR, {seed:X.code.charCodeAt(4) + 11, size:184}),
+      sent: X.shared === 'sent', notSent: X.shared !== 'sent',
+      steps: stepDef.map(([l, sub], i) => { const done = i <= stIdx; const cur = i === stIdx + 1; return {label:l, sub, bg: done ? 'var(--st-use-fg)' : 'var(--surface2)', fg: done ? 'var(--bg)' : 'var(--ink3)', icon: done ? ICXS.check : (cur ? h('span', {style:{width:8, height:8, borderRadius:4, background:'var(--accent)', animation:'livePulse 1.4s infinite'}}) : null), line: i === 2 ? 'transparent' : (i < stIdx ? 'var(--st-use-fg)' : 'var(--line)'), tc: done || cur ? 'var(--ink)' : 'var(--ink2)'}; }),
+      open:() => this.setState({sheet:'share'}), done:() => this.back()
+    };
+    const shareTargets = {
+      people:[X.owner, 'Sara', 'Mum'].map(p => ({label:p, i:ini(p), onClick:() => this.sendShare(p)})),
+      apps:[['Message', ICL.msg], ['Mail', ICL.mail], ['Copy link', ICL.link], ['More', ICL.more]].map(([l, icn]) => ({label:l, icon:icn, onClick:() => this.sendShare(l === 'Copy link' ? 'clipboard' : X.owner)}))
+    };
+
+    const top = {
+      who:X.owner, picking:S.topState === 'pick', busy:S.topState === 'busy', done:S.topState === 'done', pickGb:S.topPick,
+      price:eur({1:4, 3:9, 5:13}[S.topPick]),
+      opts:[[1, 4], [3, 9], [5, 13]].map(([g, p]) => ({gb:g, price:eur(p), bg: S.topPick === g ? 'var(--accent-soft)' : 'var(--surface2)', ring: S.topPick === g ? 'inset 0 0 0 2px var(--accent)' : 'none', onClick:() => this.setState({topPick:g})})),
+      pay:() => this.topPay()
+    };
+    const ownerOpts = OWNERS.map((o, i) => ({label:o, i:ini(o), border:bt(i), op: S.ownerIdx != null && S.owners[S.ownerIdx] === o ? 1 : 0, onClick:() => { const ow = [...S.owners]; ow[S.ownerIdx] = o; this.setState({owners:ow, sheet:null}); }}));
+    const acc = {
+      themes:[['Light', false], ['Dark', true]].map(([l, v]) => ({label:l, ...seg(dark === v), onClick:() => this.setState({dark:v})})),
+      compat:() => this.nav('compat', {compatFrom:'account'}), help:() => this.nav('help'), about:() => this.nav('about')
+    };
+
+    // help
+    const PILL = {Open:['var(--accent-soft)','var(--accent-text)'], 'In progress':['var(--st-in-bg)','var(--st-in-fg)'], Resolved:['var(--st-use-bg)','var(--st-use-fg)']};
+    const openCall = () => this.setState({sheet:'call', call:'idle'});
+    const help = {
+      chat:() => this.nav('chat'), call:openCall, ticket:() => this.nav('ticket', {ticketSent:null}),
+      tickets:S.tickets.map((t, i) => ({id:t.id, subject:t.subject, status:t.status, when:t.when, pbg:PILL[t.status][0], pfg:PILL[t.status][1], border:bt(i), onClick:() => this.nav('ticketDetail', {ticketId:t.id, tReply:''})}))
+    };
+    const mb = (mine, text, who) => ({text, who, align:mine ? 'flex-end' : 'flex-start', bg:mine ? 'var(--accent)' : 'var(--surface)', fg:mine ? 'var(--accent-ink)' : 'var(--ink)', rad:mine ? '20px 20px 6px 20px' : '20px 20px 20px 6px', sh:mine ? 'none' : 'var(--shadow-s)'});
+    const canChat = !!S.chatInput.trim() && !S.chatBusy;
+    const lastUser = [...S.chat].reverse().find(m => m.role === 'user');
+    const chat = {
+      ref:this.chatRef, msgs:S.chat.map(m => mb(m.role === 'user', m.text, m.role === 'user' ? 'You' : 'Assistant')), busy:S.chatBusy, showSuggest:S.chat.length === 1 && !S.chatBusy,
+      suggest:['Data not working','How do I install?','Share with family','Refund'].map(l => ({label:l, onClick:() => this.sendChat(l)})),
+      input:S.chatInput, onInput:e => this.setState({chatInput:e.target.value}), onKey:e => { if (e.key === 'Enter') this.sendChat(); },
+      send:() => this.sendChat(), sendBg:canChat ? 'var(--accent)' : 'var(--surface2)', sendFg:canChat ? 'var(--accent-ink)' : 'var(--ink3)',
+      toTicket:() => this.nav('ticket', {ticketSent:null, tForm:{...S.tForm, text:lastUser ? lastUser.text : S.tForm.text}}), toCall:openCall
+    };
+    const tf = S.tForm; const on = v => ({bg:v ? 'var(--ink)' : 'var(--surface)', fg:v ? 'var(--bg)' : 'var(--ink)'});
+    const tk = {
+      form:!S.ticketSent, sent:!!S.ticketSent, sentId:S.ticketSent, canSubmit:!S.ticketSent && !!tf.text.trim(), cantSubmit:!S.ticketSent && !tf.text.trim(),
+      topics:['Install','Data','Payment','Refund','Other'].map(l => ({label:l, ...on(tf.topic === l), onClick:() => this.setState({tForm:{...tf, topic:l}})})),
+      sims:[{id:null, label:'None'}, ...S.sims.map(x => ({id:x.id, label:C[x.cc][1] + ' ' + x.owner}))].map(o => ({label:o.label, ...on(tf.sim === o.id), onClick:() => this.setState({tForm:{...tf, sim:o.id}})})),
+      text:tf.text, onText:e => this.setState({tForm:{...tf, text:e.target.value}}), submit:() => this.submitTicket(),
+      view:() => this.setState({route:'ticketDetail', ticketId:S.ticketSent, tReply:''})
+    };
+    const T = S.tickets.find(t => t.id === S.ticketId) || S.tickets[0];
+    const canReply = !!S.tReply.trim();
+    const td = {
+      id:T.id, subject:T.subject, status:T.status, pbg:PILL[T.status][0], pfg:PILL[T.status][1], meta:`${T.topic} · ${T.sim || 'No eSIM'} · ${T.when}`,
+      msgs:T.msgs.map(m => mb(m.from === 'me', m.text, m.from === 'me' ? 'You' : 'Mira · Support')), closed:T.status === 'Resolved',
+      reply:S.tReply, onReply:e => this.setState({tReply:e.target.value}), onKey:e => { if (e.key === 'Enter') this.replyTicket(); }, send:() => this.replyTicket(),
+      sendBg:canReply ? 'var(--accent)' : 'var(--surface2)', sendFg:canReply ? 'var(--accent-ink)' : 'var(--ink3)'
+    };
+    const cl = {
+      idle:S.call === 'idle', live:S.call !== 'idle', label:S.call === 'connected' ? 'Connected · Mira' : 'Calling support',
+      time:String(Math.floor(S.callSec / 60)).padStart(2, '0') + ':' + String(S.callSec % 60).padStart(2, '0'),
+      start:() => this.startCall(), end:() => this.endCall(), callback:() => { this.setState({sheet:null}); this.toast("We'll call you in ~5 min"); }
+    };
+
+    // panel
+    const opt = (cur, val, set) => ({bg: cur === val ? 'var(--ink)' : 'var(--surface2)', fg: cur === val ? 'var(--bg)' : 'var(--ink)', onClick:set});
+    const panel = {
+      groups:[
+        {title:'Payment outcome', opts:[['3ds','3-D Secure → OK'],['direct','No 3DS'],['fail','Fails once'],['delay','Delivery delayed']].map(([k, l]) => ({label:l, ...opt(S.payScenario, k, () => this.setState({payScenario:k}))}))},
+        {title:'Install outcome', opts:[['ok','Success'],['nonet','No internet'],['used','Code used'],['incompat','Not compatible']].map(([k, l]) => ({label:l, ...opt(S.installScenario, k, () => this.setState({installScenario:k}))}))},
+        {title:'App state', opts:[['Offline', S.offline, () => this.setState({offline:!S.offline})], ['Empty list', S.empty, () => this.setState({empty:!S.empty})], ['Dark mode', dark, () => this.setState({dark:!dark})]].map(([l, on, f]) => ({label:(on ? '● ' : '○ ') + l, ...opt(on, true, f)}))}
+      ],
+      jumps:[['onb','Onboarding'],['explore','Explore'],['results','Montenegro'],['checkout','Checkout ×3'],['sims','My eSIMs'],['install','Install (Me)'],['share',"Share (Dad)"],['low','Running low'],['expired','Expired'],['compat','Phone check'],['help','Help & support']].map(([k, l], i) => ({n:String(i + 1).padStart(2, '0'), label:l, onClick:() => this.jump(k)})),
+      android: ANDROID[{compat:'compat', install:'install', result:'result', share:'share', detail:'detail'}[r]] || 'No platform difference on this screen.',
+      where: r
+    };
+
+    return {
+      theme: dark ? 'dark' : 'light', s, ic:IC, icS:ICS, icXS:ICXS, icL:ICL, icXL:ICXL,
+      logo:h(Logo, {size:30}), logoBig:h(Logo, {size:76}), sb:h(StatusIcons),
+      showTabs:['explore','sims','account','about','help'].includes(r),
+      tabs:[['explore','Explore','globe'],['sims','My eSIMs','sim'],['account','Account','user']].map(([k, l, i]) => ({label:l, icon:IC[i], color: tabOf === k ? 'var(--accent-text)' : 'var(--ink3)', onClick:() => this.tab(k)})),
+      offline:S.offline, offlineBanner: S.offline && ['explore','sims','detail','account','checkout','package'].includes(r),
+      toast:{show:!!S.toast, text:S.toast},
+      fromSplash:() => this.setState({route:'onb'}),
+      onb, compat, ex, pk, co, pay, three, sims, d, ins, res, sh, shareTargets, top, ownerOpts, acc, panel,
+      sheet:{any:!!S.sheet, owner:S.sheet === 'owner', threeDS:S.sheet === '3ds', share:S.sheet === 'share', topup:S.sheet === 'topup', ios:S.sheet === 'ios', call:S.sheet === 'call'},
+      help, chat, tk, td, cl,
+      back:() => this.back(),
+      closeSheet:() => { if (S.sheet === '3ds') return this.cancel3ds(); if (S.sheet === 'call') return S.call === 'idle' ? this.setState({sheet:null}) : this.endCall(); if (S.sheet === 'topup' && S.topState === 'busy') return; this.setState({sheet:null}); },
+      showPanel: this.props.demoPanel ?? true
+    };
+  }
+}
+</script>
+</body>
+</html>
